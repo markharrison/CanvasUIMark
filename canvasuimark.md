@@ -5,14 +5,15 @@ CanvasUIMark is a JavaScript library for creating UI controls within an HTML Can
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
-2. [Core Concepts](#core-concepts)
-3. [Input Controls](#input-controls)
-4. [Display Features](#display-features)
-5. [Modal Dialogs](#modal-dialogs)
-6. [Toast Notifications](#toast-notifications)
-7. [Input Handling](#input-handling)
-8. [Styling and Customization](#styling-and-customization)
-9. [API Reference](#api-reference)
+2. [Architecture](#architecture)
+3. [Core Concepts](#core-concepts)
+4. [Input Handling](#input-handling)
+5. [Input Controls](#input-controls)
+6. [Display Features](#display-features)
+7. [Modal Dialogs](#modal-dialogs)
+8. [Toast Notifications](#toast-notifications)
+9. [Styling and Customization](#styling-and-customization)
+10. [API Reference](#api-reference)
 
 ## Getting Started
 
@@ -22,7 +23,7 @@ Include the library in your HTML file:
 
 ```html
 <script type="module">
-    import { CanvasUIMark } from './canvasUImark.js';
+    import { CanvasUIMark, InputHandler } from './canvasuimark.js';
 </script>
 ```
 
@@ -31,11 +32,35 @@ Include the library in your HTML file:
 ```html
 <canvas id="gameCanvas" width="1280" height="720"></canvas>
 
-<script>
+<script type="module">
+    import { CanvasUIMark, Button } from './canvasuimark.js';
+    
     const canvas = document.getElementById('gameCanvas');
     const ui = new CanvasUIMark(canvas, {
         backgroundColor: '#1a1a1a'
     });
+    
+    // Add a button
+    const button = new Button(100, 100, 200, 50, 'Click Me!', () => {
+        ui.showToast('Button clicked!', 'success');
+    });
+    ui.addControl(button);
+    
+    // Create your animation loop
+    let lastFrameTime = 0;
+    
+    function gameLoop(timestamp) {
+        const deltaTime = timestamp - lastFrameTime;
+        lastFrameTime = timestamp;
+        
+        // Update and render
+        ui.update(deltaTime);
+        ui.render();
+        
+        requestAnimationFrame(gameLoop);
+    }
+    
+    requestAnimationFrame(gameLoop);
 </script>
 ```
 
@@ -57,6 +82,58 @@ To make your canvas scale with screen width:
 ```
 
 The library automatically handles mouse position calculations for scaled canvases.
+
+## Architecture
+
+CanvasUIMark uses a modern, flexible architecture that gives you full control over the rendering loop:
+
+### External Animation Loop
+
+Unlike many UI libraries, CanvasUIMark **does not manage its own animation loop**. Instead, you create your own loop using `requestAnimationFrame` and call the library's `update()` and `render()` methods each frame.
+
+**Benefits:**
+- Full control over frame timing and updates
+- Easy integration with existing game engines
+- Ability to pause/resume rendering independently
+- Better performance management
+- Consistent with modern game development patterns
+
+### InputHandler Class
+
+The `InputHandler` class provides a clean separation between input logic and UI functionality:
+
+- Handles keyboard, mouse, and gamepad events
+- Provides callbacks for all input events
+- Can be used independently of CanvasUIMark
+- Includes proper cleanup via `destroy()` method
+
+```javascript
+import { InputHandler } from './canvasuimark.js';
+
+const inputHandler = new InputHandler(canvas);
+
+inputHandler.onKeyDown = (e) => {
+    console.log('Key pressed:', e.key);
+};
+
+inputHandler.onClick = (e, pos) => {
+    console.log('Clicked at:', pos.x, pos.y);
+};
+
+// In your game loop
+inputHandler.updateGamepad();
+
+// Cleanup when done
+inputHandler.destroy();
+```
+
+### CanvasUIMark Class
+
+The main class manages UI controls, state, and rendering:
+
+- **update(deltaTime)**: Updates control animations and input state
+- **render()**: Renders all UI elements to the canvas
+- **destroy()**: Cleans up resources and event listeners
 
 ## Core Concepts
 
@@ -354,9 +431,11 @@ ui.showToast(
 
 ## Input Handling
 
+CanvasUIMark includes an `InputHandler` class that manages all keyboard, mouse, and gamepad input. This class is used internally by CanvasUIMark but can also be used independently for custom input handling.
+
 ### Keyboard Support
 
-The library handles keyboard input automatically:
+The library handles keyboard input through the InputHandler:
 
 - **Tab** / **Shift+Tab**: Navigate between controls
 - **Arrow Keys**: Navigate within menus/radios, adjust sliders, move cursor in text inputs
@@ -368,20 +447,23 @@ The library handles keyboard input automatically:
 
 ### Mouse Support
 
-Mouse interaction is fully supported:
+Mouse interaction is fully supported through InputHandler:
 
 - **Click**: Activate controls
-- **Hover**: Visual feedback (on compatible controls)
+- **Move**: Track mouse position
 - Automatically accounts for canvas scaling
+- All mouse coordinates are converted to canvas space
 
 ### Gamepad Support
 
 Basic gamepad controller support:
 
 - **D-pad Up/Down**: Navigate between controls
-- **D-pad Left/Right**: Adjust sliders
+- **D-pad Left/Right**: Adjust sliders, navigate horizontal menus
 - **A Button (button 0)**: Activate control
+- **B Button (button 1)**: Acts like Escape key
 - Auto-detects connected gamepads
+- **Note**: Call `inputHandler.updateGamepad()` or `ui.update()` in your game loop to poll gamepad state
 
 ### Escape Key Handler
 
@@ -391,6 +473,34 @@ Set a custom handler for the Escape key:
 ui.onEscape = () => {
     console.log('User pressed ESC');
     // Navigate to menu, pause game, etc.
+};
+```
+
+### Custom Input Handling
+
+You can access the InputHandler directly for custom behavior:
+
+```javascript
+// Access the input handler
+const inputHandler = ui.inputHandler;
+
+// Check if a key is pressed
+if (inputHandler.isKeyPressed('w')) {
+    movePlayerUp();
+}
+
+// Get current mouse position
+const mousePos = inputHandler.getMousePosition();
+
+// Add custom key handler
+const originalKeyDown = inputHandler.onKeyDown;
+inputHandler.onKeyDown = (e) => {
+    // Your custom logic
+    if (e.key === 'p') {
+        pauseGame();
+    }
+    // Call original handler
+    if (originalKeyDown) originalKeyDown(e);
 };
 ```
 
@@ -435,7 +545,39 @@ Colors can be specified using:
 
 ## API Reference
 
+### InputHandler Class
+
+Handles keyboard, mouse, and gamepad input.
+
+#### Constructor
+
+```javascript
+new InputHandler(canvas, options)
+```
+
+#### Methods
+
+- `updateGamepad()` - Updates gamepad state (call this in your game loop)
+- `isKeyPressed(key)` - Returns true if the specified key is currently pressed
+- `getMousePosition()` - Returns current mouse position {x, y}
+- `getGamepad()` - Returns the current gamepad object
+- `destroy()` - Removes all event listeners and cleans up
+
+#### Callbacks
+
+Set these properties to handle events:
+
+- `onKeyDown(event)` - Called when a key is pressed
+- `onKeyUp(event)` - Called when a key is released
+- `onMouseMove(event, position)` - Called when mouse moves
+- `onMouseDown(event)` - Called when mouse button is pressed
+- `onMouseUp(event)` - Called when mouse button is released
+- `onClick(event, position)` - Called when mouse is clicked
+- `onGamepadButton(buttonIndex)` - Called when gamepad button is pressed
+
 ### CanvasUIMark Class
+
+Main UI management class.
 
 #### Constructor
 
@@ -443,30 +585,43 @@ Colors can be specified using:
 new CanvasUIMark(canvas, options)
 ```
 
+**Options:**
+- `backgroundColor` (string): Background color (default: '#1a1a1a')
+- `backgroundGradient` (array): Gradient definition (see [Display Features](#display-features))
+
 #### Methods
 
+**Core Methods:**
+- `update(deltaTime)` - Update UI state and animations (call each frame)
+- `render()` - Render UI to canvas (call each frame)
+- `destroy()` - Clean up resources and event listeners
+
+**Control Management:**
 - `addControl(control)` - Add a control to the UI
 - `removeControl(control)` - Remove a control from the UI
-- `addText(text, x, y, options)` - Add text display
+
+**Display Methods:**
+- `addText(text, x, y, options)` - Add static text display
 - `addImage(image, x, y, width, height)` - Add image display
 - `setBackground(color)` - Set solid background color
 - `setBackgroundGradient(gradient)` - Set gradient background
-- `showModal(title, message, buttons)` - Display modal dialog
+
+**Dialog Methods:**
+- `showModal(title, message, buttons, options)` - Display modal dialog
 - `closeModal(modal)` - Close specific modal
 - `showToast(message, type, duration)` - Display toast notification
-- `start()` - Start animation loop
-- `stop()` - Stop animation loop
 
 #### Properties
 
 - `canvas` - Reference to canvas element
 - `ctx` - Canvas 2D context
 - `controls` - Array of all controls
+- `inputHandler` - Reference to InputHandler instance
 - `onEscape` - Escape key callback function
 
 ### Control Classes
 
-All available in `CanvasUIControls`:
+All available control classes exported from the library:
 
 - `Button(x, y, width, height, label, callback, options)`
 - `Menu(x, y, width, itemHeight, items, options)`
@@ -474,12 +629,17 @@ All available in `CanvasUIControls`:
 - `TextInput(x, y, width, height, placeholder, options)`
 - `Radio(x, y, width, itemHeight, options, selectedIndex, callback, options)`
 - `Slider(x, y, width, height, min, max, value, step, label, callback, options)`
+- `Panel(x, y, width, height, options)`
+
+See [Input Controls](#input-controls) section for detailed information on each control.
 
 ## Examples
 
 ### Complete Example
 
 ```javascript
+import { CanvasUIMark, Button, Menu, Toggle } from './canvasuimark.js';
+
 // Initialize
 const canvas = document.getElementById('gameCanvas');
 const ui = new CanvasUIMark(canvas);
@@ -491,7 +651,7 @@ ui.addText('My Game', 640, 50, {
 });
 
 // Add menu
-const mainMenu = new CanvasUIControls.Menu(
+const mainMenu = new Menu(
     540, 200, 200, 60,
     [
         { label: 'Start', callback: startGame },
@@ -502,7 +662,7 @@ const mainMenu = new CanvasUIControls.Menu(
 ui.addControl(mainMenu);
 
 // Add settings toggle
-const musicToggle = new CanvasUIControls.Toggle(
+const musicToggle = new Toggle(
     440, 450, 400, 50,
     'Background Music',
     true,
@@ -523,20 +683,94 @@ ui.onEscape = () => {
 
 // Show welcome message
 ui.showToast('Welcome!', 'success', 3000);
+
+// Create animation loop
+let lastFrameTime = 0;
+
+function gameLoop(timestamp) {
+    const deltaTime = timestamp - lastFrameTime;
+    lastFrameTime = timestamp;
+    
+    // Update and render UI
+    ui.update(deltaTime);
+    ui.render();
+    
+    requestAnimationFrame(gameLoop);
+}
+
+// Start the loop
+requestAnimationFrame(gameLoop);
+```
+
+### Using InputHandler Independently
+
+```javascript
+import { InputHandler } from './canvasuimark.js';
+
+const canvas = document.getElementById('canvas');
+const inputHandler = new InputHandler(canvas);
+
+// Set up callbacks
+inputHandler.onKeyDown = (e) => {
+    if (e.key === 'w') movePlayerUp();
+    if (e.key === 's') movePlayerDown();
+};
+
+inputHandler.onClick = (e, pos) => {
+    shootAt(pos.x, pos.y);
+};
+
+// In your game loop
+function gameLoop() {
+    // Update gamepad state
+    inputHandler.updateGamepad();
+    
+    // Check gamepad input
+    const gamepad = inputHandler.getGamepad();
+    if (gamepad) {
+        // Use gamepad axes for movement
+        const leftStick = gamepad.axes[0];
+        // ... handle movement
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
 ```
 
 ## Best Practices
 
-1. **Canvas Size**: Use the recommended 1280x720 for optimal display, but the library works with any size
-2. **Responsive Design**: Always make your canvas scale with CSS to support different screen sizes
-3. **Control Placement**: Leave adequate spacing between controls for better usability
-4. **Focus Order**: Add controls in the order you want users to tab through them
-5. **Callbacks**: Keep callback functions lightweight; perform heavy operations asynchronously
-6. **Toast Duration**: Use 2-3 seconds for info messages, 4-5 seconds for important warnings
-7. **Modal Usage**: Use modals sparingly; they block all other interaction
-8. **Testing**: Test with keyboard, mouse, and gamepad if possible
+1. **Animation Loop**: Always create your own animation loop using `requestAnimationFrame` and call `ui.update(deltaTime)` and `ui.render()` each frame
+2. **Delta Time**: Pass accurate deltaTime to `update()` for smooth animations independent of frame rate
+3. **Canvas Size**: Use the recommended 1280x720 for optimal display, but the library works with any size
+4. **Responsive Design**: Always make your canvas scale with CSS to support different screen sizes
+5. **Control Placement**: Leave adequate spacing between controls for better usability
+6. **Focus Order**: Add controls in the order you want users to tab through them
+7. **Callbacks**: Keep callback functions lightweight; perform heavy operations asynchronously
+8. **Toast Duration**: Use 2-3 seconds for info messages, 4-5 seconds for important warnings
+9. **Modal Usage**: Use modals sparingly; they block all other interaction
+10. **Cleanup**: Call `ui.destroy()` when done to properly clean up event listeners
+11. **Testing**: Test with keyboard, mouse, and gamepad if possible
+12. **Gamepad Polling**: Remember to call `ui.update()` in your loop to poll gamepad state
 
 ## Troubleshooting
+
+### Animation not updating
+
+Make sure you're calling both `update()` and `render()` in your animation loop:
+
+```javascript
+function gameLoop(timestamp) {
+    const deltaTime = timestamp - lastFrameTime;
+    lastFrameTime = timestamp;
+    
+    ui.update(deltaTime);  // Update state
+    ui.render();           // Render to canvas
+    
+    requestAnimationFrame(gameLoop);
+}
+```
 
 ### Mouse clicks not registering correctly when canvas is scaled
 
@@ -559,15 +793,16 @@ Ensure focus management is working:
 ### Gamepad not working
 
 - Ensure a gamepad is connected before the page loads
+- Call `ui.update()` or `inputHandler.updateGamepad()` in your game loop
 - Check browser console for "Gamepad connected" message
 - Not all browsers support gamepad API
 
 ### Performance issues
 
 - Limit the number of controls (recommended: < 50)
-- Use `ui.stop()` when UI is not visible
 - Optimize callback functions
 - Consider using separate canvases for complex scenes
+- Adjust frame rate if needed in your animation loop
 
 ## License
 
