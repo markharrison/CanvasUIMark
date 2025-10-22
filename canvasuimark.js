@@ -28,6 +28,166 @@ export function drawRoundedRect(ctx, x, y, width, height, radius) {
     ctx.closePath();
 }
 
+// InputHandler class - handles keyboard, mouse, and gamepad input
+export class InputHandler {
+    constructor(canvas, options = {}) {
+        this.canvas = canvas;
+        this.keys = {};
+        this.mouse = { x: 0, y: 0, buttons: 0 };
+        this.gamepad = null;
+        this.lastGamepadButtons = [];
+        
+        // Callbacks
+        this.onKeyDown = null;
+        this.onKeyUp = null;
+        this.onMouseMove = null;
+        this.onMouseDown = null;
+        this.onMouseUp = null;
+        this.onClick = null;
+        this.onGamepadButton = null;
+        
+        // Setup event listeners
+        this.setupEventListeners();
+    }
+    
+    setupEventListeners() {
+        // Keyboard events
+        this.keyDownHandler = (e) => this.handleKeyDown(e);
+        this.keyUpHandler = (e) => this.handleKeyUp(e);
+        window.addEventListener('keydown', this.keyDownHandler);
+        window.addEventListener('keyup', this.keyUpHandler);
+        
+        // Mouse events
+        this.mouseMoveHandler = (e) => this.handleMouseMove(e);
+        this.mouseDownHandler = (e) => this.handleMouseDown(e);
+        this.mouseUpHandler = (e) => this.handleMouseUp(e);
+        this.clickHandler = (e) => this.handleClick(e);
+        this.canvas.addEventListener('mousemove', this.mouseMoveHandler);
+        this.canvas.addEventListener('mousedown', this.mouseDownHandler);
+        this.canvas.addEventListener('mouseup', this.mouseUpHandler);
+        this.canvas.addEventListener('click', this.clickHandler);
+        
+        // Gamepad support
+        this.gamepadConnectedHandler = (e) => {
+            console.log('Gamepad connected:', e.gamepad.id);
+        };
+        window.addEventListener('gamepadconnected', this.gamepadConnectedHandler);
+    }
+    
+    // Get mouse position accounting for canvas scaling
+    getCanvasMousePosition(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        
+        return {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
+        };
+    }
+    
+    handleKeyDown(e) {
+        this.keys[e.key] = true;
+        if (this.onKeyDown) {
+            this.onKeyDown(e);
+        }
+    }
+    
+    handleKeyUp(e) {
+        this.keys[e.key] = false;
+        if (this.onKeyUp) {
+            this.onKeyUp(e);
+        }
+    }
+    
+    handleMouseMove(e) {
+        const pos = this.getCanvasMousePosition(e);
+        this.mouse.x = pos.x;
+        this.mouse.y = pos.y;
+        if (this.onMouseMove) {
+            this.onMouseMove(e, pos);
+        }
+    }
+    
+    handleMouseDown(e) {
+        this.mouse.buttons |= (1 << e.button);
+        if (this.onMouseDown) {
+            this.onMouseDown(e);
+        }
+    }
+    
+    handleMouseUp(e) {
+        this.mouse.buttons &= ~(1 << e.button);
+        if (this.onMouseUp) {
+            this.onMouseUp(e);
+        }
+    }
+    
+    handleClick(e) {
+        const pos = this.getCanvasMousePosition(e);
+        if (this.onClick) {
+            this.onClick(e, pos);
+        }
+    }
+    
+    updateGamepad() {
+        const gamepads = navigator.getGamepads();
+        if (!gamepads) return;
+        
+        for (let gp of gamepads) {
+            if (gp) {
+                this.gamepad = gp;
+                
+                // Check for button presses (compare with last frame)
+                for (let i = 0; i < gp.buttons.length; i++) {
+                    const pressed = gp.buttons[i].pressed;
+                    const wasPressed = this.lastGamepadButtons[i] || false;
+                    
+                    if (pressed && !wasPressed) {
+                        if (this.onGamepadButton) {
+                            this.onGamepadButton(i);
+                        }
+                    }
+                }
+                
+                // Update button state
+                this.lastGamepadButtons = gp.buttons.map(b => b.pressed);
+                
+                break;
+            }
+        }
+    }
+    
+    isKeyPressed(key) {
+        return this.keys[key] === true;
+    }
+    
+    getMousePosition() {
+        return { x: this.mouse.x, y: this.mouse.y };
+    }
+    
+    getGamepad() {
+        return this.gamepad;
+    }
+    
+    destroy() {
+        // Remove event listeners
+        window.removeEventListener('keydown', this.keyDownHandler);
+        window.removeEventListener('keyup', this.keyUpHandler);
+        this.canvas.removeEventListener('mousemove', this.mouseMoveHandler);
+        this.canvas.removeEventListener('mousedown', this.mouseDownHandler);
+        this.canvas.removeEventListener('mouseup', this.mouseUpHandler);
+        this.canvas.removeEventListener('click', this.clickHandler);
+        window.removeEventListener('gamepadconnected', this.gamepadConnectedHandler);
+        
+        // Clear state
+        this.keys = {};
+        this.mouse = { x: 0, y: 0, buttons: 0 };
+        this.gamepad = null;
+        this.lastGamepadButtons = [];
+    }
+}
+
 // Main CanvasUIMark class
 export class CanvasUIMark {
         constructor(canvas, options = {}) {
@@ -47,56 +207,37 @@ export class CanvasUIMark {
                 ...options
             };
 
-            // Input state
-            this.keys = {};
-            this.mouse = { x: 0, y: 0, buttons: 0 };
-            this.gamepad = null;
-            this.lastGamepadButtons = [];
-
+            // Input handler
+            this.inputHandler = new InputHandler(canvas);
+            
             // Event callbacks
             this.onEscape = null;
 
-            // Setup event listeners
-            this.setupEventListeners();
-
-            // Animation frame
-            this.lastFrameTime = 0;
-            this.animationFrameId = null;
-            this.start();
+            // Setup input handlers
+            this.setupInputHandlers();
         }
 
-        setupEventListeners() {
-            // Keyboard events
-            window.addEventListener('keydown', (e) => this.handleKeyDown(e));
-            window.addEventListener('keyup', (e) => this.handleKeyUp(e));
-
-            // Mouse events
-            this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-            this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
-            this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
-            this.canvas.addEventListener('click', (e) => this.handleClick(e));
-
-            // Gamepad support
-            window.addEventListener('gamepadconnected', (e) => {
-                console.log('Gamepad connected:', e.gamepad.id);
-            });
+        setupInputHandlers() {
+            // Handle keyboard input
+            this.inputHandler.onKeyDown = (e) => this.handleKeyDown(e);
+            this.inputHandler.onKeyUp = (e) => this.handleKeyUp(e);
+            
+            // Handle mouse input
+            this.inputHandler.onMouseMove = (e, pos) => {
+                // Mouse position is already tracked by InputHandler
+            };
+            this.inputHandler.onClick = (e, pos) => this.handleClick(pos.x, pos.y);
+            
+            // Handle gamepad input
+            this.inputHandler.onGamepadButton = (buttonIndex) => this.handleGamepadButton(buttonIndex);
         }
 
         // Get mouse position accounting for canvas scaling
         getCanvasMousePosition(e) {
-            const rect = this.canvas.getBoundingClientRect();
-            const scaleX = this.canvas.width / rect.width;
-            const scaleY = this.canvas.height / rect.height;
-            
-            return {
-                x: (e.clientX - rect.left) * scaleX,
-                y: (e.clientY - rect.top) * scaleY
-            };
+            return this.inputHandler.getCanvasMousePosition(e);
         }
 
         handleKeyDown(e) {
-            this.keys[e.key] = true;
-            
             // Handle escape key
             if (e.key === 'Escape') {
                 // Pass to modal first if one exists
@@ -142,67 +283,25 @@ export class CanvasUIMark {
         }
 
         handleKeyUp(e) {
-            this.keys[e.key] = false;
+            // Key up handling if needed
         }
 
-        handleMouseMove(e) {
-            const pos = this.getCanvasMousePosition(e);
-            this.mouse.x = pos.x;
-            this.mouse.y = pos.y;
-        }
-
-        handleMouseDown(e) {
-            this.mouse.buttons |= (1 << e.button);
-        }
-
-        handleMouseUp(e) {
-            this.mouse.buttons &= ~(1 << e.button);
-        }
-
-        handleClick(e) {
-            const pos = this.getCanvasMousePosition(e);
-            
+        handleClick(x, y) {
             // Check modals first
             if (this.modals.length > 0) {
                 const modal = this.modals[this.modals.length - 1];
-                modal.handleClick(pos.x, pos.y);
+                modal.handleClick(x, y);
                 return;
             }
 
             // Check controls
             for (let i = this.controls.length - 1; i >= 0; i--) {
                 const control = this.controls[i];
-                if (control.containsPoint(pos.x, pos.y)) {
+                if (control.containsPoint(x, y)) {
                     this.focusIndex = i;
                     if (control.handleClick) {
-                        control.handleClick(pos.x, pos.y);
+                        control.handleClick(x, y);
                     }
-                    break;
-                }
-            }
-        }
-
-        updateGamepad() {
-            const gamepads = navigator.getGamepads();
-            if (!gamepads) return;
-
-            for (let gp of gamepads) {
-                if (gp) {
-                    this.gamepad = gp;
-                    
-                    // Check for button presses (compare with last frame)
-                    for (let i = 0; i < gp.buttons.length; i++) {
-                        const pressed = gp.buttons[i].pressed;
-                        const wasPressed = this.lastGamepadButtons[i] || false;
-                        
-                        if (pressed && !wasPressed) {
-                            this.handleGamepadButton(i);
-                        }
-                    }
-                    
-                    // Update button state
-                    this.lastGamepadButtons = gp.buttons.map(b => b.pressed);
-                    
                     break;
                 }
             }
@@ -351,8 +450,8 @@ export class CanvasUIMark {
         }
 
         update(deltaTime) {
-            // Update gamepad
-            this.updateGamepad();
+            // Update gamepad state
+            this.inputHandler.updateGamepad();
 
             // Update controls
             for (let control of this.controls) {
@@ -369,7 +468,7 @@ export class CanvasUIMark {
             }
         }
 
-        draw() {
+        render() {
             // Clear canvas with background
             if (this.options.backgroundGradient) {
                 const gradient = this.ctx.createLinearGradient(
@@ -430,26 +529,20 @@ export class CanvasUIMark {
                 toast.draw(this.ctx, i);
             }
         }
-
-        start() {
-            const loop = (timestamp) => {
-                const deltaTime = timestamp - this.lastFrameTime;
-                this.lastFrameTime = timestamp;
-
-                this.update(deltaTime);
-                this.draw();
-
-                this.animationFrameId = requestAnimationFrame(loop);
-            };
-
-            this.animationFrameId = requestAnimationFrame(loop);
-        }
-
-        stop() {
-            if (this.animationFrameId) {
-                cancelAnimationFrame(this.animationFrameId);
-                this.animationFrameId = null;
+        
+        destroy() {
+            // Cleanup input handler
+            if (this.inputHandler) {
+                this.inputHandler.destroy();
+                this.inputHandler = null;
             }
+            
+            // Clear all controls and references
+            this.controls = [];
+            this.modals = [];
+            this.toasts = [];
+            this.images = [];
+            this.texts = [];
         }
     }
 

@@ -138,10 +138,11 @@
 
     <script type="module">
         // Import the library
-        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Slider, Panel } from './canvasUImark.js';
+        import { CanvasUIMark, InputHandler, Button, Menu, Toggle, TextInput, Radio, Slider, Panel } from './canvasuimark.js';
 
         // Make classes available globally for easier use in event handlers
         window.CanvasUIMark = CanvasUIMark;
+        window.InputHandler = InputHandler;
         window.CanvasUIControls = { Button, Menu, Toggle, TextInput, Radio, Slider, Panel };
 
         // Initialize the canvas
@@ -430,6 +431,28 @@
 
         console.log('CanvasUIMark showcase loaded successfully!');
         console.log('Press ESC to test the escape event handler');
+        
+        // ===== EXTERNAL ANIMATION LOOP =====
+        // This is the game loop that drives the UI library
+        let lastFrameTime = 0;
+        
+        function gameLoop(timestamp) {
+            // Calculate delta time in milliseconds
+            const deltaTime = timestamp - lastFrameTime;
+            lastFrameTime = timestamp;
+            
+            // Update the UI (handles input, animations, etc.)
+            ui.update(deltaTime);
+            
+            // Render the UI
+            ui.render();
+            
+            // Request next frame
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Start the animation loop
+        requestAnimationFrame(gameLoop);
     </script>
 </body>
 </html>
