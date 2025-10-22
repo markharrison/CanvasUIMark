@@ -29,7 +29,7 @@ ui.addControl(button);
 
 ## Documentation
 
-For detailed documentation, API reference, and examples, see **[canvasUImark.md](canvasUImark.md)**.
+For detailed documentation, API reference, and examples, see **[canvasuimark.md](canvasuimark.md)**.
 
 ## Showcase
 
