@@ -12,14 +12,14 @@ A JavaScript library for creating UI controls within HTML Canvas elements, speci
 - **Responsive** - Automatic canvas scaling support
 - **Easy to Use** - Simple API with minimal setup
 - **External Animation Loop** - Library is driven by your own game loop for maximum control
-- **Separated Input Handling** - Clear abstraction between input logic and UI functionality
+- **Separated Input Handling** - Clear abstraction between input logic and UI functionality using `CanvasUIMarkInputHandler` class
 
 ## Architecture
 
 CanvasUIMark follows a modern, flexible architecture:
 
 - **External Animation Loop**: You control the game loop using `requestAnimationFrame`, calling `update()` and `render()` methods
-- **InputHandler Class**: Handles all keyboard, mouse, and gamepad input separately from UI logic
+- **CanvasUIMarkInputHandler Class**: Handles all keyboard, mouse, and gamepad input separately from UI logic
 - **CanvasUIMark Class**: Manages UI controls, rendering, and state
 
 This design gives you full control over when and how the UI updates, making it easy to integrate with existing game engines or custom animation systems.

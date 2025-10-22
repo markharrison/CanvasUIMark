@@ -23,7 +23,7 @@ Include the library in your HTML file:
 
 ```html
 <script type="module">
-    import { CanvasUIMark, InputHandler } from './canvasuimark.js';
+    import { CanvasUIMark, CanvasUIMarkInputHandler } from './canvasuimark.js';
 </script>
 ```
 
@@ -98,9 +98,9 @@ Unlike many UI libraries, CanvasUIMark **does not manage its own animation loop*
 - Better performance management
 - Consistent with modern game development patterns
 
-### InputHandler Class
+### CanvasUIMarkInputHandler Class
 
-The `InputHandler` class provides a clean separation between input logic and UI functionality:
+The `CanvasUIMarkInputHandler` class provides a clean separation between input logic and UI functionality:
 
 - Handles keyboard, mouse, and gamepad events
 - Provides callbacks for all input events
@@ -108,9 +108,9 @@ The `InputHandler` class provides a clean separation between input logic and UI 
 - Includes proper cleanup via `destroy()` method
 
 ```javascript
-import { InputHandler } from './canvasuimark.js';
+import { CanvasUIMarkInputHandler } from './canvasuimark.js';
 
-const inputHandler = new InputHandler(canvas);
+const inputHandler = new CanvasUIMarkInputHandler(canvas);
 
 inputHandler.onKeyDown = (e) => {
     console.log('Key pressed:', e.key);
@@ -431,11 +431,11 @@ ui.showToast(
 
 ## Input Handling
 
-CanvasUIMark includes an `InputHandler` class that manages all keyboard, mouse, and gamepad input. This class is used internally by CanvasUIMark but can also be used independently for custom input handling.
+CanvasUIMark includes a `CanvasUIMarkInputHandler` class that manages all keyboard, mouse, and gamepad input. This class is used internally by CanvasUIMark but can also be used independently for custom input handling.
 
 ### Keyboard Support
 
-The library handles keyboard input through the InputHandler:
+The library handles keyboard input through the CanvasUIMarkInputHandler:
 
 - **Tab** / **Shift+Tab**: Navigate between controls
 - **Arrow Keys**: Navigate within menus/radios, adjust sliders, move cursor in text inputs
@@ -447,7 +447,7 @@ The library handles keyboard input through the InputHandler:
 
 ### Mouse Support
 
-Mouse interaction is fully supported through InputHandler:
+Mouse interaction is fully supported through CanvasUIMarkInputHandler:
 
 - **Click**: Activate controls
 - **Move**: Track mouse position
@@ -478,7 +478,7 @@ ui.onEscape = () => {
 
 ### Custom Input Handling
 
-You can access the InputHandler directly for custom behavior:
+You can access the CanvasUIMarkInputHandler directly for custom behavior:
 
 ```javascript
 // Access the input handler
@@ -545,14 +545,14 @@ Colors can be specified using:
 
 ## API Reference
 
-### InputHandler Class
+### CanvasUIMarkInputHandler Class
 
 Handles keyboard, mouse, and gamepad input.
 
 #### Constructor
 
 ```javascript
-new InputHandler(canvas, options)
+new CanvasUIMarkInputHandler(canvas, options)
 ```
 
 #### Methods
@@ -616,7 +616,7 @@ new CanvasUIMark(canvas, options)
 - `canvas` - Reference to canvas element
 - `ctx` - Canvas 2D context
 - `controls` - Array of all controls
-- `inputHandler` - Reference to InputHandler instance
+- `inputHandler` - Reference to CanvasUIMarkInputHandler instance
 - `onEscape` - Escape key callback function
 
 ### Control Classes
@@ -702,13 +702,13 @@ function gameLoop(timestamp) {
 requestAnimationFrame(gameLoop);
 ```
 
-### Using InputHandler Independently
+### Using CanvasUIMarkInputHandler Independently
 
 ```javascript
-import { InputHandler } from './canvasuimark.js';
+import { CanvasUIMarkInputHandler } from './canvasuimark.js';
 
 const canvas = document.getElementById('canvas');
-const inputHandler = new InputHandler(canvas);
+const inputHandler = new CanvasUIMarkInputHandler(canvas);
 
 // Set up callbacks
 inputHandler.onKeyDown = (e) => {
