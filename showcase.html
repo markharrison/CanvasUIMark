@@ -138,7 +138,7 @@
 
     <script type="module">
         // Import the library
-        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Slider, Panel } from './canvasUImark.js';
+        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Slider, Panel } from './canvasuimark.js';
 
         // Make classes available globally for easier use in event handlers
         window.CanvasUIMark = CanvasUIMark;
@@ -152,6 +152,19 @@
 
         // Make ui available globally for event handlers
         window.ui = ui;
+
+        // External game loop
+        let lastTime = 0;
+        function gameLoop(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+
+            ui.update(deltaTime);
+            ui.render();
+
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
 
         // Set up escape key handler
         ui.onEscape = () => {
