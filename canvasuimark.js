@@ -314,8 +314,9 @@ export class CanvasUIMark {
             this.options.backgroundGradient = null;
         }
 
-        setBackgroundGradient(gradient) {
+        setBackgroundGradient(gradient, direction = 'diagonal') {
             this.options.backgroundGradient = gradient;
+            this.options.gradientDirection = direction; // 'horizontal', 'vertical', or 'diagonal'
         }
 
         showModal(title, message, buttons = [], options = {}) {
@@ -367,11 +368,33 @@ export class CanvasUIMark {
         draw() {
             // Clear canvas with background
             if (this.options.backgroundGradient) {
-                const gradient = this.ctx.createLinearGradient(
-                    0, 0, 
-                    this.canvas.width, 
-                    this.canvas.height
-                );
+                const direction = this.options.gradientDirection || 'diagonal';
+                let gradient;
+                
+                // Create gradient based on direction
+                if (direction === 'horizontal') {
+                    // Left to right
+                    gradient = this.ctx.createLinearGradient(
+                        0, 0, 
+                        this.canvas.width, 
+                        0
+                    );
+                } else if (direction === 'vertical') {
+                    // Top to bottom
+                    gradient = this.ctx.createLinearGradient(
+                        0, 0, 
+                        0, 
+                        this.canvas.height
+                    );
+                } else {
+                    // Diagonal (default): top-left to bottom-right
+                    gradient = this.ctx.createLinearGradient(
+                        0, 0, 
+                        this.canvas.width, 
+                        this.canvas.height
+                    );
+                }
+                
                 for (let stop of this.options.backgroundGradient) {
                     gradient.addColorStop(stop.offset, stop.color);
                 }

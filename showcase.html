@@ -118,7 +118,12 @@
             <button onclick="changeBackground('#1a1a1a')">Dark Background</button>
             <button onclick="changeBackground('#2c3e50')">Blue Background</button>
             <button onclick="changeBackground('#34495e')">Gray Background</button>
-            <button onclick="setGradientBackground()">Gradient Background</button>
+        </div>
+
+        <div class="control-group">
+            <button onclick="setGradientBackground('diagonal')">Diagonal Gradient</button>
+            <button onclick="setGradientBackground('horizontal')">Horizontal Gradient</button>
+            <button onclick="setGradientBackground('vertical')">Vertical Gradient</button>
         </div>
 
         <div class="info">
@@ -427,13 +432,13 @@
             ui.showToast('Background changed', 'info', 2000);
         }
 
-        window.setGradientBackground = function() {
+        window.setGradientBackground = function(direction = 'diagonal') {
             ui.setBackgroundGradient([
                 { offset: 0, color: '#1a1a1a' },
                 { offset: 0.5, color: '#2c3e50' },
                 { offset: 1, color: '#34495e' }
-            ]);
-            ui.showToast('Gradient applied', 'info', 2000);
+            ], direction);
+            ui.showToast(`${direction.charAt(0).toUpperCase() + direction.slice(1)} gradient applied`, 'info', 2000);
         }
 
         // Show welcome toast on load
