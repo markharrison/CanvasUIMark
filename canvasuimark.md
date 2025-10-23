@@ -319,15 +319,33 @@ ui.setBackground('#1a1a1a');
 
 ### Background Gradient
 
-Set a gradient background:
+Set a gradient background with customizable direction:
 
 ```javascript
+// Diagonal gradient (default) - from top-left to bottom-right
 ui.setBackgroundGradient([
     { offset: 0, color: '#1a1a1a' },
     { offset: 0.5, color: '#2c3e50' },
     { offset: 1, color: '#34495e' }
-]);
+], 'diagonal');
+
+// Horizontal gradient - from left to right
+ui.setBackgroundGradient([
+    { offset: 0, color: '#1a1a1a' },
+    { offset: 1, color: '#34495e' }
+], 'horizontal');
+
+// Vertical gradient - from top to bottom
+ui.setBackgroundGradient([
+    { offset: 0, color: '#1a1a1a' },
+    { offset: 1, color: '#34495e' }
+], 'vertical');
 ```
+
+**Direction Options:**
+- `'horizontal'` - Left to right gradient
+- `'vertical'` - Top to bottom gradient
+- `'diagonal'` - Top-left to bottom-right gradient (default)
 
 ## Modal Dialogs
 
@@ -482,7 +500,7 @@ new CanvasUIMark(canvas, options)
 - `addText(text, x, y, options)` - Add text display
 - `addImage(image, x, y, width, height)` - Add image display
 - `setBackground(color)` - Set solid background color
-- `setBackgroundGradient(gradient)` - Set gradient background
+- `setBackgroundGradient(gradient, direction)` - Set gradient background with direction ('horizontal', 'vertical', or 'diagonal')
 - `showModal(title, message, buttons)` - Display modal dialog
 - `closeModal(modal)` - Close specific modal
 - `showToast(message, type, duration)` - Display toast notification
