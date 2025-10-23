@@ -15,7 +15,7 @@ A JavaScript library for creating UI controls within HTML Canvas elements, speci
 ## Quick Start
 
 ```javascript
-import { CanvasUIMark, Button, Menu } from './canvasUImark.js';
+import { CanvasUIMark, Button, Menu } from './canvasuimark.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ui = new CanvasUIMark(canvas);
@@ -25,6 +25,19 @@ const button = new Button(100, 100, 200, 50, 'Click Me!', () => {
     ui.showToast('Button clicked!', 'success');
 });
 ui.addControl(button);
+
+// External game loop
+let lastTime = 0;
+function gameLoop(currentTime) {
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    
+    ui.update(deltaTime);
+    ui.render();
+    
+    requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop);
 ```
 
 ## Documentation

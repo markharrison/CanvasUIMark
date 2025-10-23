@@ -22,7 +22,7 @@ Include the library in your HTML file:
 
 ```html
 <script type="module">
-    import { CanvasUIMark } from './canvasUImark.js';
+    import { CanvasUIMark } from './canvasuimark.js';
 </script>
 ```
 
@@ -31,11 +31,26 @@ Include the library in your HTML file:
 ```html
 <canvas id="gameCanvas" width="1280" height="720"></canvas>
 
-<script>
+<script type="module">
+    import { CanvasUIMark } from './canvasuimark.js';
+    
     const canvas = document.getElementById('gameCanvas');
     const ui = new CanvasUIMark(canvas, {
         backgroundColor: '#1a1a1a'
     });
+    
+    // External game loop
+    let lastTime = 0;
+    function gameLoop(currentTime) {
+        const deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        
+        ui.update(deltaTime);
+        ui.render();
+        
+        requestAnimationFrame(gameLoop);
+    }
+    requestAnimationFrame(gameLoop);
 </script>
 ```
 
@@ -62,7 +77,7 @@ The library automatically handles mouse position calculations for scaled canvase
 
 ### CanvasUIMark Instance
 
-The main `CanvasUIMark` class manages all UI elements, input handling, and rendering.
+The main `CanvasUIMark` class manages all UI elements and input handling. The library is designed to be driven by an external animation loop for maximum flexibility.
 
 ```javascript
 const ui = new CanvasUIMark(canvas, options);
@@ -72,12 +87,29 @@ const ui = new CanvasUIMark(canvas, options);
 - `backgroundColor` (string): Default background color (e.g., '#1a1a1a')
 - `backgroundGradient` (array): Gradient definition (see [Display Features](#display-features))
 
+**Animation Loop:**
+The library does not include an internal animation loop. You must provide your own game loop that calls `update(deltaTime)` and `render()` each frame:
+
+```javascript
+let lastTime = 0;
+function gameLoop(currentTime) {
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    
+    ui.update(deltaTime);
+    ui.render();
+    
+    requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop);
+```
+
 ### Adding Controls
 
 Controls are added to the UI instance:
 
 ```javascript
-import { Button } from './canvasUImark.js';
+import { Button } from './canvasuimark.js';
 const button = new Button(x, y, width, height, label, callback);
 ui.addControl(button);
 ```
@@ -454,8 +486,8 @@ new CanvasUIMark(canvas, options)
 - `showModal(title, message, buttons)` - Display modal dialog
 - `closeModal(modal)` - Close specific modal
 - `showToast(message, type, duration)` - Display toast notification
-- `start()` - Start animation loop
-- `stop()` - Stop animation loop
+- `update(deltaTime)` - Update all controls and animations (call each frame)
+- `render()` - Render all UI elements to canvas (call each frame)
 
 #### Properties
 
@@ -565,9 +597,9 @@ Ensure focus management is working:
 ### Performance issues
 
 - Limit the number of controls (recommended: < 50)
-- Use `ui.stop()` when UI is not visible
 - Optimize callback functions
 - Consider using separate canvases for complex scenes
+- Control your game loop frame rate if needed (e.g., skip rendering if not visible)
 
 ## License
 

@@ -8,7 +8,7 @@
 'use strict';
 
 // Helper function to draw rounded rectangles
-export function drawRoundedRect(ctx, x, y, width, height, radius) {
+export function DrawRoundedRect(ctx, x, y, width, height, radius) {
     if (radius === 0) {
         ctx.rect(x, y, width, height);
         return;
@@ -58,11 +58,6 @@ export class CanvasUIMark {
 
             // Setup event listeners
             this.setupEventListeners();
-
-            // Animation frame
-            this.lastFrameTime = 0;
-            this.animationFrameId = null;
-            this.start();
         }
 
         setupEventListeners() {
@@ -431,25 +426,8 @@ export class CanvasUIMark {
             }
         }
 
-        start() {
-            const loop = (timestamp) => {
-                const deltaTime = timestamp - this.lastFrameTime;
-                this.lastFrameTime = timestamp;
-
-                this.update(deltaTime);
-                this.draw();
-
-                this.animationFrameId = requestAnimationFrame(loop);
-            };
-
-            this.animationFrameId = requestAnimationFrame(loop);
-        }
-
-        stop() {
-            if (this.animationFrameId) {
-                cancelAnimationFrame(this.animationFrameId);
-                this.animationFrameId = null;
-            }
+        render() {
+            this.draw();
         }
     }
 
@@ -486,7 +464,7 @@ export class Control {
             // Background
             ctx.fillStyle = this.options.backgroundColor;
             if (radius > 0) {
-                drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.fill();
             } else {
                 ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -496,7 +474,7 @@ export class Control {
             ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
-                drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.stroke();
             } else {
                 ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -554,7 +532,7 @@ export class Button extends Control {
             // Background - change color when pressed
             ctx.fillStyle = this.pressed ? this.options.focusColor : this.options.backgroundColor;
             if (radius > 0) {
-                drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.fill();
             } else {
                 ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -564,7 +542,7 @@ export class Button extends Control {
             ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
-                drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.stroke();
             } else {
                 ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -686,7 +664,7 @@ export class Menu extends Control {
                 }
                 
                 if (radius > 0) {
-                    drawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
+                    DrawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
                     ctx.fill();
                 } else {
                     ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -696,7 +674,7 @@ export class Menu extends Control {
                 ctx.strokeStyle = isFocused && isSelected ? this.options.focusColor : this.options.borderColor;
                 ctx.lineWidth = this.options.borderWidth;
                 if (radius > 0) {
-                    drawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
+                    DrawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
                     ctx.stroke();
                 } else {
                     ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -762,7 +740,7 @@ export class Toggle extends Control {
 
             // Switch background
             ctx.fillStyle = this.value ? this.options.focusColor : '#999999';
-            drawRoundedRect(ctx, switchX, switchY, switchWidth, switchHeight, switchRadius);
+            DrawRoundedRect(ctx, switchX, switchY, switchWidth, switchHeight, switchRadius);
             ctx.fill();
 
             // Switch knob
@@ -772,7 +750,7 @@ export class Toggle extends Control {
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
             
             ctx.fillStyle = '#ffffff';
-            drawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
+            DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
         }
     }
@@ -983,7 +961,7 @@ export class Radio extends Control {
             ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
-                drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.stroke();
             } else {
                 ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -1070,13 +1048,13 @@ export class Slider extends Control {
             const trackRadius = this.options.borderRadius > 0 ? Math.min(trackHeight / 2, this.options.borderRadius / 2) : trackHeight / 2;
 
             ctx.fillStyle = '#666666';
-            drawRoundedRect(ctx, trackX, trackY - trackHeight / 2, trackWidth, trackHeight, trackRadius);
+            DrawRoundedRect(ctx, trackX, trackY - trackHeight / 2, trackWidth, trackHeight, trackRadius);
             ctx.fill();
 
             // Draw filled portion
             const percent = (this.value - this.min) / (this.max - this.min);
             ctx.fillStyle = this.options.focusColor;
-            drawRoundedRect(ctx, trackX, trackY - trackHeight / 2, trackWidth * percent, trackHeight, trackRadius);
+            DrawRoundedRect(ctx, trackX, trackY - trackHeight / 2, trackWidth * percent, trackHeight, trackRadius);
             ctx.fill();
 
             // Draw slider knob
@@ -1086,12 +1064,12 @@ export class Slider extends Control {
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
 
             ctx.fillStyle = isFocused ? this.options.focusColor : '#ffffff';
-            drawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
+            DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
             
             ctx.strokeStyle = this.options.textColor;
             ctx.lineWidth = 2;
-            drawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
+            DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.stroke();
 
             // Draw value
@@ -1115,7 +1093,7 @@ export class Panel extends Control {
             // Background
             ctx.fillStyle = this.options.backgroundColor;
             if (radius > 0) {
-                drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.fill();
             } else {
                 ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -1126,7 +1104,7 @@ export class Panel extends Control {
                 ctx.strokeStyle = this.options.borderColor;
                 ctx.lineWidth = this.options.borderWidth;
                 if (radius > 0) {
-                    drawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                    DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                     ctx.stroke();
                 } else {
                     ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -1287,13 +1265,13 @@ export class Modal {
 
             // Draw modal background
             ctx.fillStyle = '#2a2a2a';
-            drawRoundedRect(ctx, this.x, this.y, this.width, this.height, modalRadius);
+            DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, modalRadius);
             ctx.fill();
 
             // Draw border
             ctx.strokeStyle = '#4CAF50';
             ctx.lineWidth = 3;
-            drawRoundedRect(ctx, this.x, this.y, this.width, this.height, modalRadius);
+            DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, modalRadius);
             ctx.stroke();
 
             // Draw title
@@ -1339,13 +1317,13 @@ export class Modal {
 
                 // Button background
                 ctx.fillStyle = i === this.selectedButton ? '#4CAF50' : '#444444';
-                drawRoundedRect(ctx, buttonX, buttonsY, this.buttonWidth, this.buttonHeight, buttonRadius);
+                DrawRoundedRect(ctx, buttonX, buttonsY, this.buttonWidth, this.buttonHeight, buttonRadius);
                 ctx.fill();
 
                 // Button border
                 ctx.strokeStyle = '#666666';
                 ctx.lineWidth = 2;
-                drawRoundedRect(ctx, buttonX, buttonsY, this.buttonWidth, this.buttonHeight, buttonRadius);
+                DrawRoundedRect(ctx, buttonX, buttonsY, this.buttonWidth, this.buttonHeight, buttonRadius);
                 ctx.stroke();
 
                 // Button label
