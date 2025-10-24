@@ -659,8 +659,8 @@ export class Menu extends Control {
             }
             
             super(x, y, totalWidth, totalHeight, options);
-            this.width = width;
-            this.height = height;
+            this.itemWidth = width;
+            this.itemHeight = height;
             this.items = items;
             this.selectedIndex = 0;
             this.orientation = orientation;
@@ -701,17 +701,17 @@ export class Menu extends Control {
         getItemBounds(index) {
             if (this.orientation === 'horizontal') {
                 return {
-                    x: this.x + index * (this.width + this.gap),
+                    x: this.x + index * (this.itemWidth + this.gap),
                     y: this.y,
-                    width: this.width,
-                    height: this.height
+                    width: this.itemWidth,
+                    height: this.itemHeight
                 };
             } else {
                 return {
                     x: this.x,
-                    y: this.y + index * (this.height + this.gap),
-                    width: this.width,
-                    height: this.height
+                    y: this.y + index * (this.itemHeight + this.gap),
+                    width: this.itemWidth,
+                    height: this.itemHeight
                 };
             }
         }
