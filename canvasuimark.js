@@ -1102,28 +1102,19 @@ export class Radio extends Control {
         draw(ctx, isFocused) {
             const radius = this.options.borderRadius;
             
+            // Draw background for entire control with rounded corners
+            ctx.fillStyle = this.options.backgroundColor;
+            if (radius > 0) {
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                ctx.fill();
+            } else {
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+            
+            // Draw individual radio items
             for (let i = 0; i < this.items.length; i++) {
                 const bounds = this.getItemBounds(i);
                 const isSelected = i === this.selectedIndex;
-
-                // Background with rounded corners
-                ctx.fillStyle = this.options.backgroundColor;
-                if (radius > 0) {
-                    DrawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
-                    ctx.fill();
-                } else {
-                    ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-                }
-
-                // Border for each item
-                ctx.strokeStyle = isFocused && isSelected ? this.options.focusColor : this.options.borderColor;
-                ctx.lineWidth = this.options.borderWidth;
-                if (radius > 0) {
-                    DrawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
-                    ctx.stroke();
-                } else {
-                    ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
-                }
 
                 // Radio button circle
                 const radioSize = 16;
@@ -1150,6 +1141,16 @@ export class Radio extends Control {
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(this.items[i], radioX + radioSize, radioY);
+            }
+
+            // Draw outer border around entire control
+            ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
+            ctx.lineWidth = this.options.borderWidth;
+            if (radius > 0) {
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                ctx.stroke();
+            } else {
+                ctx.strokeRect(this.x, this.y, this.width, this.height);
             }
         }
     }
