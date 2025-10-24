@@ -115,6 +115,12 @@
         </div>
 
         <div class="control-group">
+            <button onclick="removeAllControlsDemo()">Remove All Controls</button>
+            <button onclick="removeAllControlsExceptToastsDemo()">Remove All Except Toasts</button>
+            <button onclick="addControlsBack()">Add Controls Back</button>
+        </div>
+
+        <div class="control-group">
             <button onclick="changeBackground('#1a1a1a')">Dark Background</button>
             <button onclick="changeBackground('#2c3e50')">Blue Background</button>
             <button onclick="changeBackground('#34495e')">Gray Background</button>
@@ -439,6 +445,156 @@
                 { offset: 1, color: '#34495e' }
             ], direction);
             ui.showToast(`${direction.charAt(0).toUpperCase() + direction.slice(1)} gradient applied`, 'info', 2000);
+        }
+
+        // Function to remove all controls
+        window.removeAllControlsDemo = function() {
+            ui.removeAllControls();
+            ui.showToast('Canvas cleared! Only background preserved.', 'warning', 3000);
+        }
+
+        // Function to remove all controls except toasts
+        window.removeAllControlsExceptToastsDemo = function() {
+            ui.showToast('Removing all controls but keeping this toast!', 'info', 5000);
+            // Wait a bit for the toast to appear before clearing
+            setTimeout(() => {
+                ui.removeAllControlsExceptToasts();
+            }, 100);
+        }
+
+        // Function to add controls back
+        window.addControlsBack = function() {
+            // First remove all controls to start fresh
+            ui.removeAllControls();
+            
+            // Re-add the demo controls
+            // Column 1: Buttons and Menu
+            let column1X = 50;
+            let currentY = 120;
+
+            const button1 = new Button(
+                column1X, currentY, 200, 50,
+                'Click Me!',
+                () => {
+                    ui.showToast('Button clicked!', 'success', 2000);
+                },
+                { borderRadius: 10 }
+            );
+            ui.addControl(button1);
+            currentY += 70;
+
+            const menu = new Menu(
+                column1X, currentY, 200, 50,
+                [
+                    { label: 'New Game', callback: () => ui.showToast('New Game selected', 'info') },
+                    { label: 'Load Game', callback: () => ui.showToast('Load Game selected', 'info') },
+                    { label: 'Options', callback: () => ui.showToast('Options selected', 'info') },
+                    { label: 'Exit', callback: () => ui.showToast('Exit selected', 'info') }
+                ],
+                { borderRadius: 8, gap: 5, orientation: 'vertical' }
+            );
+            ui.addControl(menu);
+
+            // Column 2: Toggle and TextInput
+            let column2X = 300;
+            currentY = 120;
+
+            const toggle = new Toggle(
+                column2X, currentY, 250, 50,
+                'Sound Effects',
+                true,
+                (value) => {
+                    ui.showToast(`Sound ${value ? 'ON' : 'OFF'}`, value ? 'success' : 'warning', 2000);
+                },
+                { borderRadius: 10 }
+            );
+            ui.addControl(toggle);
+            currentY += 70;
+
+            const textInput = new TextInput(
+                column2X, currentY, 300, 50,
+                'Enter your name...',
+                { borderRadius: 10 }
+            );
+            ui.addControl(textInput);
+            currentY += 70;
+
+            const showInputButton = new Button(
+                column2X, currentY, 200, 50,
+                'Show Input Value',
+                () => {
+                    const value = textInput.value || '(empty)';
+                    ui.showModal('Input Value', `You entered: ${value}`, [
+                        { label: 'OK', callback: () => {} }
+                    ]);
+                },
+                { borderRadius: 8 }
+            );
+            ui.addControl(showInputButton);
+            currentY += 70;
+            
+            const horizontalMenu = new Menu(
+                column2X, currentY, 90, 40,
+                [
+                    { label: 'Easy', callback: () => ui.showToast('Easy mode', 'info') },
+                    { label: 'Med', callback: () => ui.showToast('Medium mode', 'info') },
+                    { label: 'Hard', callback: () => ui.showToast('Hard mode', 'info') }
+                ],
+                { borderRadius: 8, gap: 10, orientation: 'horizontal' }
+            );
+            ui.addControl(horizontalMenu);
+
+            // Column 3: Radio and Slider
+            let column3X = 650;
+            currentY = 120;
+
+            const radioPanel = new Panel(
+                column3X - 10, currentY - 10, 550, 460,
+                {
+                    backgroundColor: '#888888',
+                    borderColor: '#4CAF50',
+                    borderWidth: 2,
+                    borderRadius: 10
+                }
+            );
+            ui.addControl(radioPanel);
+
+            const radio = new Radio(
+                column3X, currentY, 250, 45,
+                ['Easy', 'Medium', 'Hard', 'Expert'],
+                1,
+                (index, value) => {
+                    ui.showToast(`Difficulty: ${value}`, 'info', 2000);
+                },
+                { borderRadius: 10 }
+            );
+            ui.addControl(radio);
+            currentY += 200;
+
+            const slider = new Slider(
+                column3X, currentY, 300, 80,
+                0, 100, 50, 5,
+                'Volume',
+                (value) => {
+                    console.log('Volume changed to:', value);
+                },
+                { borderRadius: 10 }
+            );
+            ui.addControl(slider);
+            currentY += 100;
+
+            const speedSlider = new Slider(
+                column3X, currentY, 300, 80,
+                10, 200, 100, 10,
+                'Speed',
+                (value) => {
+                    console.log('Speed changed to:', value);
+                },
+                { borderRadius: 10 }
+            );
+            ui.addControl(speedSlider);
+
+            ui.showToast('All controls restored!', 'success', 2000);
         }
 
         // Show welcome toast on load
