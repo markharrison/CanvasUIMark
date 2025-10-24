@@ -114,6 +114,22 @@ const button = new Button(x, y, width, height, label, callback);
 ui.addControl(button);
 ```
 
+### Removing Controls
+
+Remove a specific control:
+
+```javascript
+ui.removeControl(button);
+```
+
+Remove all controls at once (useful for switching between game states or screens):
+
+```javascript
+ui.removeAllControls();
+```
+
+**Note:** `removeAllControls()` only removes interactive controls. The background (color or gradient), text displays, and images are preserved.
+
 ### Focus Management
 
 The library automatically manages focus and keyboard navigation:
@@ -497,6 +513,7 @@ new CanvasUIMark(canvas, options)
 
 - `addControl(control)` - Add a control to the UI
 - `removeControl(control)` - Remove a control from the UI
+- `removeAllControls()` - Remove all controls from the UI (background, texts, and images are preserved)
 - `addText(text, x, y, options)` - Add text display
 - `addImage(image, x, y, width, height)` - Add image display
 - `setBackground(color)` - Set solid background color

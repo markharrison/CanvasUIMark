@@ -289,6 +289,11 @@ export class CanvasUIMark {
             }
         }
 
+        removeAllControls() {
+            this.controls = [];
+            this.focusIndex = -1;
+        }
+
         addText(text, x, y, options = {}) {
             const textObj = {
                 text,
