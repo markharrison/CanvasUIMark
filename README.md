@@ -6,7 +6,7 @@ A JavaScript library for creating UI controls within HTML Canvas elements, speci
 
 ## Features
 
-- **Interactive UI Controls** - Buttons, menus, toggles, text inputs, radio buttons, and sliders
+- **Interactive UI Controls** - Buttons, menus, toggles, text inputs, radio buttons, carousels, and sliders
 - **Modal Dialogs & Notifications** - Pop-up dialogs and toast notifications
 - **Full Input Support** - Keyboard, mouse, and gamepad navigation
 - **Responsive** - Automatic canvas scaling support
