@@ -229,14 +229,14 @@
         currentY += 30;
 
         const menu = new Menu(
-            column1X, currentY, 200, 50,
+            column1X, currentY,
             [
                 { label: 'New Game', callback: () => ui.showToast('New Game selected', 'info') },
                 { label: 'Load Game', callback: () => ui.showToast('Load Game selected', 'info') },
                 { label: 'Options', callback: () => ui.showToast('Options selected', 'info') },
                 { label: 'Exit', callback: () => ui.showToast('Exit selected', 'info') }
             ],
-            { borderRadius: 8, gap: 5, orientation: 'vertical' }
+            { width: 200, height: 50, borderRadius: 8, gap: 5, orientation: 'vertical' }
         );
         ui.addControl(menu);
         currentY += 230;
@@ -302,13 +302,13 @@
         currentY += 30;
 
         const horizontalMenu = new Menu(
-            column2X, currentY, 90, 40,
+            column2X, currentY,
             [
                 { label: 'Easy', callback: () => ui.showToast('Easy mode', 'info') },
                 { label: 'Med', callback: () => ui.showToast('Medium mode', 'info') },
                 { label: 'Hard', callback: () => ui.showToast('Hard mode', 'info') }
             ],
-            { borderRadius: 8, gap: 10, orientation: 'horizontal' }
+            { width: 90, height: 40, borderRadius: 8, gap: 10, orientation: 'horizontal' }
         );
         ui.addControl(horizontalMenu);
         currentY += 60;
@@ -337,13 +337,13 @@
         currentY += 30;
 
         const radio = new Radio(
-            column3X, currentY, 250, 45,
+            column3X, currentY,
             ['Easy', 'Medium', 'Hard', 'Expert'],
             1,
             (index, value) => {
                 ui.showToast(`Difficulty: ${value}`, 'info', 2000);
             },
-            { borderRadius: 10 }
+            { width: 250, height: 45, borderRadius: 10 }
         );
         ui.addControl(radio);
         currentY += 200;
@@ -484,14 +484,14 @@
             currentY += 70;
 
             const menu = new Menu(
-                column1X, currentY, 200, 50,
+                column1X, currentY,
                 [
                     { label: 'New Game', callback: () => ui.showToast('New Game selected', 'info') },
                     { label: 'Load Game', callback: () => ui.showToast('Load Game selected', 'info') },
                     { label: 'Options', callback: () => ui.showToast('Options selected', 'info') },
                     { label: 'Exit', callback: () => ui.showToast('Exit selected', 'info') }
                 ],
-                { borderRadius: 8, gap: 5, orientation: 'vertical' }
+                { width: 200, height: 50, borderRadius: 8, gap: 5, orientation: 'vertical' }
             );
             ui.addControl(menu);
 
@@ -534,13 +534,13 @@
             currentY += 70;
             
             const horizontalMenu = new Menu(
-                column2X, currentY, 90, 40,
+                column2X, currentY,
                 [
                     { label: 'Easy', callback: () => ui.showToast('Easy mode', 'info') },
                     { label: 'Med', callback: () => ui.showToast('Medium mode', 'info') },
                     { label: 'Hard', callback: () => ui.showToast('Hard mode', 'info') }
                 ],
-                { borderRadius: 8, gap: 10, orientation: 'horizontal' }
+                { width: 90, height: 40, borderRadius: 8, gap: 10, orientation: 'horizontal' }
             );
             ui.addControl(horizontalMenu);
 
@@ -560,13 +560,13 @@
             ui.addControl(radioPanel);
 
             const radio = new Radio(
-                column3X, currentY, 250, 45,
+                column3X, currentY,
                 ['Easy', 'Medium', 'Hard', 'Expert'],
                 1,
                 (index, value) => {
                     ui.showToast(`Difficulty: ${value}`, 'info', 2000);
                 },
-                { borderRadius: 10 }
+                { width: 250, height: 45, borderRadius: 10 }
             );
             ui.addControl(radio);
             currentY += 200;

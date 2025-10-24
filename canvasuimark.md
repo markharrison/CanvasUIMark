@@ -175,21 +175,24 @@ ui.addControl(button);
 
 ### Menu
 
-A vertical list of selectable items (buttons).
+A vertical or horizontal list of selectable items (buttons).
 
 ```javascript
 const menu = new CanvasUIControls.Menu(
     100, 100,           // x, y position
-    200, 50,            // width, item height
     [                   // menu items
         { label: 'New Game', callback: () => console.log('New Game') },
         { label: 'Load Game', callback: () => console.log('Load Game') },
         { label: 'Options', callback: () => console.log('Options') },
         { label: 'Exit', callback: () => console.log('Exit') }
     ],
-    {                   // optional styling
+    {                   // options
+        width: 200,             // width of each item (default: 200)
+        height: 50,             // height of each item (default: 50)
         backgroundColor: '#333333',
-        focusColor: '#4CAF50'
+        focusColor: '#4CAF50',
+        orientation: 'vertical', // 'vertical' or 'horizontal' (default: 'vertical')
+        gap: 0                  // gap between items (default: 0)
     }
 );
 ui.addControl(menu);
@@ -197,7 +200,7 @@ ui.addControl(menu);
 
 **Navigation:**
 - Mouse click on item
-- Arrow Up/Down keys when focused
+- Arrow Up/Down keys when focused (or Left/Right for horizontal menus)
 - Enter or Space to select when focused
 - Gamepad D-pad up/down and A button
 
@@ -260,13 +263,14 @@ A group of mutually exclusive options.
 ```javascript
 const radio = new CanvasUIControls.Radio(
     100, 100,                  // x, y position
-    250, 45,                   // width, item height
-    ['Easy', 'Medium', 'Hard', 'Expert'],  // options
+    ['Easy', 'Medium', 'Hard', 'Expert'],  // items
     1,                         // initial selected index
     (index, value) => {        // callback
         console.log(`Selected: ${value} (index ${index})`);
     },
-    {                          // optional styling
+    {                          // options
+        width: 250,            // width (default: 250)
+        height: 45,            // height of each item (default: 45)
         focusColor: '#4CAF50'
     }
 );
@@ -545,10 +549,10 @@ new CanvasUIMark(canvas, options)
 All available in `CanvasUIControls`:
 
 - `Button(x, y, width, height, label, callback, options)`
-- `Menu(x, y, width, itemHeight, items, options)`
+- `Menu(x, y, items, options)`
 - `Toggle(x, y, width, height, label, initialValue, callback, options)`
 - `TextInput(x, y, width, height, placeholder, options)`
-- `Radio(x, y, width, itemHeight, options, selectedIndex, callback, options)`
+- `Radio(x, y, items, selectedIndex, callback, options)`
 - `Slider(x, y, width, height, min, max, value, step, label, callback, options)`
 
 ## Examples
@@ -568,12 +572,13 @@ ui.addText('My Game', 640, 50, {
 
 // Add menu
 const mainMenu = new CanvasUIControls.Menu(
-    540, 200, 200, 60,
+    540, 200,
     [
         { label: 'Start', callback: startGame },
         { label: 'Options', callback: showOptions },
         { label: 'Exit', callback: exitGame }
-    ]
+    ],
+    { width: 200, height: 60 }
 );
 ui.addControl(mainMenu);
 
