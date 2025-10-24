@@ -21,9 +21,9 @@ const canvas = document.getElementById('gameCanvas');
 const ui = new CanvasUIMark(canvas);
 
 // Add a button
-const button = new Button(100, 100, 200, 50, 'Click Me!', () => {
+const button = new Button(100, 100, 'Click Me!', () => {
     ui.showToast('Button clicked!', 'success');
-});
+}, { width: 200, height: 50 });
 ui.addControl(button);
 
 // External game loop

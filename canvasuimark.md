@@ -110,7 +110,7 @@ Controls are added to the UI instance:
 
 ```javascript
 import { Button } from './canvasuimark.js';
-const button = new Button(x, y, width, height, label, callback);
+const button = new Button(x, y, label, callback, options);
 ui.addControl(button);
 ```
 
@@ -152,7 +152,7 @@ The library automatically manages focus and keyboard navigation:
 A clickable button that executes a callback when activated.
 
 ```javascript
-const button = new CanvasUIControls.Button(
+const button = new Button(
     100, 100,           // x, y position
     'Click Me!',        // label
     () => {             // callback
@@ -179,7 +179,7 @@ ui.addControl(button);
 A vertical or horizontal list of selectable items (buttons).
 
 ```javascript
-const menu = new CanvasUIControls.Menu(
+const menu = new Menu(
     100, 100,           // x, y position
     [                   // menu items
         { label: 'New Game', callback: () => console.log('New Game') },
@@ -210,7 +210,7 @@ ui.addControl(menu);
 A switch that can be turned on or off.
 
 ```javascript
-const toggle = new CanvasUIControls.Toggle(
+const toggle = new Toggle(
     100, 100,           // x, y position
     'Sound Effects',    // label
     true,               // initial value
@@ -236,7 +236,7 @@ ui.addControl(toggle);
 A text input field for user text entry.
 
 ```javascript
-const textInput = new CanvasUIControls.TextInput(
+const textInput = new TextInput(
     100, 100,                  // x, y position
     'Enter your name...',      // placeholder text
     {                          // options
@@ -264,7 +264,7 @@ console.log(textInput.value);
 A group of mutually exclusive options.
 
 ```javascript
-const radio = new CanvasUIControls.Radio(
+const radio = new Radio(
     100, 100,                  // x, y position
     ['Easy', 'Medium', 'Hard', 'Expert'],  // items
     1,                         // initial selected index
@@ -290,7 +290,7 @@ ui.addControl(radio);
 A slider for selecting numerical values within a range.
 
 ```javascript
-const slider = new CanvasUIControls.Slider(
+const slider = new Slider(
     100, 100,          // x, y position
     0, 100,            // min, max values
     50,                // initial value
@@ -575,7 +575,7 @@ ui.addText('My Game', 640, 50, {
 });
 
 // Add menu
-const mainMenu = new CanvasUIControls.Menu(
+const mainMenu = new Menu(
     540, 200,
     [
         { label: 'Start', callback: startGame },
@@ -587,14 +587,15 @@ const mainMenu = new CanvasUIControls.Menu(
 ui.addControl(mainMenu);
 
 // Add settings toggle
-const musicToggle = new CanvasUIControls.Toggle(
-    440, 450, 400, 50,
+const musicToggle = new Toggle(
+    440, 450,
     'Background Music',
     true,
     (enabled) => {
         if (enabled) startMusic();
         else stopMusic();
-    }
+    },
+    { width: 400, height: 50 }
 );
 ui.addControl(musicToggle);
 
