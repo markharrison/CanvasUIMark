@@ -144,6 +144,44 @@ export class CanvasUIMark {
             const pos = this.getCanvasMousePosition(e);
             this.mouse.x = pos.x;
             this.mouse.y = pos.y;
+            
+            // Update cursor based on what's under the mouse
+            this.updateCursor(pos.x, pos.y);
+        }
+
+        updateCursor(x, y) {
+            let shouldShowPointer = false;
+            
+            // Check modals first (they're on top)
+            if (this.modals.length > 0) {
+                const modal = this.modals[this.modals.length - 1];
+                if (modal.isOverButton && modal.isOverButton(x, y)) {
+                    shouldShowPointer = true;
+                }
+            } else {
+                // Check controls (from top to bottom, reverse order for correct z-index)
+                for (let i = this.controls.length - 1; i >= 0; i--) {
+                    const control = this.controls[i];
+                    // Skip panels as they're not interactive
+                    if (control.constructor.name === 'Panel') {
+                        continue;
+                    }
+                    // Check if control has a hover detection method
+                    if (control.isOverInteractiveArea) {
+                        if (control.isOverInteractiveArea(x, y)) {
+                            shouldShowPointer = true;
+                            break;
+                        }
+                    } else if (control.containsPoint(x, y)) {
+                        // Fallback to basic containsPoint for controls without specific hover detection
+                        shouldShowPointer = true;
+                        break;
+                    }
+                }
+            }
+            
+            // Update canvas cursor
+            this.canvas.style.cursor = shouldShowPointer ? 'pointer' : 'default';
         }
 
         handleMouseDown(e) {
@@ -537,6 +575,10 @@ export class Button extends Control {
             this.pressedDuration = 200; // milliseconds
         }
 
+        isOverInteractiveArea(x, y) {
+            return this.containsPoint(x, y);
+        }
+
         handleClick(x, y) {
             this.activate();
         }
@@ -620,6 +662,18 @@ export class Menu extends Control {
             this.selectedIndex = 0;
             this.orientation = orientation;
             this.gap = gap;
+        }
+
+        isOverInteractiveArea(x, y) {
+            // Check if over any menu item
+            for (let i = 0; i < this.items.length; i++) {
+                const itemBounds = this.getItemBounds(i);
+                if (x >= itemBounds.x && x <= itemBounds.x + itemBounds.width &&
+                    y >= itemBounds.y && y <= itemBounds.y + itemBounds.height) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         handleClick(x, y) {
@@ -737,6 +791,17 @@ export class Toggle extends Control {
             this.label = label;
             this.value = initialValue;
             this.callback = callback;
+        }
+
+        isOverInteractiveArea(x, y) {
+            // Check if over the toggle switch area, not the entire control
+            const switchWidth = 50;
+            const switchHeight = 25;
+            const switchX = this.x + this.width - switchWidth - this.options.padding;
+            const switchY = this.y + (this.height - switchHeight) / 2;
+            
+            return x >= switchX && x <= switchX + switchWidth &&
+                   y >= switchY && y <= switchY + switchHeight;
         }
 
         handleClick(x, y) {
@@ -907,6 +972,23 @@ export class Radio extends Control {
             this.callback = callback;
         }
 
+        isOverInteractiveArea(x, y) {
+            // Check if over any radio button circle
+            const radioSize = 16;
+            for (let i = 0; i < this.items.length; i++) {
+                const itemY = this.y + i * this.itemHeight;
+                const radioX = this.x + this.options.padding + radioSize / 2;
+                const radioY = itemY + this.itemHeight / 2;
+                
+                // Check if mouse is within the radio button circle area (a bit larger for easier clicking)
+                const distance = Math.sqrt(Math.pow(x - radioX, 2) + Math.pow(y - radioY, 2));
+                if (distance <= radioSize) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         handleClick(x, y) {
             const index = Math.floor((y - this.y) / this.itemHeight);
             if (index >= 0 && index < this.items.length) {
@@ -1020,6 +1102,35 @@ export class Slider extends Control {
             this.label = label;
             this.callback = callback;
             this.dragging = false;
+        }
+
+        isOverInteractiveArea(x, y) {
+            // Check if over the slider track or knob area
+            const trackY = this.y + this.height / 2;
+            const trackX = this.x + this.options.padding;
+            const trackWidth = this.width - this.options.padding * 2;
+            const trackHeight = 4;
+            
+            // Calculate knob position
+            const percent = (this.value - this.min) / (this.max - this.min);
+            const knobSize = 20;
+            const knobX = trackX + trackWidth * percent - knobSize / 2;
+            const knobY = trackY - knobSize / 2;
+            
+            // Check if over knob (with some extra margin for easier interaction)
+            const knobMargin = 5;
+            if (x >= knobX - knobMargin && x <= knobX + knobSize + knobMargin &&
+                y >= knobY - knobMargin && y <= knobY + knobSize + knobMargin) {
+                return true;
+            }
+            
+            // Check if over track
+            if (x >= trackX && x <= trackX + trackWidth &&
+                y >= trackY - trackHeight * 2 && y <= trackY + trackHeight * 2) {
+                return true;
+            }
+            
+            return false;
         }
 
         handleClick(x, y) {
@@ -1293,6 +1404,22 @@ export class Modal {
 
         close() {
             this.manager.closeModal(this);
+        }
+
+        isOverButton(x, y) {
+            // Check if over any modal button
+            const buttonsY = this.y + this.height - this.buttonHeight - 20;
+            const totalButtonWidth = this.buttons.length * this.buttonWidth + (this.buttons.length - 1) * this.buttonSpacing;
+            const startX = this.x + (this.width - totalButtonWidth) / 2;
+
+            for (let i = 0; i < this.buttons.length; i++) {
+                const buttonX = startX + i * (this.buttonWidth + this.buttonSpacing);
+                if (x >= buttonX && x <= buttonX + this.buttonWidth &&
+                    y >= buttonsY && y <= buttonsY + this.buttonHeight) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         draw(ctx) {

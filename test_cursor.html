@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Cursor</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #1a1a1a; }
+        canvas { border: 1px solid white; }
+        #status { color: white; margin-top: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="status">Cursor: <span id="cursor-status">default</span></div>
+    
+    <script type="module">
+        import { CanvasUIMark, Button, Menu, Toggle, Radio, Slider } from './canvasuimark.js';
+        
+        const canvas = document.getElementById('gameCanvas');
+        const ui = new CanvasUIMark(canvas);
+        
+        // Add a simple button
+        const button = new Button(50, 50, 200, 50, 'Test Button', () => {
+            console.log('Button clicked!');
+        });
+        ui.addControl(button);
+        
+        // Add a menu
+        const menu = new Menu(50, 120, 200, 50, [
+            { label: 'Option 1', callback: () => console.log('Option 1') },
+            { label: 'Option 2', callback: () => console.log('Option 2') }
+        ], { gap: 5 });
+        ui.addControl(menu);
+        
+        // Add a toggle
+        const toggle = new Toggle(50, 240, 250, 50, 'Toggle', true, (val) => console.log('Toggle:', val));
+        ui.addControl(toggle);
+        
+        // Add a radio
+        const radio = new Radio(50, 310, 200, 40, ['A', 'B', 'C'], 0, (idx) => console.log('Radio:', idx));
+        ui.addControl(radio);
+        
+        // Add a slider
+        const slider = new Slider(50, 440, 250, 80, 0, 100, 50, 5, 'Slider', (val) => console.log('Slider:', val));
+        ui.addControl(slider);
+        
+        // Game loop
+        let lastTime = 0;
+        function gameLoop(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            ui.update(deltaTime);
+            ui.render();
+            
+            // Update status display
+            document.getElementById('cursor-status').textContent = canvas.style.cursor || 'default';
+            
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
+        
+        console.log('Test page loaded');
+    </script>
+</body>
+</html>
