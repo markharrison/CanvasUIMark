@@ -992,23 +992,55 @@ export class TextInput extends Control {
     // Radio Control
 export class Radio extends Control {
         constructor(x, y, items, selectedIndex, callback, options = {}) {
-            const width = options.width || 250; // Default width
+            const orientation = options.orientation || 'vertical'; // 'vertical' or 'horizontal'
+            const gap = options.gap || 0; // Gap between items
+            const width = options.width || 250; // Default width for each item
             const height = options.height || 45; // Default height for each item
-            const totalHeight = height * items.length;
-            super(x, y, width, totalHeight, options);
-            this.height = height;
+            
+            let totalWidth, totalHeight;
+            if (orientation === 'horizontal') {
+                totalWidth = items.length * width + (items.length - 1) * gap;
+                totalHeight = height;
+            } else {
+                totalWidth = width;
+                totalHeight = items.length * height + (items.length - 1) * gap;
+            }
+            
+            super(x, y, totalWidth, totalHeight, options);
+            this.itemWidth = width;
+            this.itemHeight = height;
             this.items = items;
             this.selectedIndex = selectedIndex;
             this.callback = callback;
+            this.orientation = orientation;
+            this.gap = gap;
+        }
+
+        getItemBounds(index) {
+            if (this.orientation === 'horizontal') {
+                return {
+                    x: this.x + index * (this.itemWidth + this.gap),
+                    y: this.y,
+                    width: this.itemWidth,
+                    height: this.itemHeight
+                };
+            } else {
+                return {
+                    x: this.x,
+                    y: this.y + index * (this.itemHeight + this.gap),
+                    width: this.itemWidth,
+                    height: this.itemHeight
+                };
+            }
         }
 
         isOverInteractiveArea(x, y) {
             // Check if over any radio button circle
             const radioSize = 16;
             for (let i = 0; i < this.items.length; i++) {
-                const itemY = this.y + i * this.height;
-                const radioX = this.x + this.options.padding + radioSize / 2;
-                const radioY = itemY + this.height / 2;
+                const bounds = this.getItemBounds(i);
+                const radioX = bounds.x + this.options.padding + radioSize / 2;
+                const radioY = bounds.y + bounds.height / 2;
                 
                 // Check if mouse is within the radio button circle area (a bit larger for easier clicking)
                 const distance = Math.sqrt(Math.pow(x - radioX, 2) + Math.pow(y - radioY, 2));
@@ -1020,35 +1052,31 @@ export class Radio extends Control {
         }
 
         handleClick(x, y) {
-            const index = Math.floor((y - this.y) / this.height);
-            if (index >= 0 && index < this.items.length) {
-                this.selectedIndex = index;
-                if (this.callback) {
-                    this.callback(this.selectedIndex, this.items[this.selectedIndex]);
+            for (let i = 0; i < this.items.length; i++) {
+                const bounds = this.getItemBounds(i);
+                if (x >= bounds.x && x <= bounds.x + bounds.width &&
+                    y >= bounds.y && y <= bounds.y + bounds.height) {
+                    this.selectedIndex = i;
+                    if (this.callback) {
+                        this.callback(this.selectedIndex, this.items[this.selectedIndex]);
+                    }
+                    break;
                 }
             }
         }
 
         handleKeyDown(e) {
-            if (e.key === 'ArrowUp') {
+            const isVertical = this.orientation === 'vertical';
+            const prevKey = isVertical ? 'ArrowUp' : 'ArrowLeft';
+            const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
+            
+            if (e.key === prevKey) {
                 this.selectedIndex = (this.selectedIndex - 1 + this.items.length) % this.items.length;
                 if (this.callback) {
                     this.callback(this.selectedIndex, this.items[this.selectedIndex]);
                 }
                 e.preventDefault();
-            } else if (e.key === 'ArrowDown') {
-                this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
-                if (this.callback) {
-                    this.callback(this.selectedIndex, this.items[this.selectedIndex]);
-                }
-                e.preventDefault();
-            } else if (e.key === 'ArrowLeft') {
-                this.selectedIndex = (this.selectedIndex - 1 + this.items.length) % this.items.length;
-                if (this.callback) {
-                    this.callback(this.selectedIndex, this.items[this.selectedIndex]);
-                }
-                e.preventDefault();
-            } else if (e.key === 'ArrowRight') {
+            } else if (e.key === nextKey) {
                 this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
                 if (this.callback) {
                     this.callback(this.selectedIndex, this.items[this.selectedIndex]);
@@ -1074,18 +1102,24 @@ export class Radio extends Control {
         draw(ctx, isFocused) {
             const radius = this.options.borderRadius;
             
+            // Draw background for entire control with rounded corners
+            ctx.fillStyle = this.options.backgroundColor;
+            if (radius > 0) {
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                ctx.fill();
+            } else {
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+            
+            // Draw individual radio items
             for (let i = 0; i < this.items.length; i++) {
-                const y = this.y + i * this.height;
+                const bounds = this.getItemBounds(i);
                 const isSelected = i === this.selectedIndex;
-
-                // Background
-                ctx.fillStyle = this.options.backgroundColor;
-                ctx.fillRect(this.x, y, this.width, this.height);
 
                 // Radio button circle
                 const radioSize = 16;
-                const radioX = this.x + this.options.padding + radioSize / 2;
-                const radioY = y + this.height / 2;
+                const radioX = bounds.x + this.options.padding + radioSize / 2;
+                const radioY = bounds.y + bounds.height / 2;
 
                 ctx.strokeStyle = this.options.textColor;
                 ctx.lineWidth = 2;
