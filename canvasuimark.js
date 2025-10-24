@@ -1155,6 +1155,218 @@ export class Radio extends Control {
         }
     }
 
+// Carousel Control
+export class Carousel extends Control {
+        constructor(x, y, items, selectedIndex, callback, options = {}) {
+            const orientation = options.orientation || 'horizontal';
+            const width = options.width || 250;
+            const height = options.height || 60;
+            
+            super(x, y, width, height, options);
+            this.items = items;
+            this.selectedIndex = selectedIndex;
+            this.callback = callback;
+            this.orientation = orientation;
+            this.arrowSize = options.arrowSize || 12;
+        }
+
+        getArrowBounds() {
+            if (this.orientation === 'horizontal') {
+                return {
+                    left: {
+                        x: this.x + this.options.padding,
+                        y: this.y,
+                        width: this.arrowSize * 2,
+                        height: this.height
+                    },
+                    right: {
+                        x: this.x + this.width - this.options.padding - this.arrowSize * 2,
+                        y: this.y,
+                        width: this.arrowSize * 2,
+                        height: this.height
+                    }
+                };
+            } else {
+                return {
+                    up: {
+                        x: this.x,
+                        y: this.y + this.options.padding,
+                        width: this.width,
+                        height: this.arrowSize * 2
+                    },
+                    down: {
+                        x: this.x,
+                        y: this.y + this.height - this.options.padding - this.arrowSize * 2,
+                        width: this.width,
+                        height: this.arrowSize * 2
+                    }
+                };
+            }
+        }
+
+        containsPointInBounds(x, y, bounds) {
+            return x >= bounds.x && x <= bounds.x + bounds.width &&
+                   y >= bounds.y && y <= bounds.y + bounds.height;
+        }
+
+        isOverInteractiveArea(x, y) {
+            const arrows = this.getArrowBounds();
+            if (this.orientation === 'horizontal') {
+                return this.containsPointInBounds(x, y, arrows.left) ||
+                       this.containsPointInBounds(x, y, arrows.right);
+            } else {
+                return this.containsPointInBounds(x, y, arrows.up) ||
+                       this.containsPointInBounds(x, y, arrows.down);
+            }
+        }
+
+        handleClick(x, y) {
+            const arrows = this.getArrowBounds();
+            if (this.orientation === 'horizontal') {
+                if (this.containsPointInBounds(x, y, arrows.left)) {
+                    this.selectPrevious();
+                } else if (this.containsPointInBounds(x, y, arrows.right)) {
+                    this.selectNext();
+                }
+            } else {
+                if (this.containsPointInBounds(x, y, arrows.up)) {
+                    this.selectPrevious();
+                } else if (this.containsPointInBounds(x, y, arrows.down)) {
+                    this.selectNext();
+                }
+            }
+        }
+
+        selectPrevious() {
+            this.selectedIndex = (this.selectedIndex - 1 + this.items.length) % this.items.length;
+            if (this.callback) {
+                this.callback(this.selectedIndex, this.items[this.selectedIndex]);
+            }
+        }
+
+        selectNext() {
+            this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
+            if (this.callback) {
+                this.callback(this.selectedIndex, this.items[this.selectedIndex]);
+            }
+        }
+
+        handleKeyDown(e) {
+            if (this.orientation === 'horizontal') {
+                if (e.key === 'ArrowLeft') {
+                    this.selectPrevious();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowRight') {
+                    this.selectNext();
+                    e.preventDefault();
+                }
+            } else {
+                if (e.key === 'ArrowUp') {
+                    this.selectPrevious();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowDown') {
+                    this.selectNext();
+                    e.preventDefault();
+                }
+            }
+        }
+
+        handleGamepadLeft() {
+            this.selectPrevious();
+        }
+
+        handleGamepadRight() {
+            this.selectNext();
+        }
+
+        drawTriangle(ctx, centerX, centerY, direction) {
+            const size = this.arrowSize;
+            
+            ctx.fillStyle = this.options.textColor;
+            ctx.beginPath();
+            
+            if (direction === 'left') {
+                ctx.moveTo(centerX + size / 2, centerY - size / 2);
+                ctx.lineTo(centerX + size / 2, centerY + size / 2);
+                ctx.lineTo(centerX - size / 2, centerY);
+            } else if (direction === 'right') {
+                ctx.moveTo(centerX - size / 2, centerY - size / 2);
+                ctx.lineTo(centerX - size / 2, centerY + size / 2);
+                ctx.lineTo(centerX + size / 2, centerY);
+            } else if (direction === 'up') {
+                ctx.moveTo(centerX - size / 2, centerY + size / 2);
+                ctx.lineTo(centerX + size / 2, centerY + size / 2);
+                ctx.lineTo(centerX, centerY - size / 2);
+            } else if (direction === 'down') {
+                ctx.moveTo(centerX - size / 2, centerY - size / 2);
+                ctx.lineTo(centerX + size / 2, centerY - size / 2);
+                ctx.lineTo(centerX, centerY + size / 2);
+            }
+            
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        draw(ctx, isFocused) {
+            const radius = this.options.borderRadius;
+            
+            // Draw background
+            ctx.fillStyle = this.options.backgroundColor;
+            if (radius > 0) {
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                ctx.fill();
+            } else {
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+            
+            if (this.orientation === 'horizontal') {
+                // Draw left arrow
+                const leftArrowX = this.x + this.options.padding + this.arrowSize;
+                const leftArrowY = this.y + this.height / 2;
+                this.drawTriangle(ctx, leftArrowX, leftArrowY, 'left');
+                
+                // Draw right arrow
+                const rightArrowX = this.x + this.width - this.options.padding - this.arrowSize;
+                const rightArrowY = this.y + this.height / 2;
+                this.drawTriangle(ctx, rightArrowX, rightArrowY, 'right');
+                
+                // Draw current value in center
+                ctx.font = this.options.font;
+                ctx.fillStyle = this.options.textColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.items[this.selectedIndex], this.x + this.width / 2, this.y + this.height / 2);
+            } else {
+                // Draw up arrow
+                const upArrowX = this.x + this.width / 2;
+                const upArrowY = this.y + this.options.padding + this.arrowSize;
+                this.drawTriangle(ctx, upArrowX, upArrowY, 'up');
+                
+                // Draw down arrow
+                const downArrowX = this.x + this.width / 2;
+                const downArrowY = this.y + this.height - this.options.padding - this.arrowSize;
+                this.drawTriangle(ctx, downArrowX, downArrowY, 'down');
+                
+                // Draw current value in center
+                ctx.font = this.options.font;
+                ctx.fillStyle = this.options.textColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.items[this.selectedIndex], this.x + this.width / 2, this.y + this.height / 2);
+            }
+            
+            // Draw border
+            ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
+            ctx.lineWidth = this.options.borderWidth;
+            if (radius > 0) {
+                DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
+                ctx.stroke();
+            } else {
+                ctx.strokeRect(this.x, this.y, this.width, this.height);
+            }
+        }
+    }
+
 // Slider Control
 export class Slider extends Control {
         constructor(x, y, min, max, value, step, label, callback, options = {}) {

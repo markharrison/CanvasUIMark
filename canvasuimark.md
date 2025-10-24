@@ -306,6 +306,54 @@ ui.addControl(horizontalRadio);
 - Arrow Left/Right keys when focused (for horizontal orientation)
 - Gamepad D-pad left/right (navigates within control regardless of orientation)
 
+### Carousel
+
+A control for selecting one value at a time from a list, with arrow buttons to cycle through options.
+
+```javascript
+// Horizontal Carousel (default)
+const carousel = new Carousel(
+    100, 100,                      // x, y position
+    ['Option A', 'Option B', 'Option C', 'Option D'],  // items
+    0,                             // initial selected index
+    (index, value) => {            // callback
+        console.log(`Selected: ${value} (index ${index})`);
+    },
+    {                              // options
+        width: 300,                // width (default: 250)
+        height: 60,                // height (default: 60)
+        focusColor: '#4CAF50',
+        orientation: 'horizontal', // 'horizontal' or 'vertical' (default: 'horizontal')
+        arrowSize: 12              // size of triangle arrows (default: 12)
+    }
+);
+ui.addControl(carousel);
+
+// Vertical Carousel
+const verticalCarousel = new Carousel(
+    100, 200,
+    ['Red', 'Green', 'Blue'],
+    1,
+    (index, value) => {
+        console.log(`Color selected: ${value}`);
+    },
+    {
+        width: 200,
+        height: 120,
+        orientation: 'vertical'
+    }
+);
+ui.addControl(verticalCarousel);
+```
+
+**Navigation:**
+- Mouse click on arrow buttons to navigate
+- Arrow Left/Right keys when focused (for horizontal orientation)
+- Arrow Up/Down keys when focused (for vertical orientation)
+- Gamepad D-pad left/right (navigates within control regardless of orientation)
+- Displays triangle arrows pointing in the appropriate direction
+- Shows only the currently selected value
+
 ### Slider
 
 A slider for selecting numerical values within a range.

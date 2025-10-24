@@ -135,25 +135,26 @@
         <div class="info">
             <strong>Instructions:</strong><br>
             • Use <strong>TAB</strong> to navigate between controls<br>
-            • Use <strong>Arrow Keys</strong> to navigate within menu/radio controls and adjust sliders<br>
+            • Use <strong>Arrow Keys</strong> to navigate within menu/radio/carousel controls and adjust sliders<br>
             • Use <strong>Enter</strong> or <strong>Space</strong> to activate buttons and toggles<br>
             • Use <strong>ESC</strong> to test the escape event or close modal dialogs<br>
             • Click with mouse to interact with any control<br>
             • Connect a gamepad to test controller support (D-pad, A and B buttons)<br>
             • Gamepad <strong>B button</strong> acts like ESC key<br>
-            • Gamepad <strong>D-pad left/right</strong> navigates within menus and radio controls<br>
+            • Gamepad <strong>D-pad left/right</strong> navigates within menus, radio and carousel controls<br>
             • The canvas scales responsively - try resizing your browser window!<br>
-            • <strong>Panel control</strong> shown behind Radio control for visual grouping
+            • <strong>Panel control</strong> shown behind Radio control for visual grouping<br>
+            • <strong>Carousel control</strong> allows scrolling through options with triangle arrows
         </div>
     </div>
 
     <script type="module">
         // Import the library
-        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Slider, Panel } from './canvasuimark.js';
+        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel } from './canvasuimark.js';
 
         // Make classes available globally for easier use in event handlers
         window.CanvasUIMark = CanvasUIMark;
-        window.CanvasUIControls = { Button, Menu, Toggle, TextInput, Radio, Slider, Panel };
+        window.CanvasUIControls = { Button, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel };
 
         // Initialize the canvas
         const canvas = document.getElementById('gameCanvas');
@@ -366,6 +367,44 @@
         );
         ui.addControl(horizontalRadio);
         currentY += 65;
+
+        // Carousel Control (Horizontal)
+        ui.addText('Carousel (Horizontal):', column3X, currentY, {
+            font: 'bold 18px Arial',
+            color: '#ffffff'
+        });
+        currentY += 30;
+
+        const carouselHorizontal = new Carousel(
+            column3X, currentY,
+            ['Option A', 'Option B', 'Option C', 'Option D'],
+            0,
+            (index, value) => {
+                ui.showToast(`Carousel: ${value}`, 'info', 2000);
+            },
+            { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
+        );
+        ui.addControl(carouselHorizontal);
+        currentY += 80;
+
+        // Carousel Control (Vertical)
+        ui.addText('Carousel (Vertical):', column3X, currentY, {
+            font: 'bold 18px Arial',
+            color: '#ffffff'
+        });
+        currentY += 30;
+
+        const carouselVertical = new Carousel(
+            column3X, currentY,
+            ['Red', 'Green', 'Blue'],
+            1,
+            (index, value) => {
+                ui.showToast(`Color: ${value}`, 'info', 2000);
+            },
+            { width: 200, height: 120, borderRadius: 10, orientation: 'vertical' }
+        );
+        ui.addControl(carouselVertical);
+        currentY += 140;
 
         // Slider Control
         ui.addText('Slider Control:', column3X, currentY, {
