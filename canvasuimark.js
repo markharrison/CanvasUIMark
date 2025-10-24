@@ -1512,7 +1512,9 @@ export class Slider extends Control {
 
 // Panel Control - for grouping other controls with a background
 export class Panel extends Control {
-        constructor(x, y, width, height, options = {}) {
+        constructor(x, y, options = {}) {
+            const width = options.width || 500; // Default width
+            const height = options.height || 500; // Default height
             super(x, y, width, height, options);
         }
 
