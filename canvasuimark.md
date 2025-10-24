@@ -130,6 +130,14 @@ ui.removeAllControls();
 
 **Note:** `removeAllControls()` clears everything from the canvas except the background settings (color or gradient). This includes all interactive controls, text displays, images, modals, and toasts.
 
+Remove all controls but keep toasts visible:
+
+```javascript
+ui.removeAllControlsExceptToasts();
+```
+
+**Note:** `removeAllControlsExceptToasts()` clears everything from the canvas except the background settings and toast notifications. This is useful when you want to switch screens but keep important notifications visible. Toasts will auto-dismiss after their timeout period.
+
 ### Focus Management
 
 The library automatically manages focus and keyboard navigation:
@@ -514,6 +522,7 @@ new CanvasUIMark(canvas, options)
 - `addControl(control)` - Add a control to the UI
 - `removeControl(control)` - Remove a control from the UI
 - `removeAllControls()` - Remove all controls, texts, images, modals, and toasts from the canvas (only background settings are preserved)
+- `removeAllControlsExceptToasts()` - Remove all controls, texts, images, and modals from the canvas, but preserve toast notifications (only background settings and toasts are preserved)
 - `addText(text, x, y, options)` - Add text display
 - `addImage(image, x, y, width, height)` - Add image display
 - `setBackground(color)` - Set solid background color

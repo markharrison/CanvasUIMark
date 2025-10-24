@@ -116,6 +116,7 @@
 
         <div class="control-group">
             <button onclick="removeAllControlsDemo()">Remove All Controls</button>
+            <button onclick="removeAllControlsExceptToastsDemo()">Remove All Except Toasts</button>
             <button onclick="addControlsBack()">Add Controls Back</button>
         </div>
 
@@ -450,6 +451,15 @@
         window.removeAllControlsDemo = function() {
             ui.removeAllControls();
             ui.showToast('Canvas cleared! Only background preserved.', 'warning', 3000);
+        }
+
+        // Function to remove all controls except toasts
+        window.removeAllControlsExceptToastsDemo = function() {
+            ui.showToast('Removing all controls but keeping this toast!', 'info', 5000);
+            // Wait a bit for the toast to appear before clearing
+            setTimeout(() => {
+                ui.removeAllControlsExceptToasts();
+            }, 100);
         }
 
         // Function to add controls back
