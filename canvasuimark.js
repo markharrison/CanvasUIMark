@@ -292,6 +292,10 @@ export class CanvasUIMark {
         removeAllControls() {
             this.controls = [];
             this.focusIndex = -1;
+            this.texts = [];
+            this.images = [];
+            this.modals = [];
+            this.toasts = [];
         }
 
         addText(text, x, y, options = {}) {

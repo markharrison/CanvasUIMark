@@ -128,7 +128,7 @@ Remove all controls at once (useful for switching between game states or screens
 ui.removeAllControls();
 ```
 
-**Note:** `removeAllControls()` only removes interactive controls. The background (color or gradient), text displays, and images are preserved.
+**Note:** `removeAllControls()` clears everything from the canvas except the background settings (color or gradient). This includes all interactive controls, text displays, images, modals, and toasts.
 
 ### Focus Management
 
@@ -513,7 +513,7 @@ new CanvasUIMark(canvas, options)
 
 - `addControl(control)` - Add a control to the UI
 - `removeControl(control)` - Remove a control from the UI
-- `removeAllControls()` - Remove all controls from the UI (background, texts, and images are preserved)
+- `removeAllControls()` - Remove all controls, texts, images, modals, and toasts from the canvas (only background settings are preserved)
 - `addText(text, x, y, options)` - Add text display
 - `addImage(image, x, y, width, height)` - Add image display
 - `setBackground(color)` - Set solid background color
