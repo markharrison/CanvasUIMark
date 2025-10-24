@@ -304,7 +304,7 @@ ui.addControl(horizontalRadio);
 - Mouse click on option
 - Arrow Up/Down keys when focused (for vertical orientation)
 - Arrow Left/Right keys when focused (for horizontal orientation)
-- Gamepad D-pad left/right
+- Gamepad D-pad left/right (navigates within control regardless of orientation)
 
 ### Slider
 
