@@ -566,7 +566,9 @@ export class Control {
 
 // Button Control
 export class Button extends Control {
-        constructor(x, y, width, height, label, callback, options = {}) {
+        constructor(x, y, label, callback, options = {}) {
+            const width = options.width || 200; // Default width
+            const height = options.height || 50; // Default height
             super(x, y, width, height, options);
             this.label = label;
             this.callback = callback;
@@ -663,6 +665,9 @@ export class Menu extends Control {
             this.selectedIndex = 0;
             this.orientation = orientation;
             this.gap = gap;
+            this.pressed = false;
+            this.pressedTime = 0;
+            this.pressedDuration = 200; // milliseconds
         }
 
         isOverInteractiveArea(x, y) {
@@ -683,6 +688,8 @@ export class Menu extends Control {
                 if (x >= itemBounds.x && x <= itemBounds.x + itemBounds.width &&
                     y >= itemBounds.y && y <= itemBounds.y + itemBounds.height) {
                     this.selectedIndex = i;
+                    this.pressed = true;
+                    this.pressedTime = 0;
                     if (this.items[i].callback) {
                         this.items[i].callback();
                     }
@@ -721,6 +728,8 @@ export class Menu extends Control {
                 this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
                 e.preventDefault();
             } else if (e.key === 'Enter' || e.key === ' ') {
+                this.pressed = true;
+                this.pressedTime = 0;
                 if (this.items[this.selectedIndex].callback) {
                     this.items[this.selectedIndex].callback();
                 }
@@ -737,8 +746,20 @@ export class Menu extends Control {
         }
 
         activate() {
+            this.pressed = true;
+            this.pressedTime = 0;
             if (this.items[this.selectedIndex].callback) {
                 this.items[this.selectedIndex].callback();
+            }
+        }
+
+        update(deltaTime) {
+            if (this.pressed) {
+                this.pressedTime += deltaTime;
+                if (this.pressedTime >= this.pressedDuration) {
+                    this.pressed = false;
+                    this.pressedTime = 0;
+                }
             }
         }
 
@@ -749,8 +770,10 @@ export class Menu extends Control {
                 const bounds = this.getItemBounds(i);
                 const isSelected = i === this.selectedIndex;
 
-                // Background
-                if (isSelected && isFocused) {
+                // Background - show pressed state
+                if (isSelected && this.pressed) {
+                    ctx.fillStyle = this.options.focusColor;
+                } else if (isSelected && isFocused) {
                     ctx.fillStyle = this.options.focusColor;
                 } else if (isSelected) {
                     ctx.fillStyle = this.options.hoverColor;
@@ -787,7 +810,9 @@ export class Menu extends Control {
 
     // Toggle Control
 export class Toggle extends Control {
-        constructor(x, y, width, height, label, initialValue, callback, options = {}) {
+        constructor(x, y, label, initialValue, callback, options = {}) {
+            const width = options.width || 250; // Default width
+            const height = options.height || 50; // Default height
             super(x, y, width, height, options);
             this.label = label;
             this.value = initialValue;
@@ -863,7 +888,9 @@ export class Toggle extends Control {
 
 // TextInput Control
 export class TextInput extends Control {
-        constructor(x, y, width, height, placeholder, options = {}) {
+        constructor(x, y, placeholder, options = {}) {
+            const width = options.width || 300; // Default width
+            const height = options.height || 50; // Default height
             super(x, y, width, height, options);
             this.placeholder = placeholder;
             this.value = '';
@@ -1096,7 +1123,9 @@ export class Radio extends Control {
 
 // Slider Control
 export class Slider extends Control {
-        constructor(x, y, width, height, min, max, value, step, label, callback, options = {}) {
+        constructor(x, y, min, max, value, step, label, callback, options = {}) {
+            const width = options.width || 300; // Default width
+            const height = options.height || 80; // Default height
             super(x, y, width, height, options);
             this.min = min;
             this.max = max;

@@ -211,12 +211,12 @@
         currentY += 30;
 
         const button1 = new Button(
-            column1X, currentY, 200, 50,
+            column1X, currentY,
             'Click Me!',
             () => {
                 ui.showToast('Button clicked!', 'success', 2000);
             },
-            { borderRadius: 10 }
+            { width: 200, height: 50, borderRadius: 10 }
         );
         ui.addControl(button1);
         currentY += 70;
@@ -253,13 +253,13 @@
         currentY += 30;
 
         const toggle = new Toggle(
-            column2X, currentY, 250, 50,
+            column2X, currentY,
             'Sound Effects',
             true,
             (value) => {
                 ui.showToast(`Sound ${value ? 'ON' : 'OFF'}`, value ? 'success' : 'warning', 2000);
             },
-            { borderRadius: 10 }
+            { width: 250, height: 50, borderRadius: 10 }
         );
         ui.addControl(toggle);
         currentY += 70;
@@ -272,16 +272,16 @@
         currentY += 30;
 
         const textInput = new TextInput(
-            column2X, currentY, 300, 50,
+            column2X, currentY,
             'Enter your name...',
-            { borderRadius: 10 }
+            { width: 300, height: 50, borderRadius: 10 }
         );
         ui.addControl(textInput);
         currentY += 70;
 
         // Another button to show text input value
         const showInputButton = new Button(
-            column2X, currentY, 200, 50,
+            column2X, currentY,
             'Show Input Value',
             () => {
                 const value = textInput.value || '(empty)';
@@ -289,7 +289,7 @@
                     { label: 'OK', callback: () => {} }
                 ]);
             },
-            { borderRadius: 8 }
+            { width: 200, height: 50, borderRadius: 8 }
         );
         ui.addControl(showInputButton);
         currentY += 70;
@@ -356,26 +356,26 @@
         currentY += 30;
 
         const slider = new Slider(
-            column3X, currentY, 300, 80,
+            column3X, currentY,
             0, 100, 50, 5,
             'Volume',
             (value) => {
                 console.log('Volume changed to:', value);
             },
-            { borderRadius: 10 }
+            { width: 300, height: 80, borderRadius: 10 }
         );
         ui.addControl(slider);
         currentY += 100;
 
         // Another slider with different range
         const speedSlider = new Slider(
-            column3X, currentY, 300, 80,
+            column3X, currentY,
             10, 200, 100, 10,
             'Speed',
             (value) => {
                 console.log('Speed changed to:', value);
             },
-            { borderRadius: 10 }
+            { width: 300, height: 80, borderRadius: 10 }
         );
         ui.addControl(speedSlider);
 
@@ -473,12 +473,12 @@
             let currentY = 120;
 
             const button1 = new Button(
-                column1X, currentY, 200, 50,
+                column1X, currentY,
                 'Click Me!',
                 () => {
                     ui.showToast('Button clicked!', 'success', 2000);
                 },
-                { borderRadius: 10 }
+                { width: 200, height: 50, borderRadius: 10 }
             );
             ui.addControl(button1);
             currentY += 70;
@@ -500,27 +500,27 @@
             currentY = 120;
 
             const toggle = new Toggle(
-                column2X, currentY, 250, 50,
+                column2X, currentY,
                 'Sound Effects',
                 true,
                 (value) => {
                     ui.showToast(`Sound ${value ? 'ON' : 'OFF'}`, value ? 'success' : 'warning', 2000);
                 },
-                { borderRadius: 10 }
+                { width: 250, height: 50, borderRadius: 10 }
             );
             ui.addControl(toggle);
             currentY += 70;
 
             const textInput = new TextInput(
-                column2X, currentY, 300, 50,
+                column2X, currentY,
                 'Enter your name...',
-                { borderRadius: 10 }
+                { width: 300, height: 50, borderRadius: 10 }
             );
             ui.addControl(textInput);
             currentY += 70;
 
             const showInputButton = new Button(
-                column2X, currentY, 200, 50,
+                column2X, currentY,
                 'Show Input Value',
                 () => {
                     const value = textInput.value || '(empty)';
@@ -528,7 +528,7 @@
                         { label: 'OK', callback: () => {} }
                     ]);
                 },
-                { borderRadius: 8 }
+                { width: 200, height: 50, borderRadius: 8 }
             );
             ui.addControl(showInputButton);
             currentY += 70;
@@ -572,25 +572,25 @@
             currentY += 200;
 
             const slider = new Slider(
-                column3X, currentY, 300, 80,
+                column3X, currentY,
                 0, 100, 50, 5,
                 'Volume',
                 (value) => {
                     console.log('Volume changed to:', value);
                 },
-                { borderRadius: 10 }
+                { width: 300, height: 80, borderRadius: 10 }
             );
             ui.addControl(slider);
             currentY += 100;
 
             const speedSlider = new Slider(
-                column3X, currentY, 300, 80,
+                column3X, currentY,
                 10, 200, 100, 10,
                 'Speed',
                 (value) => {
                     console.log('Speed changed to:', value);
                 },
-                { borderRadius: 10 }
+                { width: 300, height: 80, borderRadius: 10 }
             );
             ui.addControl(speedSlider);
 

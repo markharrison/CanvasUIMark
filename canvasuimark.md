@@ -154,12 +154,13 @@ A clickable button that executes a callback when activated.
 ```javascript
 const button = new CanvasUIControls.Button(
     100, 100,           // x, y position
-    200, 50,            // width, height
     'Click Me!',        // label
     () => {             // callback
         console.log('Button clicked!');
     },
-    {                   // optional styling
+    {                   // options
+        width: 200,             // width (default: 200)
+        height: 50,             // height (default: 50)
         backgroundColor: '#333333',
         textColor: '#ffffff',
         focusColor: '#4CAF50'
@@ -211,13 +212,14 @@ A switch that can be turned on or off.
 ```javascript
 const toggle = new CanvasUIControls.Toggle(
     100, 100,           // x, y position
-    250, 50,            // width, height
     'Sound Effects',    // label
     true,               // initial value
     (value) => {        // callback with current value
         console.log('Toggle is now:', value);
     },
-    {                   // optional styling
+    {                   // options
+        width: 250,             // width (default: 250)
+        height: 50,             // height (default: 50)
         focusColor: '#4CAF50'
     }
 );
@@ -236,9 +238,10 @@ A text input field for user text entry.
 ```javascript
 const textInput = new CanvasUIControls.TextInput(
     100, 100,                  // x, y position
-    300, 50,                   // width, height
     'Enter your name...',      // placeholder text
-    {                          // optional styling
+    {                          // options
+        width: 300,            // width (default: 300)
+        height: 50,            // height (default: 50)
         backgroundColor: '#333333',
         textColor: '#ffffff'
     }
@@ -289,7 +292,6 @@ A slider for selecting numerical values within a range.
 ```javascript
 const slider = new CanvasUIControls.Slider(
     100, 100,          // x, y position
-    300, 80,           // width, height
     0, 100,            // min, max values
     50,                // initial value
     5,                 // step increment
@@ -297,7 +299,9 @@ const slider = new CanvasUIControls.Slider(
     (value) => {       // callback
         console.log('Value:', value);
     },
-    {                  // optional styling
+    {                  // options
+        width: 300,            // width (default: 300)
+        height: 80,            // height (default: 80)
         focusColor: '#4CAF50'
     }
 );
@@ -548,12 +552,12 @@ new CanvasUIMark(canvas, options)
 
 All available in `CanvasUIControls`:
 
-- `Button(x, y, width, height, label, callback, options)`
+- `Button(x, y, label, callback, options)`
 - `Menu(x, y, items, options)`
-- `Toggle(x, y, width, height, label, initialValue, callback, options)`
-- `TextInput(x, y, width, height, placeholder, options)`
+- `Toggle(x, y, label, initialValue, callback, options)`
+- `TextInput(x, y, placeholder, options)`
 - `Radio(x, y, items, selectedIndex, callback, options)`
-- `Slider(x, y, width, height, min, max, value, step, label, callback, options)`
+- `Slider(x, y, min, max, value, step, label, callback, options)`
 
 ## Examples
 
