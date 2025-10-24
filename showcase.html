@@ -319,7 +319,7 @@
 
         // Add a panel behind the radio control for visual grouping
         const radioPanel = new Panel(
-            column3X - 10, currentY - 10, 550, 460,
+            column3X - 10, currentY - 10, 550, 555,
             {
                 backgroundColor: '#888888',
                 borderColor: '#4CAF50',
@@ -343,10 +343,29 @@
             (index, value) => {
                 ui.showToast(`Difficulty: ${value}`, 'info', 2000);
             },
-            { width: 250, height: 45, borderRadius: 10 }
+            { width: 250, height: 45, borderRadius: 10, orientation: 'vertical' }
         );
         ui.addControl(radio);
         currentY += 200;
+
+        // Horizontal Radio Control
+        ui.addText('Horizontal Radio:', column3X, currentY, {
+            font: 'bold 18px Arial',
+            color: '#ffffff'
+        });
+        currentY += 30;
+
+        const horizontalRadio = new Radio(
+            column3X, currentY,
+            ['Low', 'Med', 'High'],
+            1,
+            (index, value) => {
+                ui.showToast(`Quality: ${value}`, 'info', 2000);
+            },
+            { width: 90, height: 45, borderRadius: 10, orientation: 'horizontal', gap: 5 }
+        );
+        ui.addControl(horizontalRadio);
+        currentY += 65;
 
         // Slider Control
         ui.addText('Slider Control:', column3X, currentY, {
@@ -549,7 +568,7 @@
             currentY = 120;
 
             const radioPanel = new Panel(
-                column3X - 10, currentY - 10, 550, 460,
+                column3X - 10, currentY - 10, 550, 555,
                 {
                     backgroundColor: '#888888',
                     borderColor: '#4CAF50',
@@ -566,10 +585,22 @@
                 (index, value) => {
                     ui.showToast(`Difficulty: ${value}`, 'info', 2000);
                 },
-                { width: 250, height: 45, borderRadius: 10 }
+                { width: 250, height: 45, borderRadius: 10, orientation: 'vertical' }
             );
             ui.addControl(radio);
             currentY += 200;
+
+            const horizontalRadio = new Radio(
+                column3X, currentY,
+                ['Low', 'Med', 'High'],
+                1,
+                (index, value) => {
+                    ui.showToast(`Quality: ${value}`, 'info', 2000);
+                },
+                { width: 90, height: 45, borderRadius: 10, orientation: 'horizontal', gap: 5 }
+            );
+            ui.addControl(horizontalRadio);
+            currentY += 65;
 
             const slider = new Slider(
                 column3X, currentY,

@@ -261,9 +261,10 @@ console.log(textInput.value);
 
 ### Radio
 
-A group of mutually exclusive options.
+A group of mutually exclusive options displayed vertically or horizontally.
 
 ```javascript
+// Vertical Radio (default)
 const radio = new Radio(
     100, 100,                  // x, y position
     ['Easy', 'Medium', 'Hard', 'Expert'],  // items
@@ -272,18 +273,38 @@ const radio = new Radio(
         console.log(`Selected: ${value} (index ${index})`);
     },
     {                          // options
-        width: 250,            // width (default: 250)
+        width: 250,            // width of each item (default: 250)
         height: 45,            // height of each item (default: 45)
-        focusColor: '#4CAF50'
+        focusColor: '#4CAF50',
+        orientation: 'vertical', // 'vertical' or 'horizontal' (default: 'vertical')
+        gap: 0                 // gap between items (default: 0)
     }
 );
 ui.addControl(radio);
+
+// Horizontal Radio
+const horizontalRadio = new Radio(
+    100, 100,
+    ['Low', 'Medium', 'High'],
+    1,
+    (index, value) => {
+        console.log(`Selected: ${value} (index ${index})`);
+    },
+    {
+        width: 100,            // width of each item
+        height: 45,            // height of each item
+        orientation: 'horizontal',
+        gap: 10                // gap between items
+    }
+);
+ui.addControl(horizontalRadio);
 ```
 
 **Navigation:**
 - Mouse click on option
-- Arrow Up/Down keys when focused
-- Gamepad D-pad up/down
+- Arrow Up/Down keys when focused (for vertical orientation)
+- Arrow Left/Right keys when focused (for horizontal orientation)
+- Gamepad D-pad left/right
 
 ### Slider
 
