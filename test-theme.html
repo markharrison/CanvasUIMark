@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .canvas-container {
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .controls {
+            max-width: 1280px;
+            width: 100%;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Theme Test - CanvasUIMark</h1>
+    
+    <div class="canvas-container">
+        <canvas id="gameCanvas" width="1280" height="720"></canvas>
+    </div>
+
+    <div class="controls">
+        <h2>Theme Controls</h2>
+        <button id="defaultTheme">Default Theme</button>
+        <button id="blueTheme">Blue Theme</button>
+        <button id="orangeTheme">Orange Theme</button>
+        <button id="purpleTheme">Purple Theme</button>
+        <button id="changeFont">Change Font Family</button>
+    </div>
+
+    <script type="module">
+        import { CanvasUIMark, Button, Menu, Toggle, Slider, Radio, Carousel, TextInput, Panel } from './canvasuimark.js';
+
+        const canvas = document.getElementById('gameCanvas');
+        const ui = new CanvasUIMark(canvas, {
+            backgroundColor: '#1a1a1a'
+        });
+
+        function createControls() {
+            ui.removeAllControls();
+
+            // Add title
+            ui.addText('Theme Test', 640, 50, {
+                font: 'bold 36px Arial',
+                align: 'center',
+                color: '#ffffff'
+            });
+
+            // Panel background
+            const panel = new Panel(50, 120, {
+                width: 600,
+                height: 550,
+                borderRadius: 10
+            });
+            ui.addControl(panel);
+
+            // Button with default theme
+            const button1 = new Button(100, 150, 'Default Button', () => {
+                ui.showToast('Button 1 clicked!', 'success');
+            }, { width: 250, height: 50, borderRadius: 10 });
+            ui.addControl(button1);
+
+            // Button with font-size override
+            const button2 = new Button(100, 220, 'Custom Font Size', () => {
+                ui.showToast('Button 2 clicked!', 'info');
+            }, { width: 250, height: 50, borderRadius: 10, fontSize: 20 });
+            ui.addControl(button2);
+
+            // Button with font-style and font-weight
+            const button3 = new Button(100, 290, 'Bold Italic', () => {
+                ui.showToast('Button 3 clicked!', 'warning');
+            }, { width: 250, height: 50, borderRadius: 10, fontWeight: 'bold', fontStyle: 'italic' });
+            ui.addControl(button3);
+
+            // Toggle with default theme
+            const toggle = new Toggle(100, 360, 'Music', true, (value) => {
+                ui.showToast(`Music ${value ? 'On' : 'Off'}`, 'info');
+            }, { width: 250, height: 50, borderRadius: 10 });
+            ui.addControl(toggle);
+
+            // Slider with default theme
+            const slider = new Slider(100, 430, 0, 100, 50, 5, 'Volume', (value) => {
+                console.log('Volume:', value);
+            }, { width: 250, height: 80, borderRadius: 10 });
+            ui.addControl(slider);
+
+            // Menu
+            const menu = new Menu(100, 540, [
+                { label: 'Start', callback: () => ui.showToast('Start clicked', 'success') },
+                { label: 'Options', callback: () => ui.showToast('Options clicked', 'info') }
+            ], { width: 250, height: 50, borderRadius: 10 });
+            ui.addControl(menu);
+
+            // Right side panel
+            const panel2 = new Panel(700, 120, {
+                width: 530,
+                height: 550,
+                borderRadius: 10
+            });
+            ui.addControl(panel2);
+
+            // Radio buttons
+            const radio = new Radio(750, 150, ['Easy', 'Medium', 'Hard'], 1, (index, value) => {
+                ui.showToast(`Difficulty: ${value}`, 'info');
+            }, { width: 200, height: 150, borderRadius: 10 });
+            ui.addControl(radio);
+
+            // Carousel
+            const carousel = new Carousel(750, 330, ['Red', 'Green', 'Blue'], 0, (index, value) => {
+                ui.showToast(`Color: ${value}`, 'info');
+            }, { width: 200, height: 60, borderRadius: 10 });
+            ui.addControl(carousel);
+
+            // Text input with custom font size
+            const textInput = new TextInput(750, 420, 'Enter name...', {
+                width: 200,
+                height: 50,
+                borderRadius: 10,
+                fontSize: 18
+            });
+            ui.addControl(textInput);
+        }
+
+        // Initial controls
+        createControls();
+
+        // Theme buttons
+        document.getElementById('defaultTheme').addEventListener('click', () => {
+            ui.setTheme({
+                borderColor: '#666666',
+                focusBorderColor: '#4CAF50',
+                controlColor: '#4CAF50',
+                backgroundColor: '#333333',
+                textColor: '#ffffff',
+                borderRadius: 10
+            });
+            createControls();
+            ui.showToast('Default theme applied', 'success');
+        });
+
+        document.getElementById('blueTheme').addEventListener('click', () => {
+            ui.setTheme({
+                borderColor: '#1976D2',
+                focusBorderColor: '#2196F3',
+                controlColor: '#2196F3',
+                backgroundColor: '#1E3A5F',
+                textColor: '#E3F2FD',
+                borderRadius: 10
+            });
+            createControls();
+            ui.showToast('Blue theme applied', 'info');
+        });
+
+        document.getElementById('orangeTheme').addEventListener('click', () => {
+            ui.setTheme({
+                borderColor: '#E65100',
+                focusBorderColor: '#FF9800',
+                controlColor: '#FF9800',
+                backgroundColor: '#4E342E',
+                textColor: '#FFF3E0',
+                borderRadius: 10
+            });
+            createControls();
+            ui.showToast('Orange theme applied', 'warning');
+        });
+
+        document.getElementById('purpleTheme').addEventListener('click', () => {
+            ui.setTheme({
+                borderColor: '#6A1B9A',
+                focusBorderColor: '#9C27B0',
+                controlColor: '#9C27B0',
+                backgroundColor: '#4A148C',
+                textColor: '#F3E5F5',
+                borderRadius: 10
+            });
+            createControls();
+            ui.showToast('Purple theme applied', 'success');
+        });
+
+        document.getElementById('changeFont').addEventListener('click', () => {
+            ui.setDefaultFont({
+                family: 'Georgia, serif',
+                size: 16
+            });
+            createControls();
+            ui.showToast('Font changed to Georgia', 'info');
+        });
+
+        // Animation loop
+        let lastTime = 0;
+        function gameLoop(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            ui.update(deltaTime);
+            ui.render();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>

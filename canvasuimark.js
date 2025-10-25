@@ -29,6 +29,27 @@ export function DrawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
+// Helper function to build font string from components
+export function BuildFontString(fontOptions, defaultFont) {
+  // If font is already a complete string, use it
+  if (typeof fontOptions === "string") {
+    return fontOptions;
+  }
+
+  // Build font string from components
+  const style = fontOptions.style || defaultFont.style || "normal";
+  const weight = fontOptions.weight || defaultFont.weight || "normal";
+  const size = fontOptions.size || defaultFont.size || 16;
+  const family = fontOptions.family || defaultFont.family || "Arial";
+
+  // Combine style and weight if needed
+  let prefix = "";
+  if (style !== "normal") prefix += style + " ";
+  if (weight !== "normal") prefix += weight + " ";
+
+  return `${prefix}${size}px ${family}`;
+}
+
 // Main CanvasUIMark class
 export class CanvasUIMark {
   constructor(canvas, options = {}) {
@@ -40,6 +61,26 @@ export class CanvasUIMark {
     this.toasts = [];
     this.images = [];
     this.texts = [];
+
+    // Theme defaults for controls
+    this.theme = {
+      borderColor: "#666666",
+      focusBorderColor: "#4CAF50",
+      controlColor: "#4CAF50",
+      backgroundColor: "#333333",
+      textColor: "#ffffff",
+      borderWidth: 2,
+      padding: 10,
+      borderRadius: 0,
+    };
+
+    // Default font properties
+    this.defaultFont = {
+      family: "Arial",
+      size: 16,
+      weight: "normal",
+      style: "normal",
+    };
 
     // Configuration
     this.options = {
@@ -312,6 +353,7 @@ export class CanvasUIMark {
 
   addControl(control) {
     control.manager = this;
+    control.applyTheme(); // Apply theme defaults
     this.controls.push(control);
     if (this.focusIndex === -1 && this.controls.length === 1) {
       this.focusIndex = 0;
@@ -376,6 +418,20 @@ export class CanvasUIMark {
   setBackgroundGradient(gradient, direction = "diagonal") {
     this.options.backgroundGradient = gradient;
     this.options.gradientDirection = direction; // 'horizontal', 'vertical', or 'diagonal'
+  }
+
+  setTheme(themeOptions = {}) {
+    this.theme = {
+      ...this.theme,
+      ...themeOptions,
+    };
+  }
+
+  setDefaultFont(fontOptions = {}) {
+    this.defaultFont = {
+      ...this.defaultFont,
+      ...fontOptions,
+    };
   }
 
   showModal(title, message, buttons = [], options = {}) {
@@ -513,19 +569,69 @@ export class Control {
     this.y = y;
     this.width = width;
     this.height = height;
+    this.manager = null;
+
+    // Store raw options for later processing
+    this._rawOptions = options;
+    // Initialize options with hardcoded defaults (will be overridden by theme when manager is set)
     this.options = {
-      borderColor: "#666666", // Color for the normal border
-      focusBorderColor: "#4CAF50", // Border color when the control is focused
-      controlColor: "#4CAF50", // Main color for control elements (button face, slider thumb, menu selection, etc.)
-      backgroundColor: "#333333", // General control background (panel, input field, etc.)
-      textColor: "#ffffff", // Color for the label/text inside the control (Button, TextInput)
+      borderColor: "#666666",
+      focusBorderColor: "#4CAF50",
+      controlColor: "#4CAF50",
+      backgroundColor: "#333333",
+      textColor: "#ffffff",
       font: "16px Arial",
       borderWidth: 2,
       padding: 10,
-      borderRadius: 0, // Default no rounding
+      borderRadius: 0,
       ...options,
     };
-    this.manager = null;
+  }
+
+  // Called when control is added to a manager to apply theme defaults
+  applyTheme() {
+    if (!this.manager) return;
+
+    const theme = this.manager.theme;
+    const defaultFont = this.manager.defaultFont;
+
+    // Build the options with theme defaults, then apply user overrides
+    const themedOptions = {
+      borderColor: theme.borderColor,
+      focusBorderColor: theme.focusBorderColor,
+      controlColor: theme.controlColor,
+      backgroundColor: theme.backgroundColor,
+      textColor: theme.textColor,
+      borderWidth: theme.borderWidth,
+      padding: theme.padding,
+      borderRadius: theme.borderRadius,
+    };
+
+    // Handle font - if user provided complete font string, use it
+    // Otherwise build from components
+    if (this._rawOptions.font) {
+      themedOptions.font = this._rawOptions.font;
+    } else {
+      // Build font from individual properties with theme defaults
+      const fontOptions = {
+        family: this._rawOptions["font-family"] || this._rawOptions.fontFamily,
+        size: this._rawOptions["font-size"] || this._rawOptions.fontSize,
+        weight: this._rawOptions["font-weight"] || this._rawOptions.fontWeight,
+        style: this._rawOptions["font-style"] || this._rawOptions.fontStyle,
+      };
+      themedOptions.font = BuildFontString(fontOptions, defaultFont);
+    }
+
+    // Apply user overrides on top of theme
+    this.options = {
+      ...themedOptions,
+      ...this._rawOptions,
+    };
+
+    // Ensure font is set correctly
+    if (!this.options.font) {
+      this.options.font = BuildFontString({}, defaultFont);
+    }
   }
 
   containsPoint(x, y) {

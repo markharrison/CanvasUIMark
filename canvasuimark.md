@@ -616,9 +616,113 @@ ui.onEscape = () => {
 
 ## Styling and Customization
 
+### Theme System
+
+CanvasUIMark provides a theme system to set default colors and fonts for all controls. Set theme defaults once at the beginning, and all subsequently created controls will inherit these values unless specifically overridden.
+
+#### Setting Theme Colors
+
+```javascript
+const ui = new CanvasUIMark(canvas);
+
+// Set theme colors that will apply to all controls
+ui.setTheme({
+    borderColor: '#666666',          // Normal border color
+    focusBorderColor: '#4CAF50',     // Border color when focused
+    controlColor: '#4CAF50',         // Main control element color
+    backgroundColor: '#333333',      // Control background
+    textColor: '#ffffff',            // Text color
+    borderWidth: 2,                  // Border thickness
+    padding: 10,                     // Internal padding
+    borderRadius: 10                 // Rounded corners
+});
+
+// Now create controls - they'll use the theme defaults
+const button = new Button(100, 100, 'Click Me', callback);
+ui.addControl(button);
+```
+
+#### Setting Default Font
+
+Set the default font family and properties for all controls:
+
+```javascript
+ui.setDefaultFont({
+    family: 'Georgia, serif',
+    size: 16,
+    weight: 'normal',
+    style: 'normal'
+});
+
+// Controls will now use Georgia by default
+const button = new Button(100, 100, 'Click Me', callback);
+ui.addControl(button);
+```
+
+#### Using Font Properties
+
+You can specify fonts in two ways:
+
+**1. Complete font string (traditional way):**
+```javascript
+const button = new Button(100, 100, 'Click Me', callback, {
+    font: 'bold 20px Arial'
+});
+```
+
+**2. Individual font properties (uses default font family):**
+```javascript
+const button = new Button(100, 100, 'Click Me', callback, {
+    fontSize: 20,           // or 'font-size'
+    fontWeight: 'bold',     // or 'font-weight'
+    fontStyle: 'italic',    // or 'font-style'
+    fontFamily: 'Courier'   // or 'font-family' (optional, uses default if not specified)
+});
+```
+
+When using individual properties, the font family from `setDefaultFont()` is used unless you specify a `fontFamily` option.
+
+#### Theme Examples
+
+**Blue Theme:**
+```javascript
+ui.setTheme({
+    borderColor: '#1976D2',
+    focusBorderColor: '#2196F3',
+    controlColor: '#2196F3',
+    backgroundColor: '#1E3A5F',
+    textColor: '#E3F2FD',
+    borderRadius: 10
+});
+```
+
+**Orange Theme:**
+```javascript
+ui.setTheme({
+    borderColor: '#E65100',
+    focusBorderColor: '#FF9800',
+    controlColor: '#FF9800',
+    backgroundColor: '#4E342E',
+    textColor: '#FFF3E0',
+    borderRadius: 10
+});
+```
+
+**Purple Theme:**
+```javascript
+ui.setTheme({
+    borderColor: '#6A1B9A',
+    focusBorderColor: '#9C27B0',
+    controlColor: '#9C27B0',
+    backgroundColor: '#4A148C',
+    textColor: '#F3E5F5',
+    borderRadius: 10
+});
+```
+
 ### Control Options
 
-All controls accept an `options` object for styling with consistent color properties:
+All controls accept an `options` object for styling. These options override the theme defaults:
 
 ```javascript
 const options = {
@@ -631,8 +735,15 @@ const options = {
     // Text color (Button and TextInput also support):
     textColor: '#ffffff',            // Color for the label/text inside the control
     
+    // Font options (choose one approach):
+    font: '16px Arial',              // Complete font string
+    // OR individual properties:
+    fontSize: 16,                    // Font size in pixels
+    fontFamily: 'Arial',             // Font family
+    fontWeight: 'normal',            // 'normal', 'bold', '100'-'900'
+    fontStyle: 'normal',             // 'normal', 'italic', 'oblique'
+    
     // Layout properties:
-    font: '16px Arial',              // Font style
     borderWidth: 2,                  // Border thickness
     padding: 10,                     // Internal padding
     borderRadius: 0                  // Border radius for rounded corners
@@ -674,18 +785,6 @@ const options = {
 #### Slider
 - Uses `controlColor` for both the slider knob and filled track portion
 - Border shows `focusBorderColor` when control has focus
-
-### Fonts
-
-Customize fonts using CSS font strings:
-
-```javascript
-{
-    font: 'bold 20px Arial'
-    font: '18px "Courier New"'
-    font: 'italic 16px Georgia'
-}
-```
 
 ### Colors
 
@@ -750,6 +849,8 @@ new CanvasUIMark(canvas, options)
 - `addImage(image, x, y, width, height)` - Add image display
 - `setBackground(color)` - Set solid background color
 - `setBackgroundGradient(gradient, direction)` - Set gradient background with direction ('horizontal', 'vertical', or 'diagonal')
+- `setTheme(themeOptions)` - Set default colors and styling for all subsequently created controls
+- `setDefaultFont(fontOptions)` - Set default font family and properties for all subsequently created controls
 - `showModal(title, message, buttons)` - Display modal dialog
 - `closeModal(modal)` - Close specific modal
 - `showToast(message, type, duration)` - Display toast notification
