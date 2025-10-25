@@ -876,10 +876,11 @@ export class Toggle extends Control {
             ctx.textBaseline = 'middle';
             ctx.fillText(this.label, this.x + this.options.padding, this.y + this.height / 2);
 
-            // Draw toggle switch
+            // Draw toggle switch - add extra padding to avoid overlapping control border
             const switchWidth = 50;
             const switchHeight = 25;
-            const switchX = this.x + this.width - switchWidth - this.options.padding;
+            const extraPadding = 5; // Extra padding to prevent overlap with control border
+            const switchX = this.x + this.width - switchWidth - this.options.padding - extraPadding;
             const switchY = this.y + (this.height - switchHeight) / 2;
             const switchRadius = this.options.borderRadius > 0 ? Math.min(switchHeight / 2, this.options.borderRadius) : switchHeight / 2;
 
@@ -888,15 +889,22 @@ export class Toggle extends Control {
             DrawRoundedRect(ctx, switchX, switchY, switchWidth, switchHeight, switchRadius);
             ctx.fill();
 
-            // Switch knob - white
+            // Switch knob - white with consistent border (doesn't change with focus)
             const knobSize = 20;
             const knobX = this.value ? switchX + switchWidth - knobSize - 2 : switchX + 2;
             const knobY = switchY + 2.5;
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
             
+            // Knob fill
             ctx.fillStyle = '#ffffff';
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
+            
+            // Knob border - consistent color regardless of focus state
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 1;
+            DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
+            ctx.stroke();
         }
     }
 
