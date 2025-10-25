@@ -519,11 +519,12 @@ export class Control {
             this.width = width;
             this.height = height;
             this.options = {
-                backgroundColor: '#333333',
-                borderColor: '#666666',
-                textColor: '#ffffff',
-                focusColor: '#4CAF50',
-                hoverColor: '#555555',
+                borderColor: '#666666',          // Color for the normal border
+                focusBorderColor: '#4CAF50',     // Border color when the control is focused
+                controlColor: '#ffffff',         // Main color for control elements (button face, slider thumb, etc.)
+                backgroundColor: '#333333',      // General control background (panel, input field, etc.)
+                hoverColor: '#555555',           // Indicating mouse is hovering over the control
+                textColor: '#ffffff',            // Color for the label/text inside the control (Button, TextInput)
                 font: '16px Arial',
                 borderWidth: 2,
                 padding: 10,
@@ -551,7 +552,7 @@ export class Control {
             }
 
             // Border
-            ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
+            ctx.strokeStyle = isFocused ? this.options.focusBorderColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
                 DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
@@ -618,8 +619,8 @@ export class Button extends Control {
         draw(ctx, isFocused) {
             const radius = this.options.borderRadius;
             
-            // Background - change color when pressed
-            ctx.fillStyle = this.pressed ? this.options.focusColor : this.options.backgroundColor;
+            // Background - use controlColor for button face when not pressed, focusBorderColor when pressed
+            ctx.fillStyle = this.pressed ? this.options.focusBorderColor : this.options.controlColor;
             if (radius > 0) {
                 DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
                 ctx.fill();
@@ -628,7 +629,7 @@ export class Button extends Control {
             }
 
             // Border
-            ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
+            ctx.strokeStyle = isFocused ? this.options.focusBorderColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
                 DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
@@ -786,13 +787,13 @@ export class Menu extends Control {
 
                 // Background - show pressed state
                 if (isSelected && this.pressed) {
-                    ctx.fillStyle = this.options.focusColor;
+                    ctx.fillStyle = this.options.focusBorderColor;
                 } else if (isSelected && isFocused) {
-                    ctx.fillStyle = this.options.focusColor;
+                    ctx.fillStyle = this.options.focusBorderColor;
                 } else if (isSelected) {
                     ctx.fillStyle = this.options.hoverColor;
                 } else {
-                    ctx.fillStyle = this.options.backgroundColor;
+                    ctx.fillStyle = this.options.controlColor;
                 }
                 
                 if (radius > 0) {
@@ -803,7 +804,7 @@ export class Menu extends Control {
                 }
 
                 // Border
-                ctx.strokeStyle = isFocused && isSelected ? this.options.focusColor : this.options.borderColor;
+                ctx.strokeStyle = isFocused && isSelected ? this.options.focusBorderColor : this.options.borderColor;
                 ctx.lineWidth = this.options.borderWidth;
                 if (radius > 0) {
                     DrawRoundedRect(ctx, bounds.x, bounds.y, bounds.width, bounds.height, radius);
@@ -883,18 +884,18 @@ export class Toggle extends Control {
             const switchY = this.y + (this.height - switchHeight) / 2;
             const switchRadius = this.options.borderRadius > 0 ? Math.min(switchHeight / 2, this.options.borderRadius) : switchHeight / 2;
 
-            // Switch background
-            ctx.fillStyle = this.value ? this.options.focusColor : '#999999';
+            // Switch background - use focusBorderColor when on, hoverColor when off
+            ctx.fillStyle = this.value ? this.options.focusBorderColor : this.options.hoverColor;
             DrawRoundedRect(ctx, switchX, switchY, switchWidth, switchHeight, switchRadius);
             ctx.fill();
 
-            // Switch knob
+            // Switch knob - use controlColor
             const knobSize = 20;
             const knobX = this.value ? switchX + switchWidth - knobSize - 2 : switchX + 2;
             const knobY = switchY + 2.5;
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
             
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = this.options.controlColor;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
         }
@@ -1135,15 +1136,15 @@ export class Radio extends Control {
                 const radioX = bounds.x + this.options.padding + radioSize / 2;
                 const radioY = bounds.y + bounds.height / 2;
 
-                ctx.strokeStyle = this.options.textColor;
+                ctx.strokeStyle = this.options.borderColor;
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.arc(radioX, radioY, radioSize / 2, 0, Math.PI * 2);
                 ctx.stroke();
 
-                // Fill if selected
+                // Fill if selected - use controlColor
                 if (isSelected) {
-                    ctx.fillStyle = this.options.focusColor;
+                    ctx.fillStyle = this.options.controlColor;
                     ctx.beginPath();
                     ctx.arc(radioX, radioY, radioSize / 3, 0, Math.PI * 2);
                     ctx.fill();
@@ -1158,7 +1159,7 @@ export class Radio extends Control {
             }
 
             // Draw outer border around entire control
-            ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
+            ctx.strokeStyle = isFocused ? this.options.focusBorderColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
                 DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
@@ -1370,7 +1371,7 @@ export class Carousel extends Control {
             }
             
             // Draw border
-            ctx.strokeStyle = isFocused ? this.options.focusColor : this.options.borderColor;
+            ctx.strokeStyle = isFocused ? this.options.focusBorderColor : this.options.borderColor;
             ctx.lineWidth = this.options.borderWidth;
             if (radius > 0) {
                 DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
@@ -1490,27 +1491,27 @@ export class Slider extends Control {
             const trackHeight = 4;
             const trackRadius = this.options.borderRadius > 0 ? Math.min(trackHeight / 2, this.options.borderRadius / 2) : trackHeight / 2;
 
-            ctx.fillStyle = '#666666';
+            ctx.fillStyle = this.options.hoverColor;
             DrawRoundedRect(ctx, trackX, trackY - trackHeight / 2, trackWidth, trackHeight, trackRadius);
             ctx.fill();
 
-            // Draw filled portion
+            // Draw filled portion - use focusBorderColor for active part
             const percent = (this.value - this.min) / (this.max - this.min);
-            ctx.fillStyle = this.options.focusColor;
+            ctx.fillStyle = this.options.focusBorderColor;
             DrawRoundedRect(ctx, trackX, trackY - trackHeight / 2, trackWidth * percent, trackHeight, trackRadius);
             ctx.fill();
 
-            // Draw slider knob
+            // Draw slider knob - use controlColor
             const knobSize = 20;
             const knobX = trackX + trackWidth * percent - knobSize / 2;
             const knobY = trackY - knobSize / 2;
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
 
-            ctx.fillStyle = isFocused ? this.options.focusColor : '#ffffff';
+            ctx.fillStyle = isFocused ? this.options.focusBorderColor : this.options.controlColor;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
             
-            ctx.strokeStyle = this.options.textColor;
+            ctx.strokeStyle = this.options.borderColor;
             ctx.lineWidth = 2;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.stroke();

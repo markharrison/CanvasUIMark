@@ -217,7 +217,15 @@
             () => {
                 ui.showToast('Button clicked!', 'success', 2000);
             },
-            { width: 200, height: 50, borderRadius: 10 }
+            { 
+                width: 200, 
+                height: 50, 
+                borderRadius: 10,
+                controlColor: '#4CAF50',    // Main button face color
+                textColor: '#ffffff',       // Text color
+                borderColor: '#2E7D32',     // Normal border
+                focusBorderColor: '#81C784' // Focused border
+            }
         );
         ui.addControl(button1);
         currentY += 70;
