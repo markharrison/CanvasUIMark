@@ -1513,7 +1513,8 @@ export class Slider extends Control {
 
             // Draw slider knob - use controlColor to match the filled track
             const knobSize = 20;
-            const knobX = trackX + trackWidth * percent - knobSize / 2;
+            // Constrain knob position to stay within control borders
+            const knobX = Math.max(trackX, Math.min(trackX + trackWidth - knobSize, trackX + trackWidth * percent - knobSize / 2));
             const knobY = trackY - knobSize / 2;
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
 
@@ -1521,7 +1522,8 @@ export class Slider extends Control {
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
             
-            ctx.strokeStyle = isFocused ? this.options.focusBorderColor : this.options.borderColor;
+            // Use controlColor for knob border to match the control, regardless of focus state
+            ctx.strokeStyle = this.options.controlColor;
             ctx.lineWidth = 2;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.stroke();
