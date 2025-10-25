@@ -334,6 +334,7 @@ export class CanvasUIMark {
             this.images = [];
             this.modals = [];
             this.toasts = [];
+            this.onEscape = null;
         }
 
         removeAllControlsExceptToasts() {
@@ -342,6 +343,7 @@ export class CanvasUIMark {
             this.texts = [];
             this.images = [];
             this.modals = [];
+            this.onEscape = null;
         }
 
         addText(text, x, y, options = {}) {
