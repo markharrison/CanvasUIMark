@@ -291,7 +291,8 @@ const radio = new Radio(
         backgroundColor: '#333333',  // Control background
         orientation: 'vertical',     // 'vertical' or 'horizontal' (default: 'vertical')
         gap: 0,                      // gap between items (default: 0)
-        borderRadius: 10
+        borderRadius: 10,
+        label: 'Difficulty'          // optional label displayed at top-left
     }
 );
 ui.addControl(radio);
@@ -320,6 +321,10 @@ ui.addControl(horizontalRadio);
 - Arrow Left/Right keys when focused (for horizontal orientation)
 - Gamepad D-pad left/right (navigates within control regardless of orientation)
 
+**Label Feature:**
+- Use the `label` option to display a text label at the top-left of the control
+- The label is optional and helps identify the purpose of the radio group
+
 ### Carousel
 
 A control for selecting one value at a time from a list, with arrow buttons to cycle through options.
@@ -342,7 +347,8 @@ const carousel = new Carousel(
         textColor: '#ffffff',        // Text and arrow color
         orientation: 'horizontal',   // 'horizontal' or 'vertical' (default: 'horizontal')
         arrowSize: 12,               // size of triangle arrows (default: 12)
-        borderRadius: 10
+        borderRadius: 10,
+        label: 'Select Option'       // optional label displayed at top-left
     }
 );
 ui.addControl(carousel);
@@ -371,6 +377,10 @@ ui.addControl(verticalCarousel);
 - Gamepad D-pad left/right (navigates within control regardless of orientation)
 - Displays triangle arrows pointing in the appropriate direction
 - Shows only the currently selected value
+
+**Label Feature:**
+- Use the `label` option to display a text label at the top-left of the control
+- The label is optional and helps identify the purpose of the carousel
 
 ### Slider
 
@@ -778,9 +788,11 @@ const options = {
 #### Radio
 - Uses `controlColor` for the selected radio button fill
 - Uses `borderColor` for radio button circles
+- Supports optional `label` property to display a label at the top-left of the control
 
 #### Carousel
 - Uses `textColor` for arrows and current value display
+- Supports optional `label` property to display a label at the top-left of the control
 
 #### Slider
 - Uses `controlColor` for both the slider knob and filled track portion
