@@ -383,6 +383,52 @@ ui.addControl(slider);
 - Gamepad D-pad left/right when focused
 - Displays current value
 
+### Panel
+
+A non-interactive panel control used for visual grouping and background decoration.
+
+```javascript
+const panel = new Panel(
+    100, 100,          // x, y position
+    {                  // options
+        width: 500,            // width (default: 500)
+        height: 500,           // height (default: 500)
+        backgroundColor: '#333333',
+        borderColor: '#666666',
+        borderWidth: 2,
+        borderRadius: 10
+    }
+);
+ui.addControl(panel);
+```
+
+**Features:**
+- Non-interactive (does not receive focus or input)
+- Useful for creating visual grouping of related controls
+- Supports rounded corners with borderRadius option
+- Can be used as a background layer behind other controls
+
+**Common Use Cases:**
+```javascript
+// Panel behind a group of radio buttons
+const radioPanel = new Panel(
+    90, 90,
+    {
+        width: 270,
+        height: 200,
+        backgroundColor: '#444444',
+        borderColor: '#4CAF50',
+        borderWidth: 2,
+        borderRadius: 10
+    }
+);
+ui.addControl(radioPanel);
+
+// Add radio buttons on top
+const radio = new Radio(100, 100, ['Option 1', 'Option 2'], 0, callback);
+ui.addControl(radio);
+```
+
 ## Display Features
 
 ### Text Display
@@ -627,6 +673,7 @@ All available in `CanvasUIControls`:
 - `TextInput(x, y, placeholder, options)`
 - `Radio(x, y, items, selectedIndex, callback, options)`
 - `Slider(x, y, min, max, value, step, label, callback, options)`
+- `Panel(x, y, options)`
 
 ## Examples
 
