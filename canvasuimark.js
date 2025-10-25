@@ -595,11 +595,11 @@ export class Button extends Control {
         activate() {
             this.pressed = true;
             this.pressedTime = 0;
-            // Delay callback by 200ms to allow visual feedback
+            // Delay callback to allow visual feedback
             if (this.callback) {
                 setTimeout(() => {
                     this.callback();
-                }, 200);
+                }, this.pressedDuration);
             }
         }
 
@@ -693,11 +693,11 @@ export class Menu extends Control {
                     this.selectedIndex = i;
                     this.pressed = true;
                     this.pressedTime = 0;
-                    // Delay callback by 200ms to allow visual feedback
+                    // Delay callback to allow visual feedback
                     if (this.items[i].callback) {
                         setTimeout(() => {
                             this.items[i].callback();
-                        }, 200);
+                        }, this.pressedDuration);
                     }
                     break;
                 }
@@ -736,11 +736,11 @@ export class Menu extends Control {
             } else if (e.key === 'Enter' || e.key === ' ') {
                 this.pressed = true;
                 this.pressedTime = 0;
-                // Delay callback by 200ms to allow visual feedback
+                // Delay callback to allow visual feedback
                 if (this.items[this.selectedIndex].callback) {
                     setTimeout(() => {
                         this.items[this.selectedIndex].callback();
-                    }, 200);
+                    }, this.pressedDuration);
                 }
                 e.preventDefault();
             }
@@ -757,11 +757,11 @@ export class Menu extends Control {
         activate() {
             this.pressed = true;
             this.pressedTime = 0;
-            // Delay callback by 200ms to allow visual feedback
+            // Delay callback to allow visual feedback
             if (this.items[this.selectedIndex].callback) {
                 setTimeout(() => {
                     this.items[this.selectedIndex].callback();
-                }, 200);
+                }, this.pressedDuration);
             }
         }
 
@@ -1632,13 +1632,13 @@ export class Modal {
                     y >= buttonsY && y <= buttonsY + this.buttonHeight) {
                     this.pressedButton = i;
                     this.pressedTime = 0;
-                    // Delay callback and close by 200ms to allow visual feedback
+                    // Delay callback and close to allow visual feedback
                     setTimeout(() => {
                         if (this.buttons[i].callback) {
                             this.buttons[i].callback();
                         }
                         this.close();
-                    }, 200);
+                    }, this.pressedDuration);
                     return;
                 }
             }
@@ -1654,13 +1654,13 @@ export class Modal {
             } else if (e.key === 'Enter' || e.key === ' ') {
                 this.pressedButton = this.selectedButton;
                 this.pressedTime = 0;
-                // Delay callback and close by 200ms to allow visual feedback
+                // Delay callback and close to allow visual feedback
                 setTimeout(() => {
                     if (this.buttons[this.selectedButton].callback) {
                         this.buttons[this.selectedButton].callback();
                     }
                     this.close();
-                }, 200);
+                }, this.pressedDuration);
                 e.preventDefault();
             } else if (e.key === 'Escape') {
                 // Find and activate Exit/Close button, or close if none found
@@ -1682,13 +1682,13 @@ export class Modal {
             if (buttonIndex === 0) {
                 this.pressedButton = this.selectedButton;
                 this.pressedTime = 0;
-                // Delay callback and close by 200ms to allow visual feedback
+                // Delay callback and close to allow visual feedback
                 setTimeout(() => {
                     if (this.buttons[this.selectedButton].callback) {
                         this.buttons[this.selectedButton].callback();
                     }
                     this.close();
-                }, 200);
+                }, this.pressedDuration);
             }
             // Button 1 (B/Circle) = Exit/Cancel like ESC
             else if (buttonIndex === 1) {
