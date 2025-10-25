@@ -159,11 +159,13 @@ const button = new Button(
         console.log('Button clicked!');
     },
     {                   // options
-        width: 200,             // width (default: 200)
-        height: 50,             // height (default: 50)
-        backgroundColor: '#333333',
-        textColor: '#ffffff',
-        focusColor: '#4CAF50'
+        width: 200,                  // width (default: 200)
+        height: 50,                  // height (default: 50)
+        controlColor: '#4CAF50',     // Button face color
+        textColor: '#ffffff',        // Text color
+        borderColor: '#2E7D32',      // Normal border
+        focusBorderColor: '#81C784', // Focused border
+        borderRadius: 10
     }
 );
 ui.addControl(button);
@@ -188,12 +190,15 @@ const menu = new Menu(
         { label: 'Exit', callback: () => console.log('Exit') }
     ],
     {                   // options
-        width: 200,             // width of each item (default: 200)
-        height: 50,             // height of each item (default: 50)
-        backgroundColor: '#333333',
-        focusColor: '#4CAF50',
-        orientation: 'vertical', // 'vertical' or 'horizontal' (default: 'vertical')
-        gap: 0                  // gap between items (default: 0)
+        width: 200,                  // width of each item (default: 200)
+        height: 50,                  // height of each item (default: 50)
+        controlColor: '#4CAF50',     // Menu item color
+        hoverColor: '#555555',       // Selected item color
+        borderColor: '#666666',      // Border color
+        focusBorderColor: '#81C784', // Focused border
+        orientation: 'vertical',     // 'vertical' or 'horizontal' (default: 'vertical')
+        gap: 0,                      // gap between items (default: 0)
+        borderRadius: 8
     }
 );
 ui.addControl(menu);
@@ -218,9 +223,13 @@ const toggle = new Toggle(
         console.log('Toggle is now:', value);
     },
     {                   // options
-        width: 250,             // width (default: 250)
-        height: 50,             // height (default: 50)
-        focusColor: '#4CAF50'
+        width: 250,                  // width (default: 250)
+        height: 50,                  // height (default: 50)
+        controlColor: '#ffffff',     // Toggle knob color
+        focusBorderColor: '#4CAF50', // Color when toggle is on
+        hoverColor: '#555555',       // Color when toggle is off
+        borderColor: '#666666',      // Border color
+        borderRadius: 10
     }
 );
 ui.addControl(toggle);
@@ -240,10 +249,13 @@ const textInput = new TextInput(
     100, 100,                  // x, y position
     'Enter your name...',      // placeholder text
     {                          // options
-        width: 300,            // width (default: 300)
-        height: 50,            // height (default: 50)
-        backgroundColor: '#333333',
-        textColor: '#ffffff'
+        width: 300,                  // width (default: 300)
+        height: 50,                  // height (default: 50)
+        backgroundColor: '#333333',  // Input field background
+        textColor: '#ffffff',        // Text color
+        borderColor: '#666666',      // Normal border
+        focusBorderColor: '#4CAF50', // Focused border
+        borderRadius: 10
     }
 );
 ui.addControl(textInput);
@@ -273,11 +285,15 @@ const radio = new Radio(
         console.log(`Selected: ${value} (index ${index})`);
     },
     {                          // options
-        width: 250,            // width of each item (default: 250)
-        height: 45,            // height of each item (default: 45)
-        focusColor: '#4CAF50',
-        orientation: 'vertical', // 'vertical' or 'horizontal' (default: 'vertical')
-        gap: 0                 // gap between items (default: 0)
+        width: 250,                  // width of each item (default: 250)
+        height: 45,                  // height of each item (default: 45)
+        controlColor: '#4CAF50',     // Selected radio button fill
+        borderColor: '#666666',      // Radio circle and border
+        focusBorderColor: '#81C784', // Focused border
+        backgroundColor: '#333333',  // Control background
+        orientation: 'vertical',     // 'vertical' or 'horizontal' (default: 'vertical')
+        gap: 0,                      // gap between items (default: 0)
+        borderRadius: 10
     }
 );
 ui.addControl(radio);
@@ -320,11 +336,15 @@ const carousel = new Carousel(
         console.log(`Selected: ${value} (index ${index})`);
     },
     {                              // options
-        width: 300,                // width (default: 250)
-        height: 60,                // height (default: 60)
-        focusColor: '#4CAF50',
-        orientation: 'horizontal', // 'horizontal' or 'vertical' (default: 'horizontal')
-        arrowSize: 12              // size of triangle arrows (default: 12)
+        width: 300,                  // width (default: 250)
+        height: 60,                  // height (default: 60)
+        borderColor: '#666666',      // Border color
+        focusBorderColor: '#4CAF50', // Focused border
+        backgroundColor: '#333333',  // Background
+        textColor: '#ffffff',        // Text and arrow color
+        orientation: 'horizontal',   // 'horizontal' or 'vertical' (default: 'horizontal')
+        arrowSize: 12,               // size of triangle arrows (default: 12)
+        borderRadius: 10
     }
 );
 ui.addControl(carousel);
@@ -369,9 +389,15 @@ const slider = new Slider(
         console.log('Value:', value);
     },
     {                  // options
-        width: 300,            // width (default: 300)
-        height: 80,            // height (default: 80)
-        focusColor: '#4CAF50'
+        width: 300,                  // width (default: 300)
+        height: 80,                  // height (default: 80)
+        controlColor: '#ffffff',     // Slider thumb color
+        focusBorderColor: '#4CAF50', // Filled track color
+        hoverColor: '#666666',       // Unfilled track color
+        borderColor: '#666666',      // Border color
+        backgroundColor: '#333333',  // Background
+        textColor: '#ffffff',        // Label and value text
+        borderRadius: 10
     }
 );
 ui.addControl(slider);
@@ -595,20 +621,66 @@ ui.onEscape = () => {
 
 ### Control Options
 
-All controls accept an `options` object for styling:
+All controls accept an `options` object for styling with consistent color properties:
 
 ```javascript
 const options = {
-    backgroundColor: '#333333',  // Background color
-    borderColor: '#666666',      // Normal border color
-    textColor: '#ffffff',        // Text color
-    focusColor: '#4CAF50',       // Focused border/highlight color
-    hoverColor: '#555555',       // Hover state color
-    font: '16px Arial',          // Font style
-    borderWidth: 2,              // Border thickness
-    padding: 10                  // Internal padding
+    // Core color properties (supported by ALL controls):
+    borderColor: '#666666',          // Color for the normal border
+    focusBorderColor: '#4CAF50',     // Border color when the control is focused
+    controlColor: '#ffffff',         // Main color for control elements (button face, slider thumb, toggle knob, etc.)
+    backgroundColor: '#333333',      // General control background (panel, input field, etc.)
+    hoverColor: '#555555',           // Color indicating mouse is hovering over the control
+    
+    // Text color (Button and TextInput also support):
+    textColor: '#ffffff',            // Color for the label/text inside the control
+    
+    // Layout properties:
+    font: '16px Arial',              // Font style
+    borderWidth: 2,                  // Border thickness
+    padding: 10,                     // Internal padding
+    borderRadius: 0                  // Border radius for rounded corners
 };
 ```
+
+### Color Property Usage by Control
+
+#### All Controls Support
+- `borderColor` - Normal border color
+- `focusBorderColor` - Border color when focused
+- `controlColor` - Main control element color
+- `backgroundColor` - Background color
+- `hoverColor` - Hover state color
+
+#### Button
+- All base colors plus:
+- `textColor` - Button label color
+
+#### Menu
+- Uses `controlColor` for menu items
+- Uses `hoverColor` for selected items
+- Uses `focusBorderColor` for pressed/focused state
+
+#### Toggle
+- Uses `controlColor` for the toggle knob
+- Uses `focusBorderColor` when toggle is on
+- Uses `hoverColor` when toggle is off
+
+#### TextInput
+- All base colors plus:
+- `textColor` - Input text color
+
+#### Radio
+- Uses `controlColor` for the selected radio button fill
+- Uses `borderColor` for radio button circles
+
+#### Carousel
+- Uses `textColor` for arrows and current value display
+
+#### Slider
+- Uses `controlColor` for the slider thumb
+- Uses `focusBorderColor` for the filled track portion
+- Uses `hoverColor` for the unfilled track
 
 ### Fonts
 
@@ -629,6 +701,43 @@ Colors can be specified using:
 - RGB: `'rgb(76, 175, 80)'`
 - RGBA: `'rgba(76, 175, 80, 0.8)'`
 - Named: `'green'`, `'red'`, etc.
+
+### Example: Custom Colored Button
+
+```javascript
+const customButton = new Button(
+    100, 100,
+    'Custom Button',
+    () => console.log('Clicked!'),
+    {
+        controlColor: '#4CAF50',       // Green button face
+        textColor: '#ffffff',          // White text
+        borderColor: '#2E7D32',        // Dark green border
+        focusBorderColor: '#81C784',   // Light green when focused
+        backgroundColor: '#1B5E20',    // Dark background (not typically visible for buttons)
+        hoverColor: '#66BB6A',         // Lighter green on hover
+        borderRadius: 10
+    }
+);
+```
+
+### Example: Custom Colored Slider
+
+```javascript
+const customSlider = new Slider(
+    100, 100, 0, 100, 50, 5, 'Volume',
+    (value) => console.log(value),
+    {
+        controlColor: '#2196F3',       // Blue slider thumb
+        focusBorderColor: '#1976D2',   // Dark blue filled track
+        hoverColor: '#BBDEFB',         // Light blue unfilled track
+        borderColor: '#1565C0',        // Dark border
+        backgroundColor: '#E3F2FD',    // Light background
+        textColor: '#0D47A1',          // Dark blue text
+        borderRadius: 8
+    }
+);
+```
 
 ## API Reference
 
