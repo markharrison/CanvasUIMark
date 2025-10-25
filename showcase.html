@@ -314,16 +314,16 @@
         ui.addControl(horizontalMenu);
         currentY += 60;
 
-        // Column 3: Radio and Slider
+        // Column 3: Radio, Slider and Carousel
         let column3X = 650;
         currentY = 120;
 
-        // Add a panel behind the radio control for visual grouping
+        // Add a panel behind the radio and slider controls for visual grouping
         const radioPanel = new Panel(
             column3X - 10, currentY - 10,
             {
                 width: 550,
-                height: 555,
+                height: 360,
                 backgroundColor: '#888888',
                 borderColor: '#4CAF50',
                 borderWidth: 2,
@@ -349,7 +349,7 @@
             { width: 250, height: 45, borderRadius: 10, orientation: 'vertical' }
         );
         ui.addControl(radio);
-        currentY += 200;
+        currentY += 195;
 
         // Horizontal Radio Control
         ui.addText('Horizontal Radio:', column3X, currentY, {
@@ -368,7 +368,26 @@
             { width: 90, height: 45, borderRadius: 10, orientation: 'horizontal', gap: 5 }
         );
         ui.addControl(horizontalRadio);
-        currentY += 65;
+        currentY += 60;
+
+        // Slider Control
+        ui.addText('Slider Control:', column3X, currentY, {
+            font: 'bold 18px Arial',
+            color: '#ffffff'
+        });
+        currentY += 30;
+
+        const slider = new Slider(
+            column3X, currentY,
+            0, 100, 50, 5,
+            'Volume',
+            (value) => {
+                console.log('Volume changed to:', value);
+            },
+            { width: 300, height: 60, borderRadius: 10 }
+        );
+        ui.addControl(slider);
+        currentY += 75;
 
         // Carousel Control (Horizontal)
         ui.addText('Carousel (Horizontal):', column3X, currentY, {
@@ -387,57 +406,6 @@
             { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
         );
         ui.addControl(carouselHorizontal);
-        currentY += 80;
-
-        // Carousel Control (Vertical)
-        ui.addText('Carousel (Vertical):', column3X, currentY, {
-            font: 'bold 18px Arial',
-            color: '#ffffff'
-        });
-        currentY += 30;
-
-        const carouselVertical = new Carousel(
-            column3X, currentY,
-            ['Red', 'Green', 'Blue'],
-            1,
-            (index, value) => {
-                ui.showToast(`Color: ${value}`, 'info', 2000);
-            },
-            { width: 200, height: 120, borderRadius: 10, orientation: 'vertical' }
-        );
-        ui.addControl(carouselVertical);
-        currentY += 140;
-
-        // Slider Control
-        ui.addText('Slider Control:', column3X, currentY, {
-            font: 'bold 18px Arial',
-            color: '#ffffff'
-        });
-        currentY += 30;
-
-        const slider = new Slider(
-            column3X, currentY,
-            0, 100, 50, 5,
-            'Volume',
-            (value) => {
-                console.log('Volume changed to:', value);
-            },
-            { width: 300, height: 80, borderRadius: 10 }
-        );
-        ui.addControl(slider);
-        currentY += 100;
-
-        // Another slider with different range
-        const speedSlider = new Slider(
-            column3X, currentY,
-            10, 200, 100, 10,
-            'Speed',
-            (value) => {
-                console.log('Speed changed to:', value);
-            },
-            { width: 300, height: 80, borderRadius: 10 }
-        );
-        ui.addControl(speedSlider);
 
         // Add a test image (placeholder - will show once loaded)
         const testImage = new Image();
@@ -604,7 +572,7 @@
             );
             ui.addControl(horizontalMenu);
 
-            // Column 3: Radio and Slider
+            // Column 3: Radio, Slider and Carousel
             let column3X = 650;
             currentY = 120;
 
@@ -612,7 +580,7 @@
                 column3X - 10, currentY - 10,
                 {
                     width: 550,
-                    height: 555,
+                    height: 360,
                     backgroundColor: '#888888',
                     borderColor: '#4CAF50',
                     borderWidth: 2,
@@ -631,7 +599,7 @@
                 { width: 250, height: 45, borderRadius: 10, orientation: 'vertical' }
             );
             ui.addControl(radio);
-            currentY += 200;
+            currentY += 195;
 
             const horizontalRadio = new Radio(
                 column3X, currentY,
@@ -643,7 +611,7 @@
                 { width: 90, height: 45, borderRadius: 10, orientation: 'horizontal', gap: 5 }
             );
             ui.addControl(horizontalRadio);
-            currentY += 65;
+            currentY += 60;
 
             const slider = new Slider(
                 column3X, currentY,
@@ -652,21 +620,21 @@
                 (value) => {
                     console.log('Volume changed to:', value);
                 },
-                { width: 300, height: 80, borderRadius: 10 }
+                { width: 300, height: 60, borderRadius: 10 }
             );
             ui.addControl(slider);
-            currentY += 100;
+            currentY += 75;
 
-            const speedSlider = new Slider(
+            const carouselHorizontal = new Carousel(
                 column3X, currentY,
-                10, 200, 100, 10,
-                'Speed',
-                (value) => {
-                    console.log('Speed changed to:', value);
+                ['Option A', 'Option B', 'Option C', 'Option D'],
+                0,
+                (index, value) => {
+                    ui.showToast(`Carousel: ${value}`, 'info', 2000);
                 },
-                { width: 300, height: 80, borderRadius: 10 }
+                { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
             );
-            ui.addControl(speedSlider);
+            ui.addControl(carouselHorizontal);
 
             ui.showToast('All controls restored!', 'success', 2000);
         }
