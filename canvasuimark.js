@@ -1230,6 +1230,7 @@ export class Radio extends Control {
     this.callback = callback;
     this.orientation = orientation;
     this.gap = gap;
+    this.label = options.label || null;
   }
 
   getItemBounds(index) {
@@ -1335,6 +1336,15 @@ export class Radio extends Control {
       ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
+    // Draw label at top-left if provided
+    if (this.label) {
+      ctx.font = this.options.font;
+      ctx.fillStyle = this.options.textColor;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText(this.label, this.x + this.options.padding, this.y + this.options.padding);
+    }
+
     // Draw individual radio items
     for (let i = 0; i < this.items.length; i++) {
       const bounds = this.getItemBounds(i);
@@ -1394,6 +1404,7 @@ export class Carousel extends Control {
     this.callback = callback;
     this.orientation = orientation;
     this.arrowSize = options.arrowSize || 12;
+    this.label = options.label || null;
   }
 
   getArrowBounds() {
@@ -1552,6 +1563,15 @@ export class Carousel extends Control {
       ctx.fill();
     } else {
       ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    // Draw label at top-left if provided
+    if (this.label) {
+      ctx.font = this.options.font;
+      ctx.fillStyle = this.options.textColor;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText(this.label, this.x + this.options.padding, this.y + this.options.padding);
     }
 
     if (this.orientation === "horizontal") {
