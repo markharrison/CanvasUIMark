@@ -876,11 +876,12 @@ export class Toggle extends Control {
             ctx.textBaseline = 'middle';
             ctx.fillText(this.label, this.x + this.options.padding, this.y + this.height / 2);
 
-            // Draw toggle switch - add extra padding to avoid overlapping control border
+            // Draw toggle switch with proper spacing
             const switchWidth = 50;
             const switchHeight = 25;
-            const extraPadding = 5; // Extra padding to prevent overlap with control border
-            const switchX = this.x + this.width - switchWidth - this.options.padding - extraPadding;
+            const labelPadding = 15; // Space between label and switch
+            const rightPadding = 8; // Extra padding from right edge to prevent overlap
+            const switchX = this.x + this.width - switchWidth - this.options.padding - rightPadding;
             const switchY = this.y + (this.height - switchHeight) / 2;
             const switchRadius = this.options.borderRadius > 0 ? Math.min(switchHeight / 2, this.options.borderRadius) : switchHeight / 2;
 
@@ -889,7 +890,7 @@ export class Toggle extends Control {
             DrawRoundedRect(ctx, switchX, switchY, switchWidth, switchHeight, switchRadius);
             ctx.fill();
 
-            // Switch knob - white with consistent border (doesn't change with focus)
+            // Switch knob - white with border matching controlColor
             const knobSize = 20;
             const knobX = this.value ? switchX + switchWidth - knobSize - 2 : switchX + 2;
             const knobY = switchY + 2.5;
@@ -900,9 +901,9 @@ export class Toggle extends Control {
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
             
-            // Knob border - consistent color regardless of focus state
-            ctx.strokeStyle = '#cccccc';
-            ctx.lineWidth = 1;
+            // Knob border - use controlColor (same as switch when on)
+            ctx.strokeStyle = this.options.controlColor;
+            ctx.lineWidth = 2;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.stroke();
         }
