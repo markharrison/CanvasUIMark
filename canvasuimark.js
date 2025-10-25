@@ -886,24 +886,25 @@ export class Toggle extends Control {
             const switchY = this.y + (this.height - switchHeight) / 2;
             const switchRadius = this.options.borderRadius > 0 ? Math.min(switchHeight / 2, this.options.borderRadius) : switchHeight / 2;
 
-            // Switch background - use controlColor when on, darker gray when off
-            ctx.fillStyle = this.value ? this.options.controlColor : '#999999';
+            // Switch background - use controlColor when on, backgroundColor when off
+            ctx.fillStyle = this.value ? this.options.controlColor : this.options.backgroundColor;
             DrawRoundedRect(ctx, switchX, switchY, switchWidth, switchHeight, switchRadius);
             ctx.fill();
 
-            // Switch knob - white with border matching controlColor
-            const knobSize = 20;
-            const knobX = this.value ? switchX + switchWidth - knobSize - 2 : switchX + 2;
-            const knobY = switchY + 2.5;
+            // Switch knob - smaller with more padding to prevent overflow
+            const knobSize = 18; // Reduced from 20 to 18 to provide more clearance
+            const knobPadding = 3; // Increased padding inside the switch track from 2 to 3
+            const knobX = this.value ? switchX + switchWidth - knobSize - knobPadding : switchX + knobPadding;
+            const knobY = switchY + (switchHeight - knobSize) / 2;
             const knobRadius = this.options.borderRadius > 0 ? Math.min(knobSize / 2, this.options.borderRadius) : knobSize / 2;
             
-            // Knob fill
-            ctx.fillStyle = '#ffffff';
+            // Knob fill - white when ON, controlColor when OFF
+            ctx.fillStyle = this.value ? '#ffffff' : this.options.controlColor;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.fill();
             
-            // Knob border - use controlColor (same as switch when on)
-            ctx.strokeStyle = this.options.controlColor;
+            // Knob border - darker shade for contrast
+            ctx.strokeStyle = this.value ? this.options.controlColor : this.options.borderColor;
             ctx.lineWidth = 2;
             DrawRoundedRect(ctx, knobX, knobY, knobSize, knobSize, knobRadius);
             ctx.stroke();
