@@ -268,7 +268,15 @@
             (value) => {
                 ui.showToast(`Sound ${value ? 'ON' : 'OFF'}`, value ? 'success' : 'warning', 2000);
             },
-            { width: 250, height: 50, borderRadius: 10 }
+            { 
+                width: 250, 
+                height: 50, 
+                borderRadius: 10,
+                controlColor: '#ffffff',      // White knob
+                focusBorderColor: '#4CAF50',  // Green when on
+                hoverColor: '#999999',        // Gray when off
+                borderColor: '#666666'        // Border
+            }
         );
         ui.addControl(toggle);
         currentY += 70;
@@ -283,7 +291,15 @@
         const textInput = new TextInput(
             column2X, currentY,
             'Enter your name...',
-            { width: 300, height: 50, borderRadius: 10 }
+            { 
+                width: 300, 
+                height: 50, 
+                borderRadius: 10,
+                backgroundColor: '#2a2a2a',  // Dark input background
+                textColor: '#ffffff',        // White text
+                borderColor: '#666666',      // Gray border
+                focusBorderColor: '#2196F3' // Blue when focused
+            }
         );
         ui.addControl(textInput);
         currentY += 70;
@@ -392,7 +408,15 @@
             (value) => {
                 console.log('Volume changed to:', value);
             },
-            { width: 300, height: 60, borderRadius: 10 }
+            { 
+                width: 300, 
+                height: 60, 
+                borderRadius: 10,
+                controlColor: '#ffffff',      // White slider thumb
+                focusBorderColor: '#FF9800',  // Orange filled track
+                hoverColor: '#555555',        // Dark unfilled track
+                borderColor: '#666666'        // Border
+            }
         );
         ui.addControl(slider);
         currentY += 75;
