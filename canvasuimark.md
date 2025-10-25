@@ -192,8 +192,8 @@ const menu = new Menu(
     {                   // options
         width: 200,                  // width of each item (default: 200)
         height: 50,                  // height of each item (default: 50)
-        controlColor: '#4CAF50',     // Menu item color
-        hoverColor: '#555555',       // Selected item color
+        controlColor: '#4CAF50',     // Selected menu item color
+        backgroundColor: '#333333',  // Unselected menu item background
         borderColor: '#666666',      // Border color
         focusBorderColor: '#81C784', // Focused border
         orientation: 'vertical',     // 'vertical' or 'horizontal' (default: 'vertical')
@@ -225,9 +225,7 @@ const toggle = new Toggle(
     {                   // options
         width: 250,                  // width (default: 250)
         height: 50,                  // height (default: 50)
-        controlColor: '#ffffff',     // Toggle knob color
-        focusBorderColor: '#4CAF50', // Color when toggle is on
-        hoverColor: '#555555',       // Color when toggle is off
+        controlColor: '#4CAF50',     // Switch background when toggle is on
         borderColor: '#666666',      // Border color
         borderRadius: 10
     }
@@ -391,10 +389,9 @@ const slider = new Slider(
     {                  // options
         width: 300,                  // width (default: 300)
         height: 80,                  // height (default: 80)
-        controlColor: '#ffffff',     // Slider thumb color
-        focusBorderColor: '#4CAF50', // Filled track color
-        hoverColor: '#666666',       // Unfilled track color
+        controlColor: '#4CAF50',     // Slider thumb and filled track color
         borderColor: '#666666',      // Border color
+        focusBorderColor: '#81C784', // Border when focused
         backgroundColor: '#333333',  // Background
         textColor: '#ffffff',        // Label and value text
         borderRadius: 10
@@ -628,9 +625,8 @@ const options = {
     // Core color properties (supported by ALL controls):
     borderColor: '#666666',          // Color for the normal border
     focusBorderColor: '#4CAF50',     // Border color when the control is focused
-    controlColor: '#ffffff',         // Main color for control elements (button face, slider thumb, toggle knob, etc.)
-    backgroundColor: '#333333',      // General control background (panel, input field, etc.)
-    hoverColor: '#555555',           // Color indicating mouse is hovering over the control
+    controlColor: '#4CAF50',         // Main color for control elements (button face, slider thumb/track, menu selection, toggle on state, etc.)
+    backgroundColor: '#333333',      // General control background (panel, input field, menu items, etc.)
     
     // Text color (Button and TextInput also support):
     textColor: '#ffffff',            // Color for the label/text inside the control
@@ -650,21 +646,19 @@ const options = {
 - `focusBorderColor` - Border color when focused
 - `controlColor` - Main control element color
 - `backgroundColor` - Background color
-- `hoverColor` - Hover state color
 
 #### Button
 - All base colors plus:
 - `textColor` - Button label color
 
 #### Menu
-- Uses `controlColor` for menu items
-- Uses `hoverColor` for selected items
-- Uses `focusBorderColor` for pressed/focused state
+- Uses `controlColor` for selected menu items
+- Uses `backgroundColor` for unselected menu items
 
 #### Toggle
-- Uses `controlColor` for the toggle knob
-- Uses `focusBorderColor` when toggle is on
-- Uses `hoverColor` when toggle is off
+- Uses `controlColor` for the switch background when toggle is on
+- White knob color (fixed)
+- Gray switch background when toggle is off (fixed)
 
 #### TextInput
 - All base colors plus:
@@ -678,9 +672,8 @@ const options = {
 - Uses `textColor` for arrows and current value display
 
 #### Slider
-- Uses `controlColor` for the slider thumb
-- Uses `focusBorderColor` for the filled track portion
-- Uses `hoverColor` for the unfilled track
+- Uses `controlColor` for both the slider knob and filled track portion
+- Border shows `focusBorderColor` when control has focus
 
 ### Fonts
 
@@ -715,7 +708,6 @@ const customButton = new Button(
         borderColor: '#2E7D32',        // Dark green border
         focusBorderColor: '#81C784',   // Light green when focused
         backgroundColor: '#1B5E20',    // Dark background (not typically visible for buttons)
-        hoverColor: '#66BB6A',         // Lighter green on hover
         borderRadius: 10
     }
 );
@@ -728,12 +720,11 @@ const customSlider = new Slider(
     100, 100, 0, 100, 50, 5, 'Volume',
     (value) => console.log(value),
     {
-        controlColor: '#2196F3',       // Blue slider thumb
-        focusBorderColor: '#1976D2',   // Dark blue filled track
-        hoverColor: '#BBDEFB',         // Light blue unfilled track
-        borderColor: '#1565C0',        // Dark border
-        backgroundColor: '#E3F2FD',    // Light background
-        textColor: '#0D47A1',          // Dark blue text
+        controlColor: '#FF9800',       // Orange slider knob and filled track
+        borderColor: '#E65100',        // Dark orange border
+        focusBorderColor: '#FFB74D',   // Light orange when focused
+        backgroundColor: '#FFF3E0',    // Light background
+        textColor: '#E65100',          // Dark orange text
         borderRadius: 8
     }
 );
