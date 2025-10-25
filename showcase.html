@@ -323,7 +323,7 @@
             column3X - 10, currentY - 10,
             {
                 width: 550,
-                height: 420,
+                height: 360,
                 backgroundColor: '#888888',
                 borderColor: '#4CAF50',
                 borderWidth: 2,
@@ -389,25 +389,6 @@
         ui.addControl(slider);
         currentY += 75;
 
-        // Another slider with different range
-        ui.addText('Speed Slider:', column3X, currentY, {
-            font: 'bold 18px Arial',
-            color: '#ffffff'
-        });
-        currentY += 30;
-
-        const speedSlider = new Slider(
-            column3X, currentY,
-            10, 200, 100, 10,
-            'Speed',
-            (value) => {
-                console.log('Speed changed to:', value);
-            },
-            { width: 300, height: 60, borderRadius: 10 }
-        );
-        ui.addControl(speedSlider);
-        currentY += 85;
-
         // Carousel Control (Horizontal)
         ui.addText('Carousel (Horizontal):', column3X, currentY, {
             font: 'bold 18px Arial',
@@ -425,25 +406,6 @@
             { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
         );
         ui.addControl(carouselHorizontal);
-        currentY += 75;
-
-        // Carousel Control (Vertical)
-        ui.addText('Carousel (Vertical):', column3X, currentY, {
-            font: 'bold 18px Arial',
-            color: '#ffffff'
-        });
-        currentY += 30;
-
-        const carouselVertical = new Carousel(
-            column3X, currentY,
-            ['Red', 'Green', 'Blue'],
-            1,
-            (index, value) => {
-                ui.showToast(`Color: ${value}`, 'info', 2000);
-            },
-            { width: 200, height: 120, borderRadius: 10, orientation: 'vertical' }
-        );
-        ui.addControl(carouselVertical);
 
         // Add a test image (placeholder - will show once loaded)
         const testImage = new Image();
@@ -618,7 +580,7 @@
                 column3X - 10, currentY - 10,
                 {
                     width: 550,
-                    height: 420,
+                    height: 360,
                     backgroundColor: '#888888',
                     borderColor: '#4CAF50',
                     borderWidth: 2,
@@ -663,18 +625,6 @@
             ui.addControl(slider);
             currentY += 75;
 
-            const speedSlider = new Slider(
-                column3X, currentY,
-                10, 200, 100, 10,
-                'Speed',
-                (value) => {
-                    console.log('Speed changed to:', value);
-                },
-                { width: 300, height: 60, borderRadius: 10 }
-            );
-            ui.addControl(speedSlider);
-            currentY += 85;
-
             const carouselHorizontal = new Carousel(
                 column3X, currentY,
                 ['Option A', 'Option B', 'Option C', 'Option D'],
@@ -685,18 +635,6 @@
                 { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
             );
             ui.addControl(carouselHorizontal);
-            currentY += 75;
-
-            const carouselVertical = new Carousel(
-                column3X, currentY,
-                ['Red', 'Green', 'Blue'],
-                1,
-                (index, value) => {
-                    ui.showToast(`Color: ${value}`, 'info', 2000);
-                },
-                { width: 200, height: 120, borderRadius: 10, orientation: 'vertical' }
-            );
-            ui.addControl(carouselVertical);
 
             ui.showToast('All controls restored!', 'success', 2000);
         }
