@@ -595,8 +595,11 @@ export class Button extends Control {
         activate() {
             this.pressed = true;
             this.pressedTime = 0;
+            // Delay callback by 200ms to allow visual feedback
             if (this.callback) {
-                this.callback();
+                setTimeout(() => {
+                    this.callback();
+                }, 200);
             }
         }
 
@@ -690,8 +693,11 @@ export class Menu extends Control {
                     this.selectedIndex = i;
                     this.pressed = true;
                     this.pressedTime = 0;
+                    // Delay callback by 200ms to allow visual feedback
                     if (this.items[i].callback) {
-                        this.items[i].callback();
+                        setTimeout(() => {
+                            this.items[i].callback();
+                        }, 200);
                     }
                     break;
                 }
@@ -730,8 +736,11 @@ export class Menu extends Control {
             } else if (e.key === 'Enter' || e.key === ' ') {
                 this.pressed = true;
                 this.pressedTime = 0;
+                // Delay callback by 200ms to allow visual feedback
                 if (this.items[this.selectedIndex].callback) {
-                    this.items[this.selectedIndex].callback();
+                    setTimeout(() => {
+                        this.items[this.selectedIndex].callback();
+                    }, 200);
                 }
                 e.preventDefault();
             }
@@ -748,8 +757,11 @@ export class Menu extends Control {
         activate() {
             this.pressed = true;
             this.pressedTime = 0;
+            // Delay callback by 200ms to allow visual feedback
             if (this.items[this.selectedIndex].callback) {
-                this.items[this.selectedIndex].callback();
+                setTimeout(() => {
+                    this.items[this.selectedIndex].callback();
+                }, 200);
             }
         }
 
@@ -1558,6 +1570,9 @@ export class Modal {
             this.message = message;
             this.buttons = buttons.length > 0 ? buttons : [{ label: 'OK', callback: () => this.close() }];
             this.selectedButton = 0;
+            this.pressedButton = -1; // Track which button is currently pressed
+            this.pressedTime = 0;
+            this.pressedDuration = 200; // milliseconds
 
             // Calculate dimensions - allow custom sizing
             const canvas = manager.canvas;
@@ -1615,10 +1630,15 @@ export class Modal {
                 const buttonX = startX + i * (this.buttonWidth + this.buttonSpacing);
                 if (x >= buttonX && x <= buttonX + this.buttonWidth &&
                     y >= buttonsY && y <= buttonsY + this.buttonHeight) {
-                    if (this.buttons[i].callback) {
-                        this.buttons[i].callback();
-                    }
-                    this.close();
+                    this.pressedButton = i;
+                    this.pressedTime = 0;
+                    // Delay callback and close by 200ms to allow visual feedback
+                    setTimeout(() => {
+                        if (this.buttons[i].callback) {
+                            this.buttons[i].callback();
+                        }
+                        this.close();
+                    }, 200);
                     return;
                 }
             }
@@ -1632,10 +1652,15 @@ export class Modal {
                 this.selectedButton = (this.selectedButton + 1) % this.buttons.length;
                 e.preventDefault();
             } else if (e.key === 'Enter' || e.key === ' ') {
-                if (this.buttons[this.selectedButton].callback) {
-                    this.buttons[this.selectedButton].callback();
-                }
-                this.close();
+                this.pressedButton = this.selectedButton;
+                this.pressedTime = 0;
+                // Delay callback and close by 200ms to allow visual feedback
+                setTimeout(() => {
+                    if (this.buttons[this.selectedButton].callback) {
+                        this.buttons[this.selectedButton].callback();
+                    }
+                    this.close();
+                }, 200);
                 e.preventDefault();
             } else if (e.key === 'Escape') {
                 // Find and activate Exit/Close button, or close if none found
@@ -1655,10 +1680,15 @@ export class Modal {
         handleGamepadButton(buttonIndex) {
             // Button 0 (A/Cross) = Select current button
             if (buttonIndex === 0) {
-                if (this.buttons[this.selectedButton].callback) {
-                    this.buttons[this.selectedButton].callback();
-                }
-                this.close();
+                this.pressedButton = this.selectedButton;
+                this.pressedTime = 0;
+                // Delay callback and close by 200ms to allow visual feedback
+                setTimeout(() => {
+                    if (this.buttons[this.selectedButton].callback) {
+                        this.buttons[this.selectedButton].callback();
+                    }
+                    this.close();
+                }, 200);
             }
             // Button 1 (B/Circle) = Exit/Cancel like ESC
             else if (buttonIndex === 1) {
@@ -1684,6 +1714,16 @@ export class Modal {
 
         close() {
             this.manager.closeModal(this);
+        }
+
+        update(deltaTime) {
+            if (this.pressedButton >= 0) {
+                this.pressedTime += deltaTime;
+                if (this.pressedTime >= this.pressedDuration) {
+                    this.pressedButton = -1;
+                    this.pressedTime = 0;
+                }
+            }
         }
 
         isOverButton(x, y) {
@@ -1762,8 +1802,14 @@ export class Modal {
             for (let i = 0; i < this.buttons.length; i++) {
                 const buttonX = startX + i * (this.buttonWidth + this.buttonSpacing);
 
-                // Button background
-                ctx.fillStyle = i === this.selectedButton ? '#4CAF50' : '#444444';
+                // Button background - show pressed state
+                if (i === this.pressedButton) {
+                    ctx.fillStyle = '#4CAF50'; // Pressed color
+                } else if (i === this.selectedButton) {
+                    ctx.fillStyle = '#4CAF50'; // Selected color
+                } else {
+                    ctx.fillStyle = '#444444'; // Default color
+                }
                 DrawRoundedRect(ctx, buttonX, buttonsY, this.buttonWidth, this.buttonHeight, buttonRadius);
                 ctx.fill();
 
