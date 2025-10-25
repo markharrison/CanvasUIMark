@@ -1,8 +1,9 @@
 /**
  * CanvasUIMark - A JavaScript library for UI controls in HTML Canvas for web games
- * @version 1.0.0
+ * @version 1.0.1-toggle-fix
  * @license MIT
  * @author Mark Harrison
+ * @updated 2025-10-25
  */
 
 'use strict';
