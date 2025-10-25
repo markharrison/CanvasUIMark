@@ -149,8 +149,8 @@
     </div>
 
     <script type="module">
-        // Import the library
-        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel } from './canvasuimark.js';
+        // Import the library (with cache buster)
+        import { CanvasUIMark, Button, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel } from './canvasuimark.js?v=1.0.1-toggle-fix';
 
         // Make classes available globally for easier use in event handlers
         window.CanvasUIMark = CanvasUIMark;
@@ -217,7 +217,15 @@
             () => {
                 ui.showToast('Button clicked!', 'success', 2000);
             },
-            { width: 200, height: 50, borderRadius: 10 }
+            { 
+                width: 200, 
+                height: 50, 
+                borderRadius: 10,
+                controlColor: '#4CAF50',    // Main button face color
+                textColor: '#ffffff',       // Text color
+                borderColor: '#2E7D32',     // Normal border
+                focusBorderColor: '#81C784' // Focused border
+            }
         );
         ui.addControl(button1);
         currentY += 70;
@@ -260,7 +268,13 @@
             (value) => {
                 ui.showToast(`Sound ${value ? 'ON' : 'OFF'}`, value ? 'success' : 'warning', 2000);
             },
-            { width: 250, height: 50, borderRadius: 10 }
+            { 
+                width: 250, 
+                height: 50, 
+                borderRadius: 10,
+                controlColor: '#4CAF50',  // Green when toggle is on
+                borderColor: '#666666'    // Border
+            }
         );
         ui.addControl(toggle);
         currentY += 70;
@@ -275,7 +289,15 @@
         const textInput = new TextInput(
             column2X, currentY,
             'Enter your name...',
-            { width: 300, height: 50, borderRadius: 10 }
+            { 
+                width: 300, 
+                height: 50, 
+                borderRadius: 10,
+                backgroundColor: '#2a2a2a',  // Dark input background
+                textColor: '#ffffff',        // White text
+                borderColor: '#666666',      // Gray border
+                focusBorderColor: '#2196F3' // Blue when focused
+            }
         );
         ui.addControl(textInput);
         currentY += 70;
@@ -384,7 +406,13 @@
             (value) => {
                 console.log('Volume changed to:', value);
             },
-            { width: 300, height: 60, borderRadius: 10 }
+            { 
+                width: 300, 
+                height: 60, 
+                borderRadius: 10,
+                controlColor: '#FF9800',  // Orange slider knob and filled track
+                borderColor: '#666666'    // Border
+            }
         );
         ui.addControl(slider);
         currentY += 75;
