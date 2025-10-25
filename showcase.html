@@ -368,7 +368,7 @@
             (index, value) => {
                 ui.showToast(`Difficulty: ${value}`, 'info', 2000);
             },
-            { width: 250, height: 45, borderRadius: 10, orientation: 'vertical' }
+            { width: 250, height: 45, borderRadius: 10, orientation: 'vertical', label: 'Difficulty' }
         );
         ui.addControl(radio);
         currentY += 195;
@@ -431,7 +431,7 @@
             (index, value) => {
                 ui.showToast(`Carousel: ${value}`, 'info', 2000);
             },
-            { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
+            { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal', label: 'Select Option' }
         );
         ui.addControl(carouselHorizontal);
 
@@ -624,7 +624,7 @@
                 (index, value) => {
                     ui.showToast(`Difficulty: ${value}`, 'info', 2000);
                 },
-                { width: 250, height: 45, borderRadius: 10, orientation: 'vertical' }
+                { width: 250, height: 45, borderRadius: 10, orientation: 'vertical', label: 'Difficulty' }
             );
             ui.addControl(radio);
             currentY += 195;
@@ -660,7 +660,7 @@
                 (index, value) => {
                     ui.showToast(`Carousel: ${value}`, 'info', 2000);
                 },
-                { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal' }
+                { width: 300, height: 60, borderRadius: 10, orientation: 'horizontal', label: 'Select Option' }
             );
             ui.addControl(carouselHorizontal);
 
