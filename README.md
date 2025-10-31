@@ -2,7 +2,9 @@
 
 A JavaScript library for creating UI controls within HTML Canvas elements, specifically designed for simple web games.
 
-![CanvasUIMark Showcase](https://github.com/user-attachments/assets/d9ddcf14-d7e2-49ed-b00b-3c91f5c33966)
+![CanvasUIMark Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
+
+![CanvasUIMark Showcase](https://github.com/user-attachments/assets/d5a66134-e7d2-4b5a-b1fa-7e11ae25c6a4)
 
 ## Features
 
