@@ -30,6 +30,7 @@
     <body>
         <select id="themeSelector" title="Select theme">
             <option value="Dark">Dark</option>
+            <option value="CyberMark">CyberMark</option>
             <option value="Aqua">Aqua</option>
             <option value="Forest">Forest</option>
             <option value="Pumpkin">Pumpkin</option>
@@ -56,6 +57,31 @@
                     dialogText2Color: '#b0b0b0',
                     panelSurfaceColor: '#222a36',
                     panelBorderColor: '#00ff99',
+                },
+                CyberMark: {
+                    backgroundColor: '#ff9800',
+                    controlColor: '#ff00cc', // neon pink
+                    controlSurfaceColor: '#22223b', // deep blue
+                    controlTextColor: '#00fff7', // neon cyan
+                    controlBorderColor: '#ff00cc', // neon pink
+                    controlFocusBorderColor: '#ff9800', // orange accent for focus
+                    controlClickColor: '#ffea00', // neon yellow
+                    menuButtonColor: '#ff00cc',
+                    menuButtonActiveColor: '#ff9800', // orange accent for active
+                    menuButtonClickColor: '#ffea00',
+                    menuButtonBorderColor: '#ff00cc',
+                    menuButtonFocusBorderColor: '#ff9800',
+                    menuButtonFontSize: 18,
+                    dialogSurfaceColor: '#22223b',
+                    dialogBorderColor: '#ff9800', // orange accent for dialog border
+                    dialogTextColor: '#00fff7',
+                    dialogText2Color: '#ffea00',
+                    dialogTextFontSize: 20,
+                    dialogText2FontSize: 16,
+                    panelSurfaceColor: '#181820', // much darker for panel
+                    panelBorderColor: '#ff9800', // orange accent for panel border
+                    borderWidth: 2,
+                    borderRadius: 10,
                 },
                 Aqua: {
                     controlColor: '#00bcd4',
@@ -187,7 +213,7 @@
                 // Slider
                 ui.addText('Slider (0-100)', 500, 430, { fontSize: 18, fontWeight: 'bold' });
                 currentY += 30;
-                ui.addControl(new Slider(500, 450, 0, 100, 50, 1, null, (val) => ui.showToast(`Slider: ${Math.round(val)}`, 'info', 1500), { width: 350 }));
+                ui.addControl(new Slider(500, 450, 0, 100, 50, 1, 'label', (val) => ui.showToast(`Slider: ${Math.round(val)}`, 'info', 1500), { width: 350 }));
 
                 // Column 2 - Right side controls
                 let col2X = 500;
@@ -214,7 +240,7 @@
                         currentY,
                         ['Summer', 'Autumn', 'Winter', 'Spring'],
                         0,
-                        null,
+                        'label',
                         (index, item) => ui.showToast(`Season: ${item}`, 'info', 2000),
                         { width: 350, height: 60 }
                     )
