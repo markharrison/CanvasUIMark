@@ -78,13 +78,13 @@ export class CanvasUIMark {
             menuButtonFocusBorderColor: '#4CAF50',
             menuButtonFontSize: 16,
 
-            // Dialog
-            dialogSurfaceColor: '#222222',
-            dialogBorderColor: '#888888',
-            dialogTextColor: '#ffffff',
-            dialogText2Color: '#cccccc',
-            dialogTextFontSize: 18,
-            dialogText2FontSize: 14,
+            // Modal
+            modalSurfaceColor: '#222222',
+            modalBorderColor: '#888888',
+            modalTextColor: '#ffffff',
+            modalText2Color: '#cccccc',
+            modalTextFontSize: 18,
+            modalText2FontSize: 14,
 
             // Panel
             panelSurfaceColor: '#2a2a2a',
@@ -746,6 +746,7 @@ export class Menu extends Control {
             totalHeight = items.length * height + (items.length - 1) * gap;
         }
 
+        // Just call super, do not set menuButtonFontSize here
         super(x, y, totalWidth, totalHeight, options);
         this.itemWidth = width;
         this.itemHeight = height;
@@ -1411,7 +1412,7 @@ export class Carousel extends Control {
     drawTriangle(ctx, centerX, centerY, direction) {
         const size = this.arrowSize;
 
-        ctx.fillStyle = this.options.textColor;
+        ctx.fillStyle = this.options.controlColor;
         ctx.beginPath();
 
         if (direction === 'left') {
@@ -1677,7 +1678,17 @@ export class Panel extends Control {
     constructor(x, y, options = {}) {
         const width = options.width || 500; // Default width
         const height = options.height || 500; // Default height
-        super(x, y, width, height, options);
+        // If manager is available, get theme values
+        let themePanelSurfaceColor, themePanelBorderColor;
+        if (options.manager && options.manager.theme) {
+            themePanelSurfaceColor = options.manager.theme.panelSurfaceColor;
+            themePanelBorderColor = options.manager.theme.panelBorderColor;
+        }
+        super(x, y, width, height, {
+            ...options,
+            panelSurfaceColor: options.panelSurfaceColor || themePanelSurfaceColor,
+            panelBorderColor: options.panelBorderColor || themePanelBorderColor,
+        });
     }
 
     draw(ctx, isFocused) {
@@ -1722,20 +1733,29 @@ export class Modal {
         // Support custom escape button label
         this.escapeButtonLabel = options.escapeButtonLabel || null;
 
-        // Color configuration - use theme defaults but allow override
+        // Color and style configuration - use theme modal attributes, allow override
+        const theme = manager.theme;
         this.colors = {
-            backgroundColor: options.backgroundColor || manager.theme.backgroundColor,
-            borderColor: options.borderColor || manager.theme.focusBorderColor,
-            textColor: options.textColor || manager.theme.textColor,
-            buttonBackgroundColor: options.buttonBackgroundColor || manager.theme.backgroundColor,
-            buttonSelectedColor: options.buttonSelectedColor || manager.theme.controlColor,
-            buttonBorderColor: options.buttonBorderColor || manager.theme.borderColor,
-            buttonTextColor: options.buttonTextColor || manager.theme.textColor,
+            modalSurfaceColor: options.modalSurfaceColor || theme.modalSurfaceColor,
+            modalBorderColor: options.modalBorderColor || theme.modalBorderColor,
+            modalTextColor: options.modalTextColor || theme.modalTextColor,
+            modalText2Color: options.modalText2Color || theme.modalText2Color,
+
+            menuButtonColor: options.menuButtonColor || theme.menuButtonColor,
+            menuButtonActiveColor: options.menuButtonActiveColor || theme.menuButtonActiveColor,
+            menuButtonClickColor: options.menuButtonClickColor || theme.menuButtonClickColor,
+            menuButtonBorderColor: options.menuButtonBorderColor || theme.menuButtonBorderColor,
+            menuButtonFocusBorderColor: options.menuButtonFocusBorderColor || theme.menuButtonFocusBorderColor,
         };
 
+        this.textFontColor = options.textFontColor || theme.controlTextColor;
+        this.textFontSize = options.modalTextFontSize || theme.modalTextFontSize;
+        this.text2FontColor = options.text2FontColor || theme.controlTextColor;
+        this.text2FontSize = options.modalText2FontSize || theme.modalText2FontSize;
+
         // Style configuration
-        this.borderWidth = options.borderWidth || manager.theme.borderWidth;
-        this.borderRadius = options.borderRadius !== undefined ? options.borderRadius : manager.theme.borderRadius || 10;
+        this.borderWidth = options.borderWidth || theme.borderWidth;
+        this.borderRadius = options.borderRadius || theme.borderRadius;
 
         // Calculate dimensions - allow custom sizing
         const canvas = manager.canvas;
@@ -1798,16 +1818,20 @@ export class Modal {
         }));
 
         // Create menu with custom styling to match modal theme
+        const { menuButtonColor, menuButtonActiveColor, menuButtonClickColor, menuButtonBorderColor, menuButtonFocusBorderColor } = options;
         this.buttonMenu = new Menu(buttonsX, buttonsY, menuItems, {
             orientation: 'horizontal',
             width: buttonWidth,
             height: buttonHeight,
             gap: buttonSpacing,
-            backgroundColor: this.colors.buttonBackgroundColor,
-            controlColor: this.colors.buttonSelectedColor,
-            borderColor: this.colors.buttonBorderColor,
-            focusBorderColor: this.colors.buttonSelectedColor,
-            textColor: this.colors.buttonTextColor,
+            menuButtonColor: menuButtonColor || manager.theme.menuButtonColor,
+            menuButtonActiveColor: menuButtonActiveColor || manager.theme.menuButtonActiveColor,
+            menuButtonClickColor: menuButtonClickColor || manager.theme.menuButtonClickColor,
+            menuButtonBorderColor: menuButtonBorderColor || manager.theme.menuButtonBorderColor,
+            menuButtonFocusBorderColor: menuButtonFocusBorderColor || manager.theme.menuButtonFocusBorderColor,
+            menuButtonFontSize: options.menuButtonFontSize || manager.theme.menuButtonFontSize,
+            controlTextColor: this.textFontColor,
+            fontSize: this.textFontSize,
             borderWidth: this.borderWidth,
             borderRadius: this.borderRadius,
             padding: 10,
@@ -1889,32 +1913,32 @@ export class Modal {
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         // Draw modal background
-        ctx.fillStyle = this.colors.backgroundColor;
+        ctx.fillStyle = this.colors.modalSurfaceColor;
         DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, modalRadius);
         ctx.fill();
 
         // Draw border
-        ctx.strokeStyle = this.colors.borderColor;
+        ctx.strokeStyle = this.colors.modalBorderColor;
         ctx.lineWidth = this.borderWidth;
         DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, modalRadius);
         ctx.stroke();
 
         // Draw title
-        ctx.font = 'bold 24px Arial';
-        ctx.fillStyle = this.colors.textColor;
+        ctx.font = `bold 24px Arial`;
+        ctx.fillStyle = this.colors.modalTextColor;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.fillText(this.title, this.x + this.width / 2, this.y + 20);
 
-        // Draw message
-        ctx.font = '18px Arial';
-        ctx.fillStyle = this.colors.textColor;
+        // Draw message (main text)
+        ctx.font = `${this.textFontSize}px Arial`;
+        ctx.fillStyle = this.colors.modalTextColor;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
 
         // Word wrap message
         const maxWidth = this.width - 40;
-        const lineHeight = 25;
+        const lineHeight = this.textFontSize + 7;
         const words = this.message.split(' ');
         let line = '';
         let y = this.y + 80;
@@ -1932,8 +1956,19 @@ export class Modal {
         }
         ctx.fillText(line, this.x + this.width / 2, y);
 
+        // Optionally draw secondary text if provided in this.options
+        if (this.colors.modalText2Color && this.options && this.options.text2) {
+            ctx.font = `${this.text2FontSize}px Arial`;
+            ctx.fillStyle = this.colors.modalText2Color;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(this.options.text2, this.x + this.width / 2, y + lineHeight + 10);
+        }
+
         // Draw the button menu (it handles all button rendering)
-        this.buttonMenu.draw(ctx, true); // Always draw as focused since modal has focus
+        if (this.buttonMenu && this.buttonMenu.draw) {
+            this.buttonMenu.draw(ctx, true); // Always draw as focused since modal has focus
+        }
     }
 }
 

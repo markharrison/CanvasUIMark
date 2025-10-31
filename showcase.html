@@ -29,8 +29,8 @@
     </head>
     <body>
         <select id="themeSelector" title="Select theme">
-            <option value="Dark">Dark</option>
             <option value="CyberMark">CyberMark</option>
+            <option value="Dark">Dark</option>
             <option value="Aqua">Aqua</option>
             <option value="Forest">Forest</option>
             <option value="Pumpkin">Pumpkin</option>
@@ -59,27 +59,26 @@
                     panelBorderColor: '#00ff99',
                 },
                 CyberMark: {
-                    backgroundColor: '#ff9800',
-                    controlColor: '#ff00cc', // neon pink
-                    controlSurfaceColor: '#22223b', // deep blue
-                    controlTextColor: '#00fff7', // neon cyan
-                    controlBorderColor: '#ff00cc', // neon pink
-                    controlFocusBorderColor: '#ff9800', // orange accent for focus
-                    controlClickColor: '#ffea00', // neon yellow
-                    menuButtonColor: '#ff00cc',
-                    menuButtonActiveColor: '#ff9800', // orange accent for active
-                    menuButtonClickColor: '#ffea00',
-                    menuButtonBorderColor: '#ff00cc',
-                    menuButtonFocusBorderColor: '#ff9800',
-                    menuButtonFontSize: 18,
+                    controlColor: '#0000FF',
+                    controlSurfaceColor: '#888888',
+                    controlTextColor: '#FFFFFF',
+                    controlBorderColor: '#FFFFFF',
+                    controlFocusBorderColor: '#FF0000',
+                    controlClickColor: '#ffea00',
+                    menuButtonColor: '#ffffff',
+                    menuButtonActiveColor: '#ffffff',
+                    menuButtonClickColor: '#ffffff',
+                    menuButtonBorderColor: '#ffffff',
+                    menuButtonFocusBorderColor: '#ffffff',
+                    menuButtonFontSize: 40,
                     dialogSurfaceColor: '#22223b',
-                    dialogBorderColor: '#ff9800', // orange accent for dialog border
+                    dialogBorderColor: '#ff9800',
                     dialogTextColor: '#00fff7',
                     dialogText2Color: '#ffea00',
                     dialogTextFontSize: 20,
                     dialogText2FontSize: 16,
-                    panelSurfaceColor: '#181820', // much darker for panel
-                    panelBorderColor: '#ff9800', // orange accent for panel border
+                    panelSurfaceColor: '#555555',
+                    panelBorderColor: '#ffff00',
                     borderWidth: 2,
                     borderRadius: 10,
                 },
@@ -298,7 +297,7 @@
             }
 
             // Initial setup
-            setTheme('Dark');
+            setTheme('CyberMark');
             setupShowcaseControls();
             animate(lastTime);
         </script>
