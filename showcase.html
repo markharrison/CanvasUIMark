@@ -59,26 +59,28 @@
                     panelBorderColor: '#00ff99',
                 },
                 CyberMark: {
-                    controlColor: '#0000FF',
-                    controlSurfaceColor: '#888888',
-                    controlTextColor: '#FFFFFF',
-                    controlBorderColor: '#FFFFFF',
-                    controlFocusBorderColor: '#FF0000',
-                    controlClickColor: '#ffea00',
-                    menuButtonColor: '#ffffff',
-                    menuButtonActiveColor: '#ffffff',
-                    menuButtonClickColor: '#ffffff',
-                    menuButtonBorderColor: '#ffffff',
-                    menuButtonFocusBorderColor: '#ffffff',
-                    menuButtonFontSize: 40,
-                    modalSurfaceColor: '#22223b',
-                    modalBorderColor: '#ff9800',
-                    modalTextColor: '#00fff7',
-                    modalText2Color: '#ffea00',
+                    controlColor: '#ff1493',
+                    controlSurfaceColor: '#1a0d26',
+                    controlTextColor: '#00ffff',
+                    controlBorderColor: '#ff00ff',
+                    controlFocusBorderColor: '#00ff41',
+                    controlClickColor: '#ff0080',
+                    menuButtonColor: '#0080FF',
+                    menuButtonActiveColor: '#ff0000',
+                    menuButtonClickColor: '#ff0080',
+                    menuButtonBorderColor: '#ff00ff',
+                    menuButtonFocusBorderColor: '#00ff41',
+                    menuButtonFontSize: 16,
+                    modalSurfaceColor: '#0d0d0d',
+                    modalBorderColor: '#00ffff',
+                    modalTextColor: '#ff00ff',
+                    modalText2Color: '#00ff41',
                     modalTextFontSize: 20,
                     modalText2FontSize: 16,
-                    panelSurfaceColor: '#555555',
-                    panelBorderColor: '#ffff00',
+                    panelSurfaceColor: '#0f0f23',
+                    panelBorderColor: '#00ffff',
+                    backgroundColor: '#0a0a0a',
+                    textColor: '#00ffff',
                     borderWidth: 2,
                     borderRadius: 10,
                 },
@@ -186,7 +188,7 @@
                 // TextInput
                 ui.addText('Text Input', col1X, currentY, { fontSize: 18, fontWeight: 'bold' });
                 currentY += 30;
-                ui.addControl(new TextInput(col1X, currentY, 350, 45, 'Type something here...', {}));
+                ui.addControl(new TextInput(col1X, currentY, 'Type something here...', { width: 300, height: 50, controlColor: '#cccccc' }));
                 currentY += 70;
 
                 // Radio Buttons

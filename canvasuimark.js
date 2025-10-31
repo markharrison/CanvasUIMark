@@ -473,6 +473,11 @@ export class CanvasUIMark {
             ...themeOptions,
         };
 
+        // If theme includes backgroundColor, update the options as well
+        if (themeOptions.backgroundColor) {
+            this.options.backgroundColor = themeOptions.backgroundColor;
+        }
+
         // Also support font-related properties in theme
         // Extract font properties if provided and update defaultFont
         if (
@@ -624,7 +629,7 @@ export class Control {
 
         // Store raw options for later theme application
         this._rawOptions = options;
-        
+
         // Initialize with hardcoded defaults (will be updated when added to manager)
         this.options = {
             controlColor: '#4CAF50',
@@ -776,7 +781,7 @@ export class Menu extends Control {
         this.gap = gap;
         this.pressed = false;
         this.pressedTime = 0;
-        this.pressedDuration = 200; // milliseconds
+        this.pressedDuration = 300; // milliseconds
     }
 
     isOverInteractiveArea(x, y) {
@@ -1114,7 +1119,7 @@ export class TextInput extends Control {
                 ctx.stroke();
             }
         } else if (!isFocused) {
-            ctx.fillStyle = '#999999';
+            ctx.fillStyle = this.options.controlColor;
             ctx.fillText(this.placeholder, textX, textY);
         } else if (this.cursorVisible) {
             // Draw cursor at start when empty
