@@ -369,6 +369,11 @@ export class CanvasUIMark {
         return control;
     }
 
+    // Helper method to get theme value with fallback
+    getThemeValue(key, fallback) {
+        return this.theme[key] !== undefined ? this.theme[key] : fallback;
+    }
+
     removeControl(control) {
         const index = this.controls.indexOf(control);
         if (index > -1) {
@@ -467,6 +472,11 @@ export class CanvasUIMark {
             ...this.theme,
             ...themeOptions,
         };
+
+        // If theme includes backgroundColor, update the options as well
+        if (themeOptions.backgroundColor) {
+            this.options.backgroundColor = themeOptions.backgroundColor;
+        }
 
         // Also support font-related properties in theme
         // Extract font properties if provided and update defaultFont
@@ -617,9 +627,10 @@ export class Control {
         this.height = height;
         this.manager = null;
 
-        // Store raw options for later processing
+        // Store raw options for later theme application
         this._rawOptions = options;
-        // Initialize options with hardcoded defaults (will be overridden by theme when manager is set)
+
+        // Initialize with hardcoded defaults (will be updated when added to manager)
         this.options = {
             controlColor: '#4CAF50',
             controlSurfaceColor: '#333333',
@@ -627,6 +638,14 @@ export class Control {
             controlBorderColor: '#666666',
             controlFocusBorderColor: '#4CAF50',
             controlClickColor: '#388E3C',
+            menuButtonColor: '#4CAF50',
+            menuButtonActiveColor: '#388E3C',
+            menuButtonClickColor: '#2E7D32',
+            menuButtonBorderColor: '#666666',
+            menuButtonFocusBorderColor: '#4CAF50',
+            menuButtonFontSize: 16,
+            panelSurfaceColor: '#2a2a2a',
+            panelBorderColor: '#4CAF50',
             borderRadius: 6,
             borderWidth: 2,
             fontFamily: 'Arial',
@@ -644,17 +663,26 @@ export class Control {
         const defaultFont = this.manager.defaultFont;
 
         // Build the options with theme defaults, then apply user overrides
-        // Use new theme property names for all controls
         const themedOptions = {
+            // Control colors
             controlColor: theme.controlColor,
             controlSurfaceColor: theme.controlSurfaceColor,
             controlTextColor: theme.controlTextColor,
-            textColor: theme.controlTextColor, // Alias for textColor
+            textColor: theme.controlTextColor, // Alias
             controlBorderColor: theme.controlBorderColor,
             controlFocusBorderColor: theme.controlFocusBorderColor,
             controlClickColor: theme.controlClickColor,
+            // Menu button colors
+            menuButtonColor: theme.menuButtonColor,
+            menuButtonActiveColor: theme.menuButtonActiveColor,
+            menuButtonClickColor: theme.menuButtonClickColor,
+            menuButtonBorderColor: theme.menuButtonBorderColor,
+            menuButtonFocusBorderColor: theme.menuButtonFocusBorderColor,
+            menuButtonFontSize: theme.menuButtonFontSize,
+            // Panel colors
             panelSurfaceColor: theme.panelSurfaceColor,
             panelBorderColor: theme.panelBorderColor,
+            // Shared properties
             borderRadius: theme.borderRadius,
             borderWidth: theme.borderWidth,
             fontFamily: theme.fontFamily,
@@ -662,13 +690,10 @@ export class Control {
             padding: theme.padding,
         };
 
-        // Handle font - if user provided complete font string, use it
-        // Otherwise build from components
+        // Handle font string building
         if (this._rawOptions.font) {
             themedOptions.font = this._rawOptions.font;
         } else {
-            // Build font from individual properties with theme defaults
-            // Only include properties that are explicitly provided by the user
             const fontOptions = {};
             if (this._rawOptions['font-family'] || this._rawOptions.fontFamily) {
                 fontOptions.family = this._rawOptions['font-family'] || this._rawOptions.fontFamily;
@@ -685,13 +710,13 @@ export class Control {
             themedOptions.font = BuildFontString(fontOptions, defaultFont);
         }
 
-        // Apply user overrides on top of theme
+        // Apply user overrides on top of theme defaults
         this.options = {
             ...themedOptions,
             ...this._rawOptions,
         };
 
-        // Ensure font is set correctly
+        // Ensure font is set
         if (!this.options.font) {
             this.options.font = BuildFontString({}, defaultFont);
         }
@@ -756,7 +781,7 @@ export class Menu extends Control {
         this.gap = gap;
         this.pressed = false;
         this.pressedTime = 0;
-        this.pressedDuration = 200; // milliseconds
+        this.pressedDuration = 300; // milliseconds
     }
 
     isOverInteractiveArea(x, y) {
@@ -1094,7 +1119,7 @@ export class TextInput extends Control {
                 ctx.stroke();
             }
         } else if (!isFocused) {
-            ctx.fillStyle = '#999999';
+            ctx.fillStyle = this.options.controlColor;
             ctx.fillText(this.placeholder, textX, textY);
         } else if (this.cursorVisible) {
             // Draw cursor at start when empty
@@ -1226,7 +1251,7 @@ export class Radio extends Control {
         const radius = this.options.borderRadius;
 
         // Draw background for entire control with rounded corners
-        ctx.fillStyle = this.options.backgroundColor;
+        ctx.fillStyle = this.options.controlSurfaceColor;
         if (radius > 0) {
             DrawRoundedRect(ctx, this.x, this.y, this.width, this.height, radius);
             ctx.fill();

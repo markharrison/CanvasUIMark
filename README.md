@@ -4,6 +4,8 @@ A JavaScript library for creating UI controls within HTML Canvas elements, speci
 
 ![CanvasUIMark Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
 
+![CanvasUIMark Showcase](https://github.com/user-attachments/assets/daed10cd-4f08-4e22-9acc-70b218efafc4)
+
 ![CanvasUIMark Showcase](https://github.com/user-attachments/assets/d5a66134-e7d2-4b5a-b1fa-7e11ae25c6a4)
 
 ## Features
@@ -88,11 +90,29 @@ Set default colors and fonts once, and all controls will inherit these settings:
 ```javascript
 // Set theme colors and fonts together
 ui.setTheme({
-  borderColor: "#666666",
-  focusBorderColor: "#4CAF50",
-  controlColor: "#4CAF50",
-  backgroundColor: "#333333",
-  textColor: "#ffffff", // Used by controls and addText()
+  controlColor: '#ff1493',
+  controlSurfaceColor: '#1a0d26',
+  controlTextColor: '#00ffff',
+  controlBorderColor: '#ff00ff',
+  controlFocusBorderColor: '#00ff41',
+  controlClickColor: '#ff0080',
+  menuButtonColor: '#0080FF',
+  menuButtonActiveColor: '#ff0000',
+  menuButtonClickColor: '#ff0080',
+  menuButtonBorderColor: '#ff00ff',
+  menuButtonFocusBorderColor: '#00ff41',
+  menuButtonFontSize: 16,
+  modalSurfaceColor: '#0d0d0d',
+  modalBorderColor: '#00ffff',
+  modalTextColor: '#ff00ff',
+  modalText2Color: '#00ff41',
+  modalTextFontSize: 20,
+  modalText2FontSize: 16,
+  panelSurfaceColor: '#0f0f23',
+  panelBorderColor: '#00ffff',
+  backgroundColor: '#0a0a0a',
+  textColor: '#00ffff',
+  borderWidth: 2,
   borderRadius: 10,
   fontFamily: "Georgia, serif", // Set default font in theme
   fontSize: 16,

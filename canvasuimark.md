@@ -168,10 +168,13 @@ const menu = new Menu(
         // options
         width: 200, // width of each item (default: 200)
         height: 50, // height of each item (default: 50)
-        controlColor: '#4CAF50', // Selected menu item color
-        backgroundColor: '#333333', // Unselected menu item background
-        borderColor: '#666666', // Border color
-        focusBorderColor: '#81C784', // Focused border
+        menuButtonColor: '#4CAF50', // Button background color
+        menuButtonActiveColor: '#388E3C', // Selected/hovered button
+        menuButtonClickColor: '#2E7D32', // Pressed button
+        controlSurfaceColor: '#333333', // Unselected menu item background
+        menuButtonBorderColor: '#666666', // Border color
+        menuButtonFocusBorderColor: '#81C784', // Focused border
+        menuButtonFontSize: 16, // Button text size
         orientation: 'vertical', // 'vertical' or 'horizontal' (default: 'vertical')
         gap: 0, // gap between items (default: 0)
         borderRadius: 8,
@@ -232,10 +235,10 @@ const textInput = new TextInput(
         // options
         width: 300, // width (default: 300)
         height: 50, // height (default: 50)
-        backgroundColor: '#333333', // Input field background
-        textColor: '#ffffff', // Text color
-        borderColor: '#666666', // Normal border
-        focusBorderColor: '#4CAF50', // Focused border
+        controlSurfaceColor: '#333333', // Input field background
+        controlTextColor: '#ffffff', // Text color
+        controlBorderColor: '#666666', // Normal border
+        controlFocusBorderColor: '#4CAF50', // Focused border
         borderRadius: 10,
     }
 );
@@ -274,9 +277,9 @@ const radio = new Radio(
         width: 250, // width of each item (default: 250)
         height: 45, // height of each item (default: 45)
         controlColor: '#4CAF50', // Selected radio button fill
-        borderColor: '#666666', // Radio circle and border
-        focusBorderColor: '#81C784', // Focused border
-        backgroundColor: '#333333', // Control background
+        controlBorderColor: '#666666', // Radio circle and border
+        controlFocusBorderColor: '#81C784', // Focused border
+        controlSurfaceColor: '#333333', // Control background
         orientation: 'vertical', // 'vertical' or 'horizontal' (default: 'vertical')
         gap: 0, // gap between items (default: 0)
         borderRadius: 10,
@@ -336,10 +339,11 @@ const carousel = new Carousel(
         // options
         width: 300, // width (default: 250)
         height: 60, // height (default: 60)
-        borderColor: '#666666', // Border color
-        focusBorderColor: '#4CAF50', // Focused border
-        backgroundColor: '#333333', // Background
-        textColor: '#ffffff', // Text and arrow color
+        controlBorderColor: '#666666', // Border color
+        controlFocusBorderColor: '#4CAF50', // Focused border
+        controlSurfaceColor: '#333333', // Background
+        controlColor: '#4CAF50', // Arrow color
+        controlTextColor: '#ffffff', // Text color
         orientation: 'horizontal', // 'horizontal' or 'vertical' (default: 'horizontal')
         arrowSize: 12, // size of triangle arrows (default: 12)
         borderRadius: 10,
@@ -402,10 +406,10 @@ const slider = new Slider(
         width: 300, // width (default: 300)
         height: 80, // height (default: 80)
         controlColor: '#4CAF50', // Slider thumb and filled track color
-        borderColor: '#666666', // Border color
-        focusBorderColor: '#81C784', // Border when focused
-        backgroundColor: '#333333', // Background
-        textColor: '#ffffff', // Label and value text
+        controlBorderColor: '#666666', // Border color
+        controlFocusBorderColor: '#81C784', // Border when focused
+        controlSurfaceColor: '#333333', // Background
+        controlTextColor: '#ffffff', // Label and value text
         borderRadius: 10,
     }
 );
@@ -431,8 +435,8 @@ const panel = new Panel(
         // options
         width: 500, // width (default: 500)
         height: 500, // height (default: 500)
-        backgroundColor: '#333333', // Override theme panelSurfaceColor
-        borderColor: '#666666', // Override theme panelBorderColor
+        panelSurfaceColor: '#333333', // Panel background (can also use backgroundColor)
+        panelBorderColor: '#666666', // Panel border (can also use borderColor)
         borderWidth: 2,
         borderRadius: 10,
     }
@@ -595,14 +599,21 @@ ui.showModal(
         { label: 'Cancel', callback: () => console.log('Cancel') },
     ],
     {
-        // Color customization options
-        backgroundColor: '#1a1a2e', // Modal background color
-        borderColor: '#ff6b6b', // Modal border color
-        textColor: '#eeeeee', // Title and message text color
-        buttonBackgroundColor: '#16213e', // Default button background
-        buttonSelectedColor: '#ff6b6b', // Selected/pressed button color
-        buttonBorderColor: '#0f3460', // Button border color
-        buttonTextColor: '#ffffff', // Button text color
+        // Modal color options
+        modalSurfaceColor: '#1a1a2e', // Modal background color
+        modalBorderColor: '#ff6b6b', // Modal border color
+        modalTextColor: '#eeeeee', // Title text color
+        modalText2Color: '#cccccc', // Message text color
+        modalTextFontSize: 20, // Title font size
+        modalText2FontSize: 16, // Message font size
+        
+        // Menu button color options (for modal buttons)
+        menuButtonColor: '#16213e', // Default button background
+        menuButtonActiveColor: '#ff6b6b', // Selected/hovered button color
+        menuButtonClickColor: '#ff4444', // Pressed button color
+        menuButtonBorderColor: '#0f3460', // Button border color
+        menuButtonFocusBorderColor: '#ff6b6b', // Focused button border
+        menuButtonFontSize: 16, // Button text size
 
         // Style options
         borderWidth: 3, // Border thickness
@@ -621,13 +632,21 @@ ui.showModal(
 
 All color options default to theme colors but can be overridden:
 
--   `backgroundColor` - Modal background color (defaults to `theme.backgroundColor`)
--   `borderColor` - Modal border color (defaults to `theme.focusBorderColor`)
--   `textColor` - Title and message text color (defaults to `theme.textColor`)
--   `buttonBackgroundColor` - Default button background (defaults to `theme.backgroundColor`)
--   `buttonSelectedColor` - Selected/pressed button color (defaults to `theme.controlColor`)
--   `buttonBorderColor` - Button border color (defaults to `theme.borderColor`)
--   `buttonTextColor` - Button text color (defaults to `theme.textColor`)
+**Modal Colors:**
+-   `modalSurfaceColor` - Modal background color (defaults to `theme.modalSurfaceColor`)
+-   `modalBorderColor` - Modal border color (defaults to `theme.modalBorderColor`)
+-   `modalTextColor` - Title text color (defaults to `theme.modalTextColor`)
+-   `modalText2Color` - Message text color (defaults to `theme.modalText2Color`)
+-   `modalTextFontSize` - Title font size (defaults to `theme.modalTextFontSize`)
+-   `modalText2FontSize` - Message font size (defaults to `theme.modalText2FontSize`)
+
+**Button Colors:**
+-   `menuButtonColor` - Default button background (defaults to `theme.menuButtonColor`)
+-   `menuButtonActiveColor` - Selected/hovered button color (defaults to `theme.menuButtonActiveColor`)
+-   `menuButtonClickColor` - Pressed button color (defaults to `theme.menuButtonClickColor`)
+-   `menuButtonBorderColor` - Button border color (defaults to `theme.menuButtonBorderColor`)
+-   `menuButtonFocusBorderColor` - Focused button border (defaults to `theme.menuButtonFocusBorderColor`)
+-   `menuButtonFontSize` - Button text size (defaults to `theme.menuButtonFontSize`)
 
 **Style Options:**
 
@@ -743,13 +762,13 @@ CanvasUIMark now uses a comprehensive theme system for all UI controls. Theme pr
     menuButtonFocusBorderColor,
     menuButtonFontSize,
 
-    // Dialog
-    dialogSurfaceColor,
-    dialogBorderColor,
-    dialogTextColor,
-    dialogText2Color,
-    dialogTextFontSize,
-    dialogText2FontSize,
+    // Modal
+    modalSurfaceColor,
+    modalBorderColor,
+    modalTextColor,
+    modalText2Color,
+    modalTextFontSize,
+    modalText2FontSize,
 
     // Panel
     panelSurfaceColor,
@@ -819,11 +838,12 @@ When using individual properties, the font family from the theme is used unless 
 
 ```javascript
 ui.setTheme({
-    borderColor: '#1976D2',
-    focusBorderColor: '#2196F3',
+    controlBorderColor: '#1976D2',
+    controlFocusBorderColor: '#2196F3',
     controlColor: '#2196F3',
-    backgroundColor: '#1E3A5F',
-    textColor: '#E3F2FD',
+    controlSurfaceColor: '#1E3A5F',
+    controlTextColor: '#E3F2FD',
+    backgroundColor: '#0D47A1', // Canvas background
     borderRadius: 10,
 });
 ```
@@ -832,11 +852,12 @@ ui.setTheme({
 
 ```javascript
 ui.setTheme({
-    borderColor: '#E65100',
-    focusBorderColor: '#FF9800',
+    controlBorderColor: '#E65100',
+    controlFocusBorderColor: '#FF9800',
     controlColor: '#FF9800',
-    backgroundColor: '#4E342E',
-    textColor: '#FFF3E0',
+    controlSurfaceColor: '#4E342E',
+    controlTextColor: '#FFF3E0',
+    backgroundColor: '#3E2723', // Canvas background
     borderRadius: 10,
 });
 ```
@@ -845,11 +866,12 @@ ui.setTheme({
 
 ```javascript
 ui.setTheme({
-    borderColor: '#6A1B9A',
-    focusBorderColor: '#9C27B0',
+    controlBorderColor: '#6A1B9A',
+    controlFocusBorderColor: '#9C27B0',
     controlColor: '#9C27B0',
-    backgroundColor: '#4A148C',
-    textColor: '#F3E5F5',
+    controlSurfaceColor: '#4A148C',
+    controlTextColor: '#F3E5F5',
+    backgroundColor: '#311B92', // Canvas background
     borderRadius: 10,
 });
 ```
@@ -861,13 +883,11 @@ All controls accept an `options` object for styling. These options override the 
 ```javascript
 const options = {
     // Core color properties (supported by ALL controls):
-    borderColor: '#666666', // Color for the normal border
-    focusBorderColor: '#4CAF50', // Border color when the control is focused
-    controlColor: '#4CAF50', // Main color for control elements (button face, slider thumb/track, menu selection, toggle on state, etc.)
-    backgroundColor: '#333333', // General control background (panel, input field, menu items, etc.)
-
-    // Text color (Button and TextInput also support):
-    textColor: '#ffffff', // Color for the label/text inside the control
+    controlBorderColor: '#666666', // Color for the normal border
+    controlFocusBorderColor: '#4CAF50', // Border color when the control is focused
+    controlColor: '#4CAF50', // Main color for control elements (button face, slider thumb/track, toggle on state, etc.)
+    controlSurfaceColor: '#333333', // General control background (input field, etc.)
+    controlTextColor: '#ffffff', // Color for the label/text inside the control
 
     // Font options (choose one approach):
     font: '16px Arial', // Complete font string
@@ -948,10 +968,10 @@ Colors can be specified using:
 ```javascript
 const customButton = new Button(100, 100, 'Custom Button', () => console.log('Clicked!'), {
     controlColor: '#4CAF50', // Green button face
-    textColor: '#ffffff', // White text
-    borderColor: '#2E7D32', // Dark green border
-    focusBorderColor: '#81C784', // Light green when focused
-    backgroundColor: '#1B5E20', // Dark background (not typically visible for buttons)
+    controlTextColor: '#ffffff', // White text
+    controlBorderColor: '#2E7D32', // Dark green border
+    controlFocusBorderColor: '#81C784', // Light green when focused
+    controlSurfaceColor: '#1B5E20', // Dark background
     borderRadius: 10,
 });
 ```
@@ -961,10 +981,10 @@ const customButton = new Button(100, 100, 'Custom Button', () => console.log('Cl
 ```javascript
 const customSlider = new Slider(100, 100, 0, 100, 50, 5, 'Volume', (value) => console.log(value), {
     controlColor: '#FF9800', // Orange slider knob and filled track
-    borderColor: '#E65100', // Dark orange border
-    focusBorderColor: '#FFB74D', // Light orange when focused
-    backgroundColor: '#FFF3E0', // Light background
-    textColor: '#E65100', // Dark orange text
+    controlBorderColor: '#E65100', // Dark orange border
+    controlFocusBorderColor: '#FFB74D', // Light orange when focused
+    controlSurfaceColor: '#FFF3E0', // Light background
+    controlTextColor: '#E65100', // Dark orange text
     borderRadius: 8,
 });
 ```
