@@ -1,21 +1,21 @@
-# CanvasUIMark Input Architecture
+# MarkJSCanvasUI Input Architecture
 
 ## Overview
 
-**CanvasInputMark** is a generic input handler for HTML Canvas applications. It captures keyboard, mouse, touch, and gamepad input, and broadcasts events to subscribers using a publisher-subscriber pattern. It is designed for use by CanvasUIMark, but can also be used by any other system or game that needs input management.
+**MarkJSInput** is a generic input handler for HTML Canvas applications. It captures keyboard, mouse, touch, and gamepad input, and broadcasts events to subscribers using a publisher-subscriber pattern. It is designed for use by MarkJSCanvasUI, but can also be used by any other system or game that needs input management.
 
 **Key Features:**
 
--   Generic: Not tied to CanvasUIMark; usable by any component needing input
+-   Generic: Not tied to MarkJSCanvasUI; usable by any component needing input
 -   Publisher-subscriber: Multiple subscribers can receive input events
 -   Supports keyboard, mouse, touch, and gamepad
 -   Shares input state objects by reference
 
-It is used by CanvasUIMark, but can be used by any other system needing keyboard, mouse, or gamepad input.
+It is used by MarkJSCanvasUI, but can be used by any other system needing keyboard, mouse, or gamepad input.
 
 ## Architecture
 
-### CanvasInputMark (canvasinputmark.js)
+### MarkJSInput (markjsinput.js)
 
 **Role**: Input Publisher - Captures all input events and broadcasts to subscribers
 
@@ -32,7 +32,7 @@ It is used by CanvasUIMark, but can be used by any other system needing keyboard
 **API**:
 
 ```javascript
-const inputManager = new CanvasInputMark(canvas);
+const inputManager = new MarkJSInput(canvas);
 
 // Subscribe any object - input manager checks which methods exist
 const subscription = inputManager.subscribe({
@@ -59,15 +59,15 @@ console.log(inputManager.gamepad); // GamepadAPI object
 subscription.unsubscribe();
 ```
 
-### CanvasUIMark (canvasuimark.js)
+### MarkJSCanvasUI (markjscanvasui.js)
 
 **Role**: Input Subscriber - Receives and handles input events
 
 **Required Setup**:
 
 ```javascript
-const inputManager = new CanvasInputMark(canvas);
-const ui = new CanvasUIMark(canvas, {
+const inputManager = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, {
     input: inputManager, // REQUIRED
 });
 ```
@@ -80,7 +80,7 @@ const ui = new CanvasUIMark(canvas, {
 ## Benefits
 
 1. **Decoupling**: Input capture is separate from input handling
-2. **Reusability**: CanvasInputMark can be used by multiple components
+2. **Reusability**: MarkJSInput can be used by multiple components
 3. **Extensibility**: Easy to add new subscribers
 4. **State Sharing**: All subscribers share the same input state
 5. **Simplicity**: Single, consistent pattern - no dual modes to maintain
@@ -91,8 +91,8 @@ const ui = new CanvasUIMark(canvas, {
 ### Basic Setup (Required)
 
 ```javascript
-const inputManager = new CanvasInputMark(canvas);
-const ui = new CanvasUIMark(canvas, { input: inputManager });
+const inputManager = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
 
 // Another component can also subscribe
 const gameLogic = {
@@ -105,10 +105,10 @@ const subscription = inputManager.subscribe(gameLogic);
 ### Multiple Subscribers
 
 ```javascript
-const inputManager = new CanvasInputMark(canvas);
+const inputManager = new MarkJSInput(canvas);
 
 // UI subscriber
-const ui = new CanvasUIMark(canvas, { input: inputManager });
+const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
 
 // Debug subscriber - only handles keys and mouse movement
 const debugger = {
@@ -205,28 +205,28 @@ inputManager.subscribe(gamepadHandler);
 -   Touch events use `{passive: false}` and call `preventDefault()` automatically
 -   Gamepad axes (thumbsticks) use deadzone (0.3) to prevent drift and only fire on significant changes
 -   Gamepad polling must be triggered by calling `inputManager.update()` each frame
--   Subscription cleanup is automatic when CanvasUIMark is destroyed
--   CanvasUIMark will throw an error if instantiated without an input manager
+-   Subscription cleanup is automatic when MarkJSCanvasUI is destroyed
+-   MarkJSCanvasUI will throw an error if instantiated without an input manager
 
 ## Required Setup Steps
 
 1. **Import both classes**:
 
     ```javascript
-    import { CanvasUIMark } from './canvasuimark.js';
-    import { CanvasInputMark } from './canvasinputmark.js';
+    import { MarkJSCanvasUI } from './markjscanvasui.js';
+    import { MarkJSInput } from './markjsinput.js';
     ```
 
 2. **Create input manager first**:
 
     ```javascript
-    const inputManager = new CanvasInputMark(canvas);
+    const inputManager = new MarkJSInput(canvas);
     ```
 
-3. **Pass to CanvasUIMark** (required):
+3. **Pass to MarkJSCanvasUI** (required):
 
     ```javascript
-    const ui = new CanvasUIMark(canvas, { input: inputManager });
+    const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
     ```
 
 4. **Update input in game loop**:
@@ -245,7 +245,7 @@ inputManager.subscribe(gamepadHandler);
 
 ## Custom Input Handlers
 
-You can create your own input handler instead of using CanvasInputMark. It must implement:
+You can create your own input handler instead of using MarkJSInput. It must implement:
 
 ```javascript
 class CustomInputHandler {

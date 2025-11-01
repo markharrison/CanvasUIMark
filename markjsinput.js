@@ -1,12 +1,12 @@
 /**
- * CanvasInputMark - Input management system for canvas applications
+ * MarkJSInput - Input management system for canvas applications
  * Handles keyboard, mouse, and gamepad input with publisher-subscriber pattern
  * @author Mark Harrison
  */
 
 'use strict';
 
-export class CanvasInputMark {
+export class MarkJSInput {
     constructor(canvas) {
         this.canvas = canvas;
 
@@ -43,7 +43,7 @@ export class CanvasInputMark {
         }
 
         // console.log(
-        //     `CanvasInputMark: Subscriber added. Total subscribers: ${this.subscribers.length} | Current Subscribers: ${this.subscribers
+        //     `MarkJSInput: Subscriber added. Total subscribers: ${this.subscribers.length} | Current Subscribers: ${this.subscribers
         //         .map((sub) => sub.name || sub.constructor.name)
         //         .sort()
         //         .join(', ')}`
@@ -61,7 +61,7 @@ export class CanvasInputMark {
         }
 
         // console.log(
-        //     `CanvasInputMark: Subscriber removed. Total subscribers: ${this.subscribers.length} | Current Subscribers: ${this.subscribers
+        //     `MarkJSInput: Subscriber removed. Total subscribers: ${this.subscribers.length} | Current Subscribers: ${this.subscribers
         //         .map((sub) => sub.name || sub.constructor.name)
         //         .sort()
         //         .join(', ')}`
