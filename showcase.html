@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>CanvasUIMark Showcase</title>
+        <title>MarkJSCanvasUI Showcase</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>
             html,
@@ -38,8 +38,8 @@
         <br />
         <canvas id="canvas-ui-showcase" width="1280" height="720"></canvas>
         <script type="module">
-            import { CanvasUIMark, Control, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel, Modal, Toast } from './canvasuimark.js';
-            import { CanvasInputMark } from './canvasinputmark.js';
+            import { MarkJSCanvasUI, Control, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel, Modal, Toast } from './markjscanvasui.js';
+            import { MarkJSInput } from './markjsinput.js';
 
             // Theme definitions
             const themes = {
@@ -132,15 +132,15 @@
             };
 
             const canvas = document.getElementById('canvas-ui-showcase');
-            const input = new CanvasInputMark(canvas);
-            const ui = new CanvasUIMark(canvas, { input });
+            const input = new MarkJSInput(canvas);
+            const ui = new MarkJSCanvasUI(canvas, { input });
 
             // Add controls to showcase
             function setupShowcaseControls() {
                 ui.removeAllControls();
 
                 // Title
-                ui.addText('CanvasUIMark Control Showcase', 640, 20, {
+                ui.addText('MarkJSCanvasUI Control Showcase', 640, 20, {
                     fontSize: 32,
                     fontWeight: 'bold',
                     align: 'center',

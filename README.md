@@ -1,12 +1,12 @@
-# CanvasUIMark
+# MarkJSCanvasUI
 
 A JavaScript library for creating UI controls within HTML Canvas elements, specifically designed for simple web games.
 
-![CanvasUIMark Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
+![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
 
-![CanvasUIMark Showcase](https://github.com/user-attachments/assets/daed10cd-4f08-4e22-9acc-70b218efafc4)
+![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/daed10cd-4f08-4e22-9acc-70b218efafc4)
 
-![CanvasUIMark Showcase](https://github.com/user-attachments/assets/d5a66134-e7d2-4b5a-b1fa-7e11ae25c6a4)
+![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/d5a66134-e7d2-4b5a-b1fa-7e11ae25c6a4)
 
 ## Features
 
@@ -14,38 +14,38 @@ A JavaScript library for creating UI controls within HTML Canvas elements, speci
 - **Modal Dialogs & Notifications** - Pop-up dialogs and toast notifications
 - **Theme System** - Set default colors and fonts for consistent styling across all controls
 - **Full Input Support** - Keyboard, mouse, and gamepad navigation
-- **Publisher-Subscriber Input System** - Decoupled input management via CanvasInputMark
+- **Publisher-Subscriber Input System** - Decoupled input management via MarkJSInput
 - **Responsive** - Automatic canvas scaling support
 - **Easy to Use** - Simple API with minimal setup
 
 ## Input System
 
-CanvasUIMark uses an external input manager for all keyboard, mouse, and gamepad events. The default input manager is **CanvasInputMark**.
+MarkJSCanvasUI uses an external input manager for all keyboard, mouse, and gamepad events. The default input manager is **MarkJSInput**.
 
-- You must create an input manager and pass it to CanvasUIMark via the `input` option.
+- You must create an input manager and pass it to MarkJSCanvasUI via the `input` option.
 - Multiple UI or game components can subscribe to the same input manager.
-- For details and advanced usage, see **[canvasinputmark.md](canvasinputmark.md)**.
+- For details and advanced usage, see **[markjsinput.md](markjsinput.md)**.
 
 ### Example:
 
 ```javascript
-import { CanvasUIMark, Button, Menu } from "./canvasuimark.js";
-import { CanvasInputMark } from "./canvasinputmark.js";
+import { MarkJSCanvasUI, Button, Menu } from "./markjscanvasui.js";
+import { MarkJSInput } from "./markjsinput.js";
 
 const canvas = document.getElementById("gameCanvas");
-const inputManager = new CanvasInputMark(canvas);
-const ui = new CanvasUIMark(canvas, { input: inputManager });
+const inputManager = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
 ```
 
 ## Quick Start
 
 ```javascript
-import { CanvasUIMark, Button, Menu } from "./canvasuimark.js";
-import { CanvasInputMark } from "./canvasinputmark.js";
+import { MarkJSCanvasUI, Button, Menu } from "./markjscanvasui.js";
+import { MarkJSInput } from "./markjsinput.js";
 
 const canvas = document.getElementById("gameCanvas");
-const inputManager = new CanvasInputMark(canvas);
-const ui = new CanvasUIMark(canvas, { input: inputManager });
+const inputManager = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
 
 // Optional: Set theme colors and font for all controls
 ui.setTheme({
@@ -130,7 +130,7 @@ ui.addText("Themed Text", 100, 200); // Uses theme's textColor
 
 ## Documentation
 
-For detailed documentation, API reference, and examples, see **[canvasuimark.md](canvasuimark.md)** and **[canvasinputmark.md](canvasinputmark.md)**.
+For detailed documentation, API reference, and examples, see **[markjscanvasui.md](markjscanvasui.md)** and **[markjsinput.md](markjsinput.md)**.
 
 ## Showcase
 

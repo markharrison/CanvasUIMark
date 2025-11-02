@@ -1,6 +1,6 @@
-# CanvasUIMark Documentation
+# MarkJSCanvasUI Documentation
 
-CanvasUIMark is a JavaScript library for creating UI controls within an HTML Canvas element, specifically designed for simple web games.
+MarkJSCanvasUI is a JavaScript library for creating UI controls within an HTML Canvas element, specifically designed for simple web games.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ Include the library in your HTML file:
 
 ```html
 <script type="module">
-    import { CanvasUIMark } from './canvasuimark.js';
+    import { MarkJSCanvasUI } from './markjscanvasui.js';
 </script>
 ```
 
@@ -32,10 +32,10 @@ Include the library in your HTML file:
 <canvas id="gameCanvas" width="1280" height="720"></canvas>
 
 <script type="module">
-    import { CanvasUIMark } from './canvasuimark.js';
+    import { MarkJSCanvasUI } from './markjscanvasui.js';
 
     const canvas = document.getElementById('gameCanvas');
-    const ui = new CanvasUIMark(canvas, {
+    const ui = new MarkJSCanvasUI(canvas, {
         backgroundColor: '#1a1a1a',
     });
 
@@ -75,12 +75,12 @@ The library automatically handles mouse position calculations for scaled canvase
 
 ## Core Concepts
 
-### CanvasUIMark Instance
+### MarkJSCanvasUI Instance
 
-The main `CanvasUIMark` class manages all UI elements and input handling. The library is designed to be driven by an external animation loop for maximum flexibility.
+The main `MarkJSCanvasUI` class manages all UI elements and input handling. The library is designed to be driven by an external animation loop for maximum flexibility.
 
 ```javascript
-const ui = new CanvasUIMark(canvas, options);
+const ui = new MarkJSCanvasUI(canvas, options);
 ```
 
 **Options:**
@@ -110,7 +110,7 @@ requestAnimationFrame(gameLoop);
 Controls are added to the UI instance:
 
 ```javascript
-import { Button } from './canvasuimark.js';
+import { Button } from './markjscanvasui.js';
 const button = new Button(x, y, label, callback, options);
 ui.addControl(button);
 ```
@@ -563,7 +563,7 @@ Disable background clearing and painting:
 ui.setBackgroundNone();
 ```
 
-When this is set, CanvasUIMark will not clear or fill the canvas before drawing UI controls. This allows you to overlay UI elements on top of whatever was previously drawn to the canvas, or to let another system handle background painting. Useful for overlays, HUDs, or when you want to preserve custom canvas artwork.
+When this is set, MarkJSCanvasUI will not clear or fill the canvas before drawing UI controls. This allows you to overlay UI elements on top of whatever was previously drawn to the canvas, or to let another system handle background painting. Useful for overlays, HUDs, or when you want to preserve custom canvas artwork.
 
 ## Modal Dialogs
 
@@ -740,7 +740,7 @@ ui.onEscape = () => {
 
 ### Theme System
 
-CanvasUIMark now uses a comprehensive theme system for all UI controls. Theme properties control colors, fonts, borders, and more, with sensible defaults. You can override any property via `setTheme()` or per-control options.
+MarkJSCanvasUI now uses a comprehensive theme system for all UI controls. Theme properties control colors, fonts, borders, and more, with sensible defaults. You can override any property via `setTheme()` or per-control options.
 
 #### Theme Properties
 
@@ -805,7 +805,7 @@ const menu = new Menu(x, y, items, {
 
 #### Defaults
 
-If a theme property is not specified, CanvasUIMark uses its built-in default. See `canvasuimark.js` for the full list.
+If a theme property is not specified, MarkJSCanvasUI uses its built-in default. See `markjscanvasui.js` for the full list.
 
 #### Using Font Properties
 
@@ -991,12 +991,12 @@ const customSlider = new Slider(100, 100, 0, 100, 50, 5, 'Volume', (value) => co
 
 ## API Reference
 
-### CanvasUIMark Class
+### MarkJSCanvasUI Class
 
 #### Constructor
 
 ```javascript
-new CanvasUIMark(canvas, options);
+new MarkJSCanvasUI(canvas, options);
 ```
 
 #### Methods
@@ -1042,7 +1042,7 @@ All available in `CanvasUIControls`:
 ```javascript
 // Initialize
 const canvas = document.getElementById('gameCanvas');
-const ui = new CanvasUIMark(canvas);
+const ui = new MarkJSCanvasUI(canvas);
 
 // Add title
 ui.addText('My Game', 640, 50, {

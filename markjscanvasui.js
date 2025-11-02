@@ -1,5 +1,5 @@
 /**
- * CanvasUIMark - A JavaScript library for UI controls in HTML Canvas for web games
+ * MarkJSCanvasUI - A JavaScript library for UI controls in HTML Canvas for web games
  * @author Mark Harrison
  */
 
@@ -47,8 +47,8 @@ export function BuildFontString(fontOptions, defaultFont) {
     return `${prefix}${size}px ${family}`;
 }
 
-// Main CanvasUIMark class
-export class CanvasUIMark {
+// Main MarkJSCanvasUI class
+export class MarkJSCanvasUI {
     constructor(canvas, options = {}) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
@@ -115,7 +115,7 @@ export class CanvasUIMark {
 
         // Input manager is required
         if (!options.input) {
-            throw new Error('CanvasUIMark requires an input manager. Pass an instance via options.input (e.g., new CanvasInputMark(canvas))');
+            throw new Error('MarkJSCanvasUI requires an input manager. Pass an instance via options.input (e.g., new MarkJSInput(canvas))');
         }
 
         // Store input manager reference
