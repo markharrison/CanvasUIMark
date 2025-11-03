@@ -2,14 +2,14 @@
     "name": "@markharrison/markjscanvas",
     "version": "0.0.0",
     "description": "A reusable ui system for canvas applications.",
-    "main": "markjscanvas.js",
+    "main": "markjscanvasui.js",
     "exports": {
-        ".": "./markjscanvas.js",
-        "./markjscanvas": "./markjscanvas.js"
+        ".": "./markjscanvasui.js",
+        "./markjscanvasui": "./markjscanvasui.js"
     },
     "files": [
-        "markjscanvas.js",
-        "markjscanvas.md",
+        "markjscanvasui.js",
+        "markjscanvasui.md",
         "README.md",
         "LICENSE"
     ],
