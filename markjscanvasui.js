@@ -543,7 +543,7 @@ export class MarkJSCanvasUI {
         }
     }
 
-    draw() {
+    render() {
         if (!this.options.noBackground) {
             if (this.options.backgroundGradient) {
                 const direction = this.options.gradientDirection || 'diagonal';
@@ -611,10 +611,6 @@ export class MarkJSCanvasUI {
             const toast = this.toasts[i];
             toast.draw(this.ctx, i);
         }
-    }
-
-    render() {
-        this.draw();
     }
 }
 

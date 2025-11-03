@@ -1,6 +1,6 @@
 # MarkJSCanvasUI
 
-A JavaScript library for creating UI controls within HTML Canvas elements, specifically designed for simple web games.
+A lightweight JavaScript library for creating interactive UI controls within HTML Canvas elements, specifically designed for simple web games and canvas-based applications.
 
 ![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
 
@@ -10,131 +10,81 @@ A JavaScript library for creating UI controls within HTML Canvas elements, speci
 
 ## Features
 
-- **Interactive UI Controls** - Buttons, menus, toggles, text inputs, radio buttons, carousels, and sliders
-- **Modal Dialogs & Notifications** - Pop-up dialogs and toast notifications
-- **Theme System** - Set default colors and fonts for consistent styling across all controls
-- **Full Input Support** - Keyboard, mouse, and gamepad navigation
-- **Publisher-Subscriber Input System** - Decoupled input management via MarkJSInput
-- **Responsive** - Automatic canvas scaling support
-- **Easy to Use** - Simple API with minimal setup
+-   **Complete UI Controls** - Menus (including buttons), toggles, text inputs, radio buttons, carousels, sliders, and panels
+-   **Modal Dialogs & Toast Notifications** - User-friendly pop-ups and temporary messages
+-   **Comprehensive Theme System** - Consistent styling across all controls with easy customization
+-   **Multi-Input Support** - Keyboard, mouse, gamepad, and touch navigation
+-   **External Input Management** - Uses [@markharrison/markjsinput](https://www.npmjs.com/package/@markharrison/markjsinput) for flexible input handling
+-   **Canvas Scaling Support** - Automatically handles responsive canvas sizing
+-   **Simple API** - Minimal setup with maximum flexibility
 
-## Input System
+## Requirements
 
-MarkJSCanvasUI uses an external input manager for all keyboard, mouse, and gamepad events. The default input manager is **MarkJSInput**.
+MarkJSCanvasUI requires an external input handler to manage user interactions. The recommended input handler is [@markharrison/markjsinput](https://www.npmjs.com/package/@markharrison/markjsinput).
 
-- You must create an input manager and pass it to MarkJSCanvasUI via the `input` option.
-- Multiple UI or game components can subscribe to the same input manager.
-- For details and advanced usage, see **[markjsinput.md](markjsinput.md)**.
+**Install via npm:**
 
-### Example:
-
-```javascript
-import { MarkJSCanvasUI, Button, Menu } from "./markjscanvasui.js";
-import { MarkJSInput } from "./markjsinput.js";
-
-const canvas = document.getElementById("gameCanvas");
-const inputManager = new MarkJSInput(canvas);
-const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
+```bash
+npm install @markharrison/markjsinput
 ```
 
 ## Quick Start
 
 ```javascript
-import { MarkJSCanvasUI, Button, Menu } from "./markjscanvasui.js";
-import { MarkJSInput } from "./markjsinput.js";
+import { MarkJSCanvasUI, Menu } from './markjscanvasui.js';
+import { MarkJSInput } from './markjsinput.js';
 
-const canvas = document.getElementById("gameCanvas");
-const inputManager = new MarkJSInput(canvas);
-const ui = new MarkJSCanvasUI(canvas, { input: inputManager });
+const canvas = document.getElementById('gameCanvas');
+const input = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, { input });
 
-// Optional: Set theme colors and font for all controls
-ui.setTheme({
-  controlColor: "#4CAF50",
-  backgroundColor: "#333333",
-  textColor: "#ffffff",
-  borderRadius: 10,
-  fontFamily: "Arial",
-  fontSize: 16,
-});
-
-// Add a button
-const button = new Button(
-  100,
-  100,
-  "Click Me!",
-  () => {
-    ui.showToast("Button clicked!", "success");
-  },
-  { width: 200, height: 50 }
-);
+// Add a button (using Menu with single item)
+const button = new Menu(100, 100, [{ label: 'Click Me!', callback: () => ui.showToast('Hello World!', 'success') }], { width: 200, height: 50 });
 ui.addControl(button);
 
-// External game loop
+// Game loop
 let lastTime = 0;
 function gameLoop(currentTime) {
-  const deltaTime = currentTime - lastTime;
-  lastTime = currentTime;
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
 
-  ui.update(deltaTime);
-  ui.render();
+    ui.update(deltaTime);
+    ui.render();
 
-  requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop);
 }
 requestAnimationFrame(gameLoop);
 ```
 
+## Available Controls
+
+-   **Menu** - Horizontal or vertical navigation menus (can be used for buttons with single items)
+-   **Toggle** - On/off switches with labels
+-   **TextInput** - Text input fields with placeholder support
+-   **Radio** - Mutually exclusive option groups
+-   **Carousel** - Cycleable option selectors with arrows
+-   **Slider** - Numeric value selection with range controls
+-   **Panel** - Non-interactive background panels for grouping
+
 ## Theme System
 
-Set default colors and fonts once, and all controls will inherit these settings:
-
 ```javascript
-// Set theme colors and fonts together
+// Set consistent styling across all controls
 ui.setTheme({
-  controlColor: '#ff1493',
-  controlSurfaceColor: '#1a0d26',
-  controlTextColor: '#00ffff',
-  controlBorderColor: '#ff00ff',
-  controlFocusBorderColor: '#00ff41',
-  controlClickColor: '#ff0080',
-  menuButtonColor: '#0080FF',
-  menuButtonActiveColor: '#ff0000',
-  menuButtonClickColor: '#ff0080',
-  menuButtonBorderColor: '#ff00ff',
-  menuButtonFocusBorderColor: '#00ff41',
-  menuButtonFontSize: 16,
-  modalSurfaceColor: '#0d0d0d',
-  modalBorderColor: '#00ffff',
-  modalTextColor: '#ff00ff',
-  modalText2Color: '#00ff41',
-  modalTextFontSize: 20,
-  modalText2FontSize: 16,
-  panelSurfaceColor: '#0f0f23',
-  panelBorderColor: '#00ffff',
-  backgroundColor: '#0a0a0a',
-  textColor: '#00ffff',
-  borderWidth: 2,
-  borderRadius: 10,
-  fontFamily: "Georgia, serif", // Set default font in theme
-  fontSize: 16,
+    controlColor: '#4CAF50',
+    backgroundColor: '#333333',
+    textColor: '#ffffff',
+    borderRadius: 10,
+    fontFamily: 'Arial',
+    fontSize: 16,
 });
-
-// Controls can use fontSize, fontWeight, fontStyle individually
-const button = new Button(100, 100, "Bold Button", callback, {
-  fontSize: 20,
-  fontWeight: "bold",
-});
-
-// addText() uses theme textColor by default
-ui.addText("Themed Text", 100, 200); // Uses theme's textColor
 ```
 
-## Documentation
+## Documentation & Examples
 
-For detailed documentation, API reference, and examples, see **[markjscanvasui.md](markjscanvasui.md)** and **[markjsinput.md](markjsinput.md)**.
+📖 **[Complete Documentation](markjscanvasui.md)** - Detailed API reference, examples, and usage guide
 
-## Showcase
-
-Open **[showcase.html](showcase.html)** in your browser to see all controls in action with interactive demonstrations.
+🎮 **[Live Showcase](index.html)** - Interactive demo showing all controls and themes in action
 
 ## License
 

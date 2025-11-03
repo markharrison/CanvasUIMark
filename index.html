@@ -4,6 +4,13 @@
         <meta charset="UTF-8" />
         <title>MarkJSCanvasUI Showcase</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script type="importmap">
+            {
+                "imports": {
+                    "@markharrison/markjsinput": "./node_modules/@markharrison/markjsinput/markjsinput.js"
+                }
+            }
+        </script>
         <style>
             html,
             body {
@@ -39,7 +46,7 @@
         <canvas id="canvas-ui-showcase" width="1280" height="720"></canvas>
         <script type="module">
             import { MarkJSCanvasUI, Control, Menu, Toggle, TextInput, Radio, Carousel, Slider, Panel, Modal, Toast } from './markjscanvasui.js';
-            import { MarkJSInput } from './markjsinput.js';
+            import { MarkJSInput } from '@markharrison/markjsinput';
 
             // Theme definitions
             const themes = {
@@ -293,7 +300,7 @@
                 const delta = now - lastTime;
                 lastTime = now;
                 ui.update(delta);
-                ui.draw();
+                ui.render();
                 requestAnimationFrame(animate);
             }
 

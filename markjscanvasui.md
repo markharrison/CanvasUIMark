@@ -1,6 +1,6 @@
 # MarkJSCanvasUI Documentation
 
-MarkJSCanvasUI is a JavaScript library for creating UI controls within an HTML Canvas element, specifically designed for simple web games.
+MarkJSCanvasUI is a JavaScript library for creating UI controls within an HTML Canvas element, specifically designed for simple web games. **Note:** This library requires an external input handler (recommended: [@markharrison/markjsinput](https://www.npmjs.com/package/@markharrison/markjsinput)) to manage keyboard, mouse, gamepad, and touch interactions.
 
 ## Table of Contents
 
@@ -18,10 +18,31 @@ MarkJSCanvasUI is a JavaScript library for creating UI controls within an HTML C
 
 ### Installation
 
+#### Library Files
+
 Include the library in your HTML file:
 
 ```html
 <script type="module">
+    import { MarkJSCanvasUI } from './markjscanvasui.js';
+</script>
+```
+
+#### Input Handler Requirement
+
+**Important:** MarkJSCanvasUI requires an external input handler to manage keyboard, mouse, gamepad, and touch input events. The recommended solution is to use the [@markharrison/markjsinput](https://www.npmjs.com/package/@markharrison/markjsinput) package.
+
+**Install via npm:**
+
+```bash
+npm install @markharrison/markjsinput
+```
+
+**Or include directly in HTML:**
+
+```html
+<script type="module">
+    import { MarkJSInput } from '@markharrison/markjsinput';
     import { MarkJSCanvasUI } from './markjscanvasui.js';
 </script>
 ```
@@ -33,9 +54,16 @@ Include the library in your HTML file:
 
 <script type="module">
     import { MarkJSCanvasUI } from './markjscanvasui.js';
+    import { MarkJSInput } from '@markharrison/markjsinput';
 
     const canvas = document.getElementById('gameCanvas');
+
+    // Create input handler first
+    const input = new MarkJSInput(canvas);
+
+    // Pass input handler to MarkJSCanvasUI
     const ui = new MarkJSCanvasUI(canvas, {
+        input: input,
         backgroundColor: '#1a1a1a',
     });
 
@@ -77,7 +105,7 @@ The library automatically handles mouse position calculations for scaled canvase
 
 ### MarkJSCanvasUI Instance
 
-The main `MarkJSCanvasUI` class manages all UI elements and input handling. The library is designed to be driven by an external animation loop for maximum flexibility.
+The main `MarkJSCanvasUI` class manages all UI elements. The library does not include an internal animation loop - you must provide your own game loop for maximum flexibility.
 
 ```javascript
 const ui = new MarkJSCanvasUI(canvas, options);
@@ -85,11 +113,12 @@ const ui = new MarkJSCanvasUI(canvas, options);
 
 **Options:**
 
+-   `input` (MarkJSInput): **Required.** Input handler instance for keyboard, mouse, gamepad, and touch events
 -   `backgroundColor` (string): Default background color (e.g., '#1a1a1a')
 -   `backgroundGradient` (array): Gradient definition (see [Display Features](#display-features))
 
 **Animation Loop:**
-The library does not include an internal animation loop. You must provide your own game loop that calls `update(deltaTime)` and `render()` each frame:
+Your game loop must call `update(deltaTime)` and `render()` each frame:
 
 ```javascript
 let lastTime = 0;
@@ -110,8 +139,9 @@ requestAnimationFrame(gameLoop);
 Controls are added to the UI instance:
 
 ```javascript
-import { Button } from './markjscanvasui.js';
-const button = new Button(x, y, label, callback, options);
+import { Menu } from './markjscanvasui.js';
+// Create a button using Menu with a single item
+const button = new Menu(x, y, [{ label: 'Button Text', callback: () => console.log('Clicked!') }], options);
 ui.addControl(button);
 ```
 
@@ -148,6 +178,31 @@ The library automatically manages focus and keyboard navigation:
 -   Focus is visually indicated by a highlighted border
 
 ## Input Controls
+
+### Creating Buttons
+
+While there's no dedicated `Button` class, you can easily create individual buttons using the `Menu` class with a single item:
+
+```javascript
+// Simple button
+const playButton = new Menu(100, 100, [{ label: 'Play Game', callback: () => startGame() }], {
+    width: 200,
+    height: 60,
+    menuButtonColor: '#4CAF50',
+    menuButtonFontSize: 18,
+});
+ui.addControl(playButton);
+
+// Button with custom styling
+const exitButton = new Menu(300, 100, [{ label: 'Exit', callback: () => exitGame() }], {
+    width: 150,
+    height: 50,
+    menuButtonColor: '#F44336',
+    menuButtonActiveColor: '#D32F2F',
+    menuButtonClickColor: '#B71C1C',
+});
+ui.addControl(exitButton);
+```
 
 ### Menu
 
@@ -606,7 +661,7 @@ ui.showModal(
         modalText2Color: '#cccccc', // Message text color
         modalTextFontSize: 20, // Title font size
         modalText2FontSize: 16, // Message font size
-        
+
         // Menu button color options (for modal buttons)
         menuButtonColor: '#16213e', // Default button background
         menuButtonActiveColor: '#ff6b6b', // Selected/hovered button color
@@ -633,6 +688,7 @@ ui.showModal(
 All color options default to theme colors but can be overridden:
 
 **Modal Colors:**
+
 -   `modalSurfaceColor` - Modal background color (defaults to `theme.modalSurfaceColor`)
 -   `modalBorderColor` - Modal border color (defaults to `theme.modalBorderColor`)
 -   `modalTextColor` - Title text color (defaults to `theme.modalTextColor`)
@@ -641,6 +697,7 @@ All color options default to theme colors but can be overridden:
 -   `modalText2FontSize` - Message font size (defaults to `theme.modalText2FontSize`)
 
 **Button Colors:**
+
 -   `menuButtonColor` - Default button background (defaults to `theme.menuButtonColor`)
 -   `menuButtonActiveColor` - Selected/hovered button color (defaults to `theme.menuButtonActiveColor`)
 -   `menuButtonClickColor` - Pressed button color (defaults to `theme.menuButtonClickColor`)
@@ -696,9 +753,28 @@ ui.showToast(
 
 ## Input Handling
 
-### Keyboard Support
+### External Input Handler Requirement
 
-The library handles keyboard input automatically:
+MarkJSCanvasUI does **not** handle input events directly. Instead, it requires an external input handler to manage keyboard, mouse, gamepad, and touch interactions. This design provides flexibility and allows you to use your preferred input management system.
+
+**Recommended Input Handler:** [@markharrison/markjsinput](https://www.npmjs.com/package/@markharrison/markjsinput)
+
+```javascript
+import { MarkJSInput } from '@markharrison/markjsinput';
+import { MarkJSCanvasUI } from './markjscanvasui.js';
+
+const canvas = document.getElementById('gameCanvas');
+const input = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, { input });
+```
+
+The input handler must be passed to the MarkJSCanvasUI constructor via the `input` option. Without this, UI controls will not respond to user interaction.
+
+### Supported Input Types
+
+When using the recommended MarkJSInput handler, the following input types are automatically supported:
+
+#### Keyboard Support
 
 -   **Tab** / **Shift+Tab**: Navigate between controls
 -   **Arrow Keys**: Navigate within menus/radios, adjust sliders, move cursor in text inputs
@@ -708,22 +784,24 @@ The library handles keyboard input automatically:
 -   **Backspace** / **Delete**: Edit text inputs
 -   **Home** / **End**: Move cursor in text inputs
 
-### Mouse Support
-
-Mouse interaction is fully supported:
+#### Mouse Support
 
 -   **Click**: Activate controls
 -   **Hover**: Visual feedback (on compatible controls)
 -   Automatically accounts for canvas scaling
 
-### Gamepad Support
-
-Basic gamepad controller support:
+#### Gamepad Support
 
 -   **D-pad Up/Down**: Navigate between controls
 -   **D-pad Left/Right**: Adjust sliders
 -   **A Button (button 0)**: Activate control
 -   Auto-detects connected gamepads
+
+#### Touch Support
+
+-   **Tap**: Activate controls (equivalent to mouse click)
+-   **Touch and drag**: For sliders and scrollable content
+-   Multi-touch gestures (depending on input handler capabilities)
 
 ### Escape Key Handler
 
@@ -814,7 +892,7 @@ You can specify fonts in two ways:
 **1. Complete font string (traditional way):**
 
 ```javascript
-const button = new Button(100, 100, 'Click Me', callback, {
+const menu = new Menu(100, 100, [{ label: 'Click Me', callback }], {
     font: 'bold 20px Arial',
 });
 ```
@@ -822,7 +900,7 @@ const button = new Button(100, 100, 'Click Me', callback, {
 **2. Individual font properties (uses default font family from theme):**
 
 ```javascript
-const button = new Button(100, 100, 'Click Me', callback, {
+const menu = new Menu(100, 100, [{ label: 'Click Me', callback }], {
     fontSize: 20, // or 'font-size'
     fontWeight: 'bold', // or 'font-weight'
     fontStyle: 'italic', // or 'font-style'
@@ -963,16 +1041,18 @@ Colors can be specified using:
 -   RGBA: `'rgba(76, 175, 80, 0.8)'`
 -   Named: `'green'`, `'red'`, etc.
 
-### Example: Custom Colored Button
+### Example: Custom Colored Menu Button
 
 ```javascript
-const customButton = new Button(100, 100, 'Custom Button', () => console.log('Clicked!'), {
-    controlColor: '#4CAF50', // Green button face
+const customButton = new Menu(100, 100, [{ label: 'Custom Button', callback: () => console.log('Clicked!') }], {
+    menuButtonColor: '#4CAF50', // Green button face
     controlTextColor: '#ffffff', // White text
-    controlBorderColor: '#2E7D32', // Dark green border
-    controlFocusBorderColor: '#81C784', // Light green when focused
+    menuButtonBorderColor: '#2E7D32', // Dark green border
+    menuButtonFocusBorderColor: '#81C784', // Light green when focused
     controlSurfaceColor: '#1B5E20', // Dark background
     borderRadius: 10,
+    width: 200,
+    height: 60,
 });
 ```
 
@@ -999,6 +1079,14 @@ const customSlider = new Slider(100, 100, 0, 100, 50, 5, 'Volume', (value) => co
 new MarkJSCanvasUI(canvas, options);
 ```
 
+**Parameters:**
+
+-   `canvas` (HTMLCanvasElement): The canvas element to render UI controls on
+-   `options` (Object): Configuration options
+    -   `input` (MarkJSInput): **Required.** Input handler for keyboard, mouse, gamepad, and touch events
+    -   `backgroundColor` (string): Optional. Default background color
+    -   `backgroundGradient` (array): Optional. Gradient definition for background
+
 #### Methods
 
 -   `addControl(control)` - Add a control to the UI
@@ -1014,7 +1102,7 @@ new MarkJSCanvasUI(canvas, options);
 -   `closeModal(modal)` - Close specific modal
 -   `showToast(message, type, duration)` - Display toast notification
 -   `update(deltaTime)` - Update all controls and animations (call each frame)
--   `render()` - Render all UI elements to canvas (call each frame)
+-   `render()` - Draw all UI elements to canvas (call each frame)
 
 #### Properties
 
@@ -1025,13 +1113,13 @@ new MarkJSCanvasUI(canvas, options);
 
 ### Control Classes
 
-All available in `CanvasUIControls`:
+All available as exports from `markjscanvasui.js`:
 
--   `Button(x, y, label, callback, options)`
--   `Menu(x, y, items, options)`
+-   `Menu(x, y, items, options)` - Can be used as buttons with single items
 -   `Toggle(x, y, label, initialValue, callback, options)`
 -   `TextInput(x, y, placeholder, options)`
--   `Radio(x, y, items, selectedIndex, callback, options)`
+-   `Radio(x, y, items, selectedIndex, label, callback, options)`
+-   `Carousel(x, y, items, selectedIndex, label, callback, options)`
 -   `Slider(x, y, min, max, value, step, label, callback, options)`
 -   `Panel(x, y, options)`
 
@@ -1040,9 +1128,13 @@ All available in `CanvasUIControls`:
 ### Complete Example
 
 ```javascript
-// Initialize
+// Initialize with input handler
+import { MarkJSInput } from '@markharrison/markjsinput';
+import { MarkJSCanvasUI, Menu, Toggle } from './markjscanvasui.js';
+
 const canvas = document.getElementById('gameCanvas');
-const ui = new MarkJSCanvasUI(canvas);
+const input = new MarkJSInput(canvas);
+const ui = new MarkJSCanvasUI(canvas, { input });
 
 // Add title
 ui.addText('My Game', 640, 50, {
@@ -1101,6 +1193,19 @@ ui.showToast('Welcome!', 'success', 3000);
 8. **Testing**: Test with keyboard, mouse, and gamepad if possible
 
 ## Troubleshooting
+
+### Controls not responding to input
+
+**Most Common Issue:** Missing or incorrect input handler setup.
+
+MarkJSCanvasUI requires an external input handler. Ensure you:
+
+1. Install the input handler: `npm install @markharrison/markjsinput`
+2. Import it correctly: `import { MarkJSInput } from '@markharrison/markjsinput';`
+3. Create an instance: `const input = new MarkJSInput(canvas);`
+4. Pass it to MarkJSCanvasUI: `const ui = new MarkJSCanvasUI(canvas, { input });`
+
+If controls still don't respond, check the browser console for input-related errors.
 
 ### Mouse clicks not registering correctly when canvas is scaled
 
