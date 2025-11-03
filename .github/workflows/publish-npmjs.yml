@@ -32,7 +32,7 @@ jobs:
             git add package.json
             git commit -m "Bump version to $VERSION"
             git tag $GITTAG
-            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
+            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/markharrison/MarkJSCanvasUI
             git push origin HEAD:main
             git push origin $GITTAG
           else
