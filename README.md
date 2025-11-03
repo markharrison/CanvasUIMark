@@ -1,6 +1,6 @@
 # MarkJSCanvasUI
 
-[![npm version](https://img.shields.io/npm/v/%40markharrison%2Fmarkjscanvasui)](https://www.npmjs.com/package/@markharrison/markjscanvasui)
+[![npm version](https://img.shields.io/npm/v/markharrison%2Fmarkjscanvasui)](https://www.npmjs.com/package/@markharrison/markjscanvasui)
 
 A lightweight JavaScript library for creating interactive UI controls within HTML Canvas elements, specifically designed for simple web games and canvas-based applications.
 
