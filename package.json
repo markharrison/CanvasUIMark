@@ -1,5 +1,5 @@
 {
-    "name": "@markharrison/markjscanvas",
+    "name": "@markharrison/markjscanvasui",
     "version": "0.0.0",
     "description": "A reusable ui system for canvas applications.",
     "main": "markjscanvasui.js",
