@@ -1,12 +1,8 @@
 # MarkJSCanvasUI
 
+[![npm version](https://img.shields.io/npm/v/%40markharrison%2Fmarkjscanvasui)](https://www.npmjs.com/package/@markharrison/markjscanvasui)
+
 A lightweight JavaScript library for creating interactive UI controls within HTML Canvas elements, specifically designed for simple web games and canvas-based applications.
-
-![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
-
-![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/daed10cd-4f08-4e22-9acc-70b218efafc4)
-
-![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/d5a66134-e7d2-4b5a-b1fa-7e11ae25c6a4)
 
 ## Features
 
@@ -18,21 +14,21 @@ A lightweight JavaScript library for creating interactive UI controls within HTM
 -   **Canvas Scaling Support** - Automatically handles responsive canvas sizing
 -   **Simple API** - Minimal setup with maximum flexibility
 
+## Installation
+
+```bash
+npm install @markharrison/markjscanvasui --save
+```
+
 ## Requirements
 
 MarkJSCanvasUI requires an external input handler to manage user interactions. The recommended input handler is [@markharrison/markjsinput](https://www.npmjs.com/package/@markharrison/markjsinput).
-
-**Install via npm:**
-
-```bash
-npm install @markharrison/markjsinput
-```
 
 ## Quick Start
 
 ```javascript
 import { MarkJSCanvasUI, Menu } from './markjscanvasui.js';
-import { MarkJSInput } from './markjsinput.js';
+import { MarkJSInput } from '@markharrison/markjsinput';
 
 const canvas = document.getElementById('gameCanvas');
 const input = new MarkJSInput(canvas);
@@ -80,11 +76,19 @@ ui.setTheme({
 });
 ```
 
-## Documentation & Examples
+## Documentation 
 
 📖 **[Complete Documentation](markjscanvasui.md)** - Detailed API reference, examples, and usage guide
 
+## Test Application
+
 🎮 **[Live Showcase](index.html)** - Interactive demo showing all controls and themes in action
+
+![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/cc1178cc-e777-495c-adae-7dbc364743c3)
+
+![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/daed10cd-4f08-4e22-9acc-70b218efafc4)
+
+![MarkJSCanvasUI Showcase](https://github.com/user-attachments/assets/d5a66134-e7d2-4b5a-b1fa-7e11ae25c6a4)
 
 ## License
 
