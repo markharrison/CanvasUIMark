@@ -15,7 +15,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/markharrison/MarkJSCanvas.git"
+        "url": "git+https://github.com/markharrison/MarkJSCanvasUI.git"
     },
     "author": "Mark Harrison",
     "license": "MIT",
